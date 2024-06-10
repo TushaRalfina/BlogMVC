@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+  <!-- # site-content
+================================================== -->
+<div id="body" class="s-content s-content--page">
+
+    <div class="row entry-wrap">
+        <div class="column lg-12">
+
+            <article class="entry">
+
+                <header class="entry__header entry__header--narrow">
+
+                    <h1 class="entry__title">
+                        Add a Blog Post.
+                    </h1>
+
+                </header>
+                <h4>Be your own writer</h4>
+
+                <form id="addForm" class="entry__form" method="post" action="">
+                    <fieldset class="row">
+
+                        <div class="column lg-6 tab-12 form-field">
+                            <input name="name" id="name" class="u-fullwidth" placeholder="Your Name" value="" type="text">
+                        </div>
+
+                        <div class="column lg-6 tab-12 form-field">
+                            <input name="email" id="email" class="u-fullwidth" placeholder="Your Email" value="" type="text">
+                        </div>
+
+                        <div class="column lg-12 form-field">
+                            <input name="content" id="title" class="u-fullwidth" placeholder="Title" value="" type="text">
+                        </div>
+
+                        <div class="column lg-12 message form-field mt-2 mb-2 " id="content">
+                            <textarea name="content"   class="u-fullwidth" placeholder="Content"></textarea>
+                        </div>
+
+                        <div class="column lg-12 form-field">
+                            <label>PLACE A CATEGORY</label>
+                             <select class="form-select" asp-items=" " asp-for="SelectedCategories"></select>
+                            </div>
+                        </div>
+
+                        <div class="column lg-12">
+                            <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Post" type="submit">
+                        </div>
+
+                    </fieldset>
+                </form> <!-- end form -->
+
+
+        </div> <!-- end content-primary -->
+        </article> <!-- end entry -->
+
+    </div>
+</div> <!-- end entry-wrap -->
+
+@section Scripts{
+    <script>
+        var editor = new FroalaEditor('#content');
+    </script>   
+}
+  
