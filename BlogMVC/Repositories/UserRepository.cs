@@ -1,4 +1,5 @@
 ﻿using BlogMVC.Models;
+using BlogMVC.Models.ViewModels;
 using System;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -19,23 +20,26 @@ namespace BlogMVC.Repositories
             db.SaveChanges();
         }
 
-        public void UpdateUser(user user)
+        public user UpdateUser(user user)
         {
             try
             {
                 var existingUser = db.users.FirstOrDefault(u => u.id == user.id);
+
                 if (existingUser != null)
                 {
                     existingUser.username = user.username;
                     existingUser.password = user.password;
-                    existingUser.email = user.email;
-                    existingUser.role = user.role;
-                    existingUser.profile_picture = user.profile_picture;
-                    existingUser.bio = user.bio;
+
                     existingUser.FirstName = user.FirstName;
                     existingUser.LastName = user.LastName;
+                    existingUser.email = user.email;
+                    existingUser.bio = user.bio;
                     existingUser.updated_at = System.DateTime.Now;
-                    db.SaveChanges();
+                     db.SaveChanges();
+
+                   
+                    return existingUser;
                 }
                 else
                 {
@@ -44,25 +48,21 @@ namespace BlogMVC.Repositories
             }
             catch (DbEntityValidationException ex)
             {
-                 foreach (var validationErrors in ex.EntityValidationErrors)
+                foreach (var validationErrors in ex.EntityValidationErrors)
                 {
                     foreach (var validationError in validationErrors.ValidationErrors)
                     {
                         Console.WriteLine($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
                     }
                 }
-                throw;  
+                throw;
             }
             catch (Exception ex)
             {
-                 Console.WriteLine($"An error occurred: {ex.Message}");
-                throw;  
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                throw;
             }
         }
-
-
-
-
 
         public user GetUserById(int id)
         {

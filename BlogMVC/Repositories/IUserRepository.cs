@@ -17,7 +17,7 @@ namespace BlogMVC.Repositories
 
         user GetUserById(int id);
 
-        void UpdateUser(user user);
+        user UpdateUser(user user);
 
         
 

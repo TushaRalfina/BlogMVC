@@ -18,8 +18,7 @@ namespace BlogMVC.Models.ViewModels
         public string LastName { get; set; }
 
         public Nullable<System.DateTime> created_at { get; set; }
-        public Nullable<System.DateTime> updated_at
-            { get; set; }
+        public Nullable<System.DateTime> updated_at { get; set; }
 
     }
 }

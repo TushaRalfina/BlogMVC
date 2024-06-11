@@ -355,6 +355,7 @@
     <Compile Include="Models\user.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\EditProfileRequest.cs" />
     <Compile Include="Models\ViewModels\UserProfileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
@@ -495,7 +496,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Post.cshtml" />
     <Content Include="Views\Home\Categories.cshtml" />
-    <Content Include="Views\Home\UserProfile.cshtml" />
     <Content Include="Views\BlogPost\Add.cshtml" />
     <Content Include="Views\Shared\_LayoutPage1.cshtml" />
     <Content Include="Views\Admin\List.cshtml" />

@@ -117,7 +117,7 @@ namespace BlogMVC.Controllers
         }
 
 
-      //GET:   PROFILE
+      //GET:PROFILE
 
         public ActionResult Profile()
         {
@@ -146,9 +146,9 @@ namespace BlogMVC.Controllers
                 return View(userProfileViewModel);
             }
         }
-        //GET: EDIT PROFILE
 
-        public ActionResult EditProfile()
+        //GET:EDIT PROFILE
+        public ActionResult EditProfile(int id)
         {
             if (Session["id"] == null)
             {
@@ -156,63 +156,65 @@ namespace BlogMVC.Controllers
             }
             else
             {
-                int id = Convert.ToInt32(Session["id"]);
                 var user = userRepository.GetUserById(id);
-                var userProfileViewModel = new UserProfileViewModel
+                var usermodel = new EditProfileRequest
                 {
                     id = user.id,
-                    username = user.username,
-                    email = user.email,
-                    role = user.role,
-                    profile_picture = user.profile_picture,
-                    bio = user.bio,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    created_at = user.created_at,
-                    updated_at = user.updated_at
+                    email = user.email,
+                    bio = user.bio
                 };
 
-                return View(userProfileViewModel);
+                return View(usermodel);
             }
         }
-
-        //POST: EDIT PROFILE
+         
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProfile(UserProfileViewModel userProfileViewModel)
+        public ActionResult EditProfile(EditProfileRequest editProfileRequest)
         {
             if (!ModelState.IsValid)
             {
-                return View(userProfileViewModel);
+                return View(editProfileRequest);
             }
 
             var user = new user
             {
-                id = userProfileViewModel.id,
-                username = userProfileViewModel.username,
-                email = userProfileViewModel.email,
-                role = userProfileViewModel.role,
-                profile_picture = userProfileViewModel.profile_picture,
-                bio = userProfileViewModel.bio,
-                FirstName = userProfileViewModel.FirstName,
-                LastName = userProfileViewModel.LastName,
-                created_at = userProfileViewModel.created_at,
-                updated_at = userProfileViewModel.updated_at
+                id = editProfileRequest.id,
+                FirstName = editProfileRequest.FirstName,
+                LastName = editProfileRequest.LastName,
+                email = editProfileRequest.email,
+                bio = editProfileRequest.bio
             };
 
-            userRepository.UpdateUser(user);
+            try
+            {
+                var updatedUser = userRepository.UpdateUser(user);
+                if (updatedUser == null)
+                {
+                    ViewBag.Notification = "An error occurred while updating the profile";
+                    return View(editProfileRequest);
+                }
 
-            return RedirectToAction("Index", "Home");
+                return RedirectToAction("Profile", "Home");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Notification = "An error occurred while updating the profile: " + ex.Message;
+                return View(editProfileRequest);
+                
+                
+            }
         }
-     
+ 
 
 
 
-        
-        
 
-        
+
+
 
 
 
