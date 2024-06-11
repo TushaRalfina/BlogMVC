@@ -180,3 +180,5 @@ C:\Users\User\Desktop\BlogMVC\BlogMVC\bin\Unity.Mvc.dll
 C:\Users\User\Desktop\BlogMVC\BlogMVC\bin\Unity.Mvc.pdb
 C:\Users\User\Desktop\BlogMVC\BlogMVC\bin\WebActivatorEx.dll
 C:\Users\User\Desktop\BlogMVC\BlogMVC\bin\Unity.Mvc5.dll
+C:\Users\User\Desktop\BlogMVC\BlogMVC\obj\Debug\BlogMVC.csproj.SuggestedBindingRedirects.cache
+C:\Users\User\Desktop\BlogMVC\BlogMVC\obj\Debug\BlogMVC.dll.config

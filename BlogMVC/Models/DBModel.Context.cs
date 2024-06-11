@@ -32,5 +32,7 @@ namespace BlogMVC.Models
         public virtual DbSet<post> posts { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<user> users { get; set; }
+
+        public System.Data.Entity.DbSet<BlogMVC.Models.ViewModels.UserProfileViewModel> UserProfileViewModels { get; set; }
     }
 }

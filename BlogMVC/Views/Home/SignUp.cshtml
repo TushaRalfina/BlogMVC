@@ -1,113 +1,112 @@
 ﻿@model BlogMVC.Models.user
 
 @{
-    ViewBag.Title = "SignUp";
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>SignUp</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            max-width: 500px;
-            margin-top: 50px;
-        }
-
-        .form-horizontal {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .btn-primary {
-            width: 100%;
-        }
-
-        .back-link {
-            margin-top: 10px;
-            text-align: center;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Login and Registration</title>
+    <link href="~/Content/css/signup.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
     <div class="container">
-        <h2>SignUp</h2>
-
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-
-            <div class="form-horizontal">
-                <h4>user</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label" })
-                    <div>
-                        @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label" })
-                    <div>
-                        @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.confirm_password, htmlAttributes: new { @class = "control-label" })
-                    <div>
-                        @Html.EditorFor(model => model.confirm_password, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.confirm_password, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.email, htmlAttributes: new { @class = "control-label" })
-                    <div>
-                        @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                 
-
-                <div class="form-group">
-                    <div>
-                        <input type="submit" value="Create" class="btn btn-primary" />
-                    </div>
+        <input type="checkbox" id="flip">
+        <div class="cover">
+            <div class="front">
+                <img src="~/Content/images/thumbs/masonry/statue-1200.jpg" alt="">
+                <div class="text">
+                    <span class="text-1">Welcome to your<br> favourite blog</span>
+                    <span class="text-2">RADIANCE.</span>
                 </div>
             </div>
-        }
-
-        <div class="back-link">
-            @Html.ActionLink("Login", "Login")
+            <div class="back">
+                <div class="text">
+                    <span class="text-1">Join with our <br> Community</span>
+                    <span class="text-2">Let's get started</span>
+                </div>
+            </div>
         </div>
-        
-    </div>
+        <div class="forms">
+            <div class="form-content">
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }
+                <div class="login-form">
+                    <h2 class="P-2">RADIANCE.</h2>
+                    <div class="title">Login</div>
+                    @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-user"></i>
+                                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your username", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your password", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="button input-box">
+                                <input type="submit" value="Submit">
+                            </div>
+                            <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
+                        </div>
+
+                        <!-- Display notifications if any -->
+                        if (ViewBag.Notification != null)
+                        {
+                            <div class="notification"  style="color: red; font-weight: bold;">
+                                @ViewBag.Notification
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="signup-form">
+                    <div class="title">Signup</div>
+                    @using (Html.BeginForm("SignUp", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-user"></i>
+                                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your username", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-envelope"></i>
+                                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your email", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your password", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                @Html.EditorFor(model => model.confirm_password, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirm your password", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.confirm_password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="button input-box">
+                                <input type="submit" value="Submit">
+                            </div>
+                            <div class="text sign-up-text">Already have an account?<label for="flip">Login now</label></div>
+                        </div>
+                        if (ViewBag.Notification != null)
+                        {
+                            <div class="notification" style="color: red; font-weight: bold;">
+                                @ViewBag.Notification
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
