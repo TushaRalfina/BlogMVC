@@ -1,4 +1,5 @@
 ﻿using BlogMVC.Models;
+using BlogMVC.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BlogMVC.Repositories
     {
         // Define the methods that will be used in the UserRepositoy class
 
-        void AddUser(user user);
+        void AddUser(UserViewModel user);
 
         user GetUserByUsername(string username,string password);
 

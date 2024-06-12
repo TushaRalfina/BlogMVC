@@ -26,23 +26,25 @@ namespace BlogMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignUp(user user)
+        public ActionResult SignUp(UserViewModel userViewModel)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return View(user);
+                    return View(userViewModel);
                 }
 
-                if (userRepository.GetUserByUsername(user.username,user.password) != null)
+                if (userRepository.GetUserByUsername(userViewModel.username, userViewModel.password) != null)
                 {
                     ViewBag.Notification = "This username is already taken";
-                    return View(user);
+                    return View(userViewModel);
                 }
                 else
                 {
-                    userRepository.AddUser(user);
+                    userRepository.AddUser(userViewModel);
+                    
+                    var user = userRepository.GetUserByUsername(userViewModel.username, userViewModel.password);
 
                     Session["id"] = user.id.ToString();
                     Session["username"] = user.username;
@@ -51,25 +53,13 @@ namespace BlogMVC.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
-            catch (DbEntityValidationException ex)
+            catch (Exception ex)
             {
-                foreach (var entityValidationError in ex.EntityValidationErrors)
-                {
-                    string entityName = entityValidationError.Entry.Entity.GetType().Name;
-
-                    foreach (var validationError in entityValidationError.ValidationErrors)
-                    {
-                        string propertyName = validationError.PropertyName;
-                        string errorMessage = validationError.ErrorMessage;
-
-                        Console.WriteLine($"Validation error for {entityName}.{propertyName}: {errorMessage}");
-                    }
-                }
-
-                ModelState.AddModelError("", "An error occurred while creating the account.");
-                return View(user);
+                // Log the exception and return an error view if needed
+                return View("Error");
             }
         }
+
 
         public ActionResult Logout()
         {
@@ -118,7 +108,6 @@ namespace BlogMVC.Controllers
 
 
       //GET:PROFILE
-
         public ActionResult Profile()
         {
             if (Session["id"] == null)
@@ -129,6 +118,12 @@ namespace BlogMVC.Controllers
             {
                 int id = Convert.ToInt32(Session["id"]);
                 var user = userRepository.GetUserById(id);
+
+                if (user == null)
+                {
+                     return HttpNotFound("User not found.");
+                }
+
                 var userProfileViewModel = new UserProfileViewModel
                 {
                     id = user.id,
@@ -160,16 +155,17 @@ namespace BlogMVC.Controllers
                 var usermodel = new EditProfileRequest
                 {
                     id = user.id,
+                    email = user.email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    email = user.email,
                     bio = user.bio
+                    
                 };
 
                 return View(usermodel);
             }
         }
-         
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -179,11 +175,13 @@ namespace BlogMVC.Controllers
             {
                 return View(editProfileRequest);
             }
-
             var user = new user
             {
                 id = editProfileRequest.id,
-                FirstName = editProfileRequest.FirstName,
+                password = Session["password"].ToString(),
+                username = Session["username"].ToString(),
+                role = Session["role"].ToString(),
+                 FirstName = editProfileRequest.FirstName,
                 LastName = editProfileRequest.LastName,
                 email = editProfileRequest.email,
                 bio = editProfileRequest.bio
@@ -204,11 +202,15 @@ namespace BlogMVC.Controllers
             {
                 ViewBag.Notification = "An error occurred while updating the profile: " + ex.Message;
                 return View(editProfileRequest);
-                
-                
             }
         }
- 
+
+
+
+
+
+
+
 
 
 

@@ -35,12 +35,7 @@ namespace BlogMVC.Models
         [StringLength(16, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters")]
 
         public string password { get; set; }
-
-        //confirm password
-        [Required(ErrorMessage = "Confirm Password is required")]
-        [DataType(DataType.Password)]
-        [Compare("password", ErrorMessage = "Password and Confirm Password must match")]
-        public string confirm_password { get; set; }
+         
 
 
         [Required(ErrorMessage = "Email is required")]

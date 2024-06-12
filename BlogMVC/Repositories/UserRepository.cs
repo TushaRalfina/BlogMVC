@@ -12,11 +12,23 @@ namespace BlogMVC.Repositories
        
         BlogEntities db = new BlogEntities();
 
-        public void AddUser(user user)
+        public void AddUser(UserViewModel userViewModel)
         {
  
-            user.created_at = System.DateTime.Now;
-            db.users.Add(user);
+            userViewModel.created_at = System.DateTime.Now;
+            //add user to the database
+            db.users.Add(new user
+            {
+                username = userViewModel.username,
+                password = userViewModel.password,
+                email = userViewModel.email,
+                 role = userViewModel.role,
+                FirstName = userViewModel.FirstName,
+                LastName = userViewModel.LastName,
+                bio = userViewModel.bio,
+                created_at = userViewModel.created_at,
+                updated_at = userViewModel.updated_at
+            });
             db.SaveChanges();
         }
 
@@ -28,15 +40,16 @@ namespace BlogMVC.Repositories
 
                 if (existingUser != null)
                 {
+                    existingUser.id = user.id;
                     existingUser.username = user.username;
                     existingUser.password = user.password;
-
+                     existingUser.role = user.role;
                     existingUser.FirstName = user.FirstName;
                     existingUser.LastName = user.LastName;
                     existingUser.email = user.email;
                     existingUser.bio = user.bio;
                     existingUser.updated_at = System.DateTime.Now;
-                     db.SaveChanges();
+                    db.SaveChanges();
 
                    
                     return existingUser;

@@ -1,4 +1,4 @@
-﻿@model BlogMVC.Models.user
+﻿@model BlogMVC.Models.ViewModels.UserViewModel
 
 @{
     Layout = null;
@@ -60,7 +60,7 @@
                         <!-- Display notifications if any -->
                         if (ViewBag.Notification != null)
                         {
-                            <div class="notification"  style="color: red; font-weight: bold;">
+                            <div class="notification" style="color: red; font-weight: bold;">
                                 @ViewBag.Notification
                             </div>
                         }
