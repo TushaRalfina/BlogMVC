@@ -20,9 +20,13 @@ namespace BlogMVC.Repositories
 
         user UpdateUser(user user);
 
-        
+        //string HashPassword(string password);
 
- 
+
+
+
+
+
 
     }
 }

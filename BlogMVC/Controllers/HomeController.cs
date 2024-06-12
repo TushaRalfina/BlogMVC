@@ -12,10 +12,14 @@ namespace BlogMVC.Controllers
     public class HomeController : Controller
     {
         private readonly IUserRepository userRepository;
+        private readonly IBlogPostRepository blogPostRepository;
+        private readonly ICategoryRepository categoryRepository;
 
         public HomeController( )
         {
             userRepository = new UserRepository();
+            blogPostRepository=new BlogPostRepository();
+            categoryRepository=new CategoryRepository();
          }
        
 
@@ -42,7 +46,8 @@ namespace BlogMVC.Controllers
                 }
                 else
                 {
-                    userRepository.AddUser(userViewModel);
+                   // userViewModel.password = userRepository.HashPassword(userViewModel.password);
+                     userRepository.AddUser(userViewModel);
                     
                     var user = userRepository.GetUserByUsername(userViewModel.username, userViewModel.password);
 
@@ -55,8 +60,7 @@ namespace BlogMVC.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception and return an error view if needed
-                return View("Error");
+                 return View("Error");
             }
         }
 
@@ -102,7 +106,9 @@ namespace BlogMVC.Controllers
             }
             else
             {
-                return View();
+                //show all blog posts
+                var posts =  blogPostRepository.GetBlogPosts();
+                return View(posts);
             }
         }
 
@@ -204,21 +210,6 @@ namespace BlogMVC.Controllers
                 return View(editProfileRequest);
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         public ActionResult About()

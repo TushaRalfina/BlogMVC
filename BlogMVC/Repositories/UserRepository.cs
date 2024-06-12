@@ -3,18 +3,20 @@ using BlogMVC.Models.ViewModels;
 using System;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 
 namespace BlogMVC.Repositories
 {
     public class UserRepository : IUserRepository
     {
-       
+
         BlogEntities db = new BlogEntities();
 
         public void AddUser(UserViewModel userViewModel)
         {
- 
+
             userViewModel.created_at = System.DateTime.Now;
             //add user to the database
             db.users.Add(new user
@@ -22,7 +24,7 @@ namespace BlogMVC.Repositories
                 username = userViewModel.username,
                 password = userViewModel.password,
                 email = userViewModel.email,
-                 role = userViewModel.role,
+                role = userViewModel.role,
                 FirstName = userViewModel.FirstName,
                 LastName = userViewModel.LastName,
                 bio = userViewModel.bio,
@@ -43,7 +45,7 @@ namespace BlogMVC.Repositories
                     existingUser.id = user.id;
                     existingUser.username = user.username;
                     existingUser.password = user.password;
-                     existingUser.role = user.role;
+                    existingUser.role = user.role;
                     existingUser.FirstName = user.FirstName;
                     existingUser.LastName = user.LastName;
                     existingUser.email = user.email;
@@ -51,7 +53,7 @@ namespace BlogMVC.Repositories
                     existingUser.updated_at = System.DateTime.Now;
                     db.SaveChanges();
 
-                   
+
                     return existingUser;
                 }
                 else
@@ -82,9 +84,24 @@ namespace BlogMVC.Repositories
             return db.users.FirstOrDefault(u => u.id == id);
         }
 
-        public user GetUserByUsername(string username,string password)
+        public user GetUserByUsername(string username, string password)
         {
-            return db.users.FirstOrDefault(u => u.username == username && u.password == password);
+            // Fetch the user by username
+               return db.users.FirstOrDefault(u => u.username == username);
+           
+
+            return null;
         }
+        /*public  string HashPassword(string password)
+           {
+               using (var sha256 = SHA256.Create())
+               {
+                   var bytes = Encoding.UTF8.GetBytes(password);
+                   var hash = sha256.ComputeHash(bytes);
+                   return Convert.ToBase64String(hash);
+               }
+
+            }*/
+       } 
     }
-}
+
