@@ -26,6 +26,7 @@ namespace BlogMVC.Models.ViewModels
         [DataType(DataType.Password)]
         public string password { get; set; }
 
+
         //confirm password
         [Required(ErrorMessage = "Confirm Password is required")]
         [DataType(DataType.Password)]
@@ -33,12 +34,11 @@ namespace BlogMVC.Models.ViewModels
         public string confirm_password { get; set; }
 
        
-  
-
 
         [Required(ErrorMessage = "Email is required")]
         [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "Invalid email format")]
         public string email { get; set; }
+
 
         [Required(ErrorMessage = "Role is required")]
         public string role { get; set; }
