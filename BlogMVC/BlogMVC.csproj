@@ -364,10 +364,10 @@
     <Compile Include="Repositories\BlogPostRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\FilesRepository.cs" />
-    <Compile Include="Repositories\IBlogPostRepository.cs" />
-    <Compile Include="Repositories\ICategoryRepository.cs" />
-    <Compile Include="Repositories\IFilesRepository.cs" />
-    <Compile Include="Repositories\IUserRepository.cs" />
+    <Compile Include="Interfaces\IBlogPostRepository.cs" />
+    <Compile Include="Interfaces\ICategoryRepository.cs" />
+    <Compile Include="Interfaces\IFilesRepository.cs" />
+    <Compile Include="Interfaces\IUserRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>

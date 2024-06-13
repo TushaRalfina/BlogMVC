@@ -18,12 +18,14 @@ namespace BlogMVC.Repositories
         {
 
             userViewModel.created_at = System.DateTime.Now;
-            //add user to the database
+            userViewModel.password = HashPassword(userViewModel.password);
+
+
             db.users.Add(new user
             {
                 username = userViewModel.username,
-                password = userViewModel.password,
                 email = userViewModel.email,
+                password = userViewModel.password,
                 role = userViewModel.role,
                 FirstName = userViewModel.FirstName,
                 LastName = userViewModel.LastName,
@@ -84,24 +86,29 @@ namespace BlogMVC.Repositories
             return db.users.FirstOrDefault(u => u.id == id);
         }
 
-        public user GetUserByUsername(string username, string password)
+        public user GetUserByUsername(string username)
         {
-            // Fetch the user by username
-               return db.users.FirstOrDefault(u => u.username == username);
+            // Fetch the user by  username
+               return db.users.FirstOrDefault(u => u.username == username );
            
-
-            return null;
+ 
         }
-        /*public  string HashPassword(string password)
-           {
-               using (var sha256 = SHA256.Create())
-               {
-                   var bytes = Encoding.UTF8.GetBytes(password);
-                   var hash = sha256.ComputeHash(bytes);
-                   return Convert.ToBase64String(hash);
-               }
+         public string HashPassword(string password)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
 
-            }*/
-       } 
+                 StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < hashedBytes.Length; i++)
+                {
+                    builder.Append(hashedBytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
+       
     }
+}
 

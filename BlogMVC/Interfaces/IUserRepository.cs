@@ -10,17 +10,16 @@ namespace BlogMVC.Repositories
 {
     public interface IUserRepository
     {
-        // Define the methods that will be used in the UserRepositoy class
 
         void AddUser(UserViewModel user);
 
-        user GetUserByUsername(string username,string password);
+        user GetUserByUsername(string username);
 
         user GetUserById(int id);
 
         user UpdateUser(user user);
 
-        //string HashPassword(string password);
+        string HashPassword(string password);
 
 
 

@@ -39,17 +39,16 @@ namespace BlogMVC.Controllers
                     return View(userViewModel);
                 }
 
-                if (userRepository.GetUserByUsername(userViewModel.username, userViewModel.password) != null)
+                if (userRepository.GetUserByUsername(userViewModel.username) != null)
                 {
                     ViewBag.Notification = "This username is already taken";
                     return View(userViewModel);
                 }
                 else
                 {
-                   // userViewModel.password = userRepository.HashPassword(userViewModel.password);
                      userRepository.AddUser(userViewModel);
                     
-                    var user = userRepository.GetUserByUsername(userViewModel.username, userViewModel.password);
+                    var user = userRepository.GetUserByUsername(userViewModel.username);
 
                     Session["id"] = user.id.ToString();
                     Session["username"] = user.username;
@@ -75,12 +74,12 @@ namespace BlogMVC.Controllers
         {
             return View("SignUp");
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(user user)
         {
-            var usr = userRepository.GetUserByUsername(user.username,user.password);
+            var usr = userRepository.GetUserByUsername(user.username);
+            user.password = userRepository.HashPassword(user.password);
             if (usr != null && usr.password == user.password)
             {
                 Session["id"] = usr.id.ToString();
@@ -96,7 +95,10 @@ namespace BlogMVC.Controllers
             }
         }
 
-        
+
+
+
+
 
         public ActionResult Index()
         {

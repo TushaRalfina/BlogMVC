@@ -15,7 +15,6 @@ namespace BlogMVC.Models.ViewModels
             this.role = "user";
             
         }
-
         public int id { get; set; }
 
         [Required(ErrorMessage = "Username is required")]
@@ -25,8 +24,6 @@ namespace BlogMVC.Models.ViewModels
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        [StringLength(16, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters")]
-
         public string password { get; set; }
 
         //confirm password
@@ -34,6 +31,9 @@ namespace BlogMVC.Models.ViewModels
         [DataType(DataType.Password)]
         [Compare("password", ErrorMessage = "Password and Confirm Password must match")]
         public string confirm_password { get; set; }
+
+       
+  
 
 
         [Required(ErrorMessage = "Email is required")]

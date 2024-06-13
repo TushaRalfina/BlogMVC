@@ -13,5 +13,12 @@ namespace BlogMVC.Repositories
         {
            return  db.files.ToList();
         }
+
+         //add files to the database
+         public void AddFiles(file file)
+            {
+                db.files.Add(file);
+                db.SaveChanges();
+            }
     }
 }

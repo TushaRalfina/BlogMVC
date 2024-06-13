@@ -32,8 +32,7 @@ namespace BlogMVC.Models
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        [StringLength(16, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters")]
-
+ 
         public string password { get; set; }
          
 

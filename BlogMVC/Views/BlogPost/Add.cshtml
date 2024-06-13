@@ -22,37 +22,41 @@
                 {
                     @Html.AntiForgeryToken()
 
-                    <fieldset class="row">
-                        <div class="column lg-6 tab-12 form-field">
-                            <input name="username" id="username" class="u-fullwidth" placeholder="Your Username" value="@Session["username"]" type="text" readonly>
-                        </div>
+            <fieldset class="row">
+                <div class="column lg-6 tab-12 form-field">
+                    <input name="username" id="username" class="u-fullwidth" placeholder="Your Username" value="@Session["username"]" type="text" readonly>
+                </div>
 
-                        <div class="column lg-6 tab-12 form-field">
-                            <input name="email" id="email" class="u-fullwidth" placeholder="Your Email" value="@Session["email"]" type="text" readonly>
-                        </div>
+                <div class="column lg-6 tab-12 form-field">
+                    <input name="email" id="email" class="u-fullwidth" placeholder="Your Email" value="@Session["email"]" type="text" readonly>
+                </div>
 
-                        <div class="column lg-12 form-field">
-                            @Html.LabelFor(model => model.title, "Title")
-                            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "u-fullwidth", placeholder = "Title" } })
-                            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-                        </div>
+                <div class="column lg-12 form-field">
+                    @Html.LabelFor(model => model.title, "Title")
+                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "u-fullwidth", placeholder = "Title" } })
+                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                </div>
 
-                        <div class="column lg-12 message form-field mt-2 mb-2">
-                            @Html.LabelFor(model => model.content, "Content")
-                            @Html.TextAreaFor(model => model.content, new { @class = "u-fullwidth", placeholder = "Content" })
-                            @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
-                        </div>
+                <div class="column lg-12 message form-field mt-2 mb-2">
+                    @Html.LabelFor(model => model.content, "Content")
+                    @Html.TextAreaFor(model => model.content, new { @class = "u-fullwidth", placeholder = "Content" })
+                    @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
+                </div>
+                <div>
+                    <label>Files</label>
+                    <input type="file" name="files" multiple />
+                </div>
 
-                        <div class="column lg-12 form-field">
-                            <label>PLACE A CATEGORY</label>
-                            @Html.ListBoxFor(model => model.SelectedCategoryIds, new MultiSelectList(Model.categories, "Value", "Text"), new { @class = "form-select" })
-                            @Html.ValidationMessageFor(model => model.SelectedCategoryIds, "", new { @class = "text-danger" })
-                        </div>
+                <div class="column lg-12 form-field">
+                    <label>PLACE A CATEGORY</label>
+                    @Html.ListBoxFor(model => model.SelectedCategoryIds, new MultiSelectList(Model.categories, "Value", "Text"), new { @class = "form-select" })
+                    @Html.ValidationMessageFor(model => model.SelectedCategoryIds, "", new { @class = "text-danger" })
+                </div>
 
-                        <div class="column lg-12">
-                            <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Post" type="submit">
-                        </div>
-                    </fieldset>
+                <div class="column lg-12">
+                    <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Post" type="submit">
+                </div>
+            </fieldset>
                 }
             </article> <!-- end entry -->
         </div>

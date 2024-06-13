@@ -15,11 +15,13 @@ namespace BlogMVC.Controllers
         private BlogPostRepository blogPostRepository;
         private CategoryRepository categoryRepository;
         private UserRepository userRepository;
+        private FilesRepository filesRepository;
         public BlogPostController()
         {
             blogPostRepository = new BlogPostRepository();
             categoryRepository = new CategoryRepository();
             userRepository= new UserRepository();
+           filesRepository = new FilesRepository();
         }
 
 
@@ -46,7 +48,7 @@ namespace BlogMVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(AddBlogPostRequest model)
+        public ActionResult Add(AddBlogPostRequest model,IEnumerable<HttpPostedFileBase>files)
         {
             if (ModelState.IsValid)
             {
@@ -67,6 +69,23 @@ namespace BlogMVC.Controllers
                     };
 
                     blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
+
+                    foreach (var file in files)
+                    {
+                        if (file != null & file.ContentLength>0)
+                        {
+                            var fileEntity = new file
+                            {
+                                post_id = post.id,
+                                file_type = file.ContentType,
+                                file_name = file.FileName,
+                                file_content = ConvertToBase64(file)
+                            };
+
+                            filesRepository.AddFiles(fileEntity);
+                            
+                        }
+                    }
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -83,8 +102,16 @@ namespace BlogMVC.Controllers
 
             return View(model);
         }
+        private string ConvertToBase64(HttpPostedFileBase file)
+        {
+            using (var reader = new System.IO.BinaryReader(file.InputStream))
+            {
+                var fileBytes = reader.ReadBytes(file.ContentLength);
+                return Convert.ToBase64String(fileBytes);
+            }
+        }
 
 
-        
+
     }
 }
