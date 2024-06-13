@@ -9,7 +9,7 @@ namespace BlogMVC.Repositories
 {
     public class BlogPostRepository : IBlogPostRepository
     {
-        BlogEntities db = new BlogEntities();
+         BlogEntities db = new BlogEntities();
 
         public void AddBlogPost(post post,List<int> categoryIds)
         {
@@ -53,5 +53,10 @@ namespace BlogMVC.Repositories
         {
             throw new NotImplementedException();
         }
+         
+        public IEnumerable<post> GetBlogPostsApproved()
+        {
+            return db.posts.Where(p => p.approved == "yes").ToList();
+          }
     }
 }

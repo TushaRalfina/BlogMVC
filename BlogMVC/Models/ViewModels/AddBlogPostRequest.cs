@@ -21,9 +21,14 @@ namespace BlogMVC.Models.ViewModels
 
         public int user_id { get; set; }
 
+        
+
         //display categories
         public List<int> SelectedCategoryIds { get; set; }
         public IEnumerable<SelectListItem> categories { get; set; }
+
+        public List<HttpPostedFileBase> Files { get; set; }   
+
 
     }
 }

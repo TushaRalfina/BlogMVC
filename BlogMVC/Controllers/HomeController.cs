@@ -106,14 +106,13 @@ namespace BlogMVC.Controllers
             }
             else
             {
-                //show all blog posts
-                var posts =  blogPostRepository.GetBlogPosts();
-                return View(posts);
+                 var posts = blogPostRepository.GetBlogPostsApproved();  
+                 return View(posts);
             }
         }
 
-
-      //GET:PROFILE
+        
+        //GET:PROFILE
         public ActionResult Profile()
         {
             if (Session["id"] == null)
@@ -164,14 +163,12 @@ namespace BlogMVC.Controllers
                     email = user.email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    bio = user.bio
-                    
+                    bio = user.bio   
                 };
 
                 return View(usermodel);
             }
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -210,8 +207,6 @@ namespace BlogMVC.Controllers
                 return View(editProfileRequest);
             }
         }
-
-
         public ActionResult About()
         {
             return View();
@@ -232,10 +227,6 @@ namespace BlogMVC.Controllers
             return View();
         }
 
-        public ActionResult Add()
-        {
-            return View();
-        }
+        
     }
 }
-
