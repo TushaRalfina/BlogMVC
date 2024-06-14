@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,13 +22,21 @@ namespace BlogMVC.Models.ViewModels
 
         public int user_id { get; set; }
 
-        
+        //main image of the blog post
+        public string main_image { get; set; }
+
+        public HttpPostedFileBase main_imagee { get; set; }  
+
+
+
 
         //display categories
         public List<int> SelectedCategoryIds { get; set; }
         public IEnumerable<SelectListItem> categories { get; set; }
 
-        public List<HttpPostedFileBase> files { get; set; }   
+        public List<HttpPostedFileBase> files { get; set; }
+
+ 
 
 
     }

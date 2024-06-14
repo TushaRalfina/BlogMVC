@@ -59,6 +59,7 @@
     <NavigationProperty Name="files" Relationship="Self.FK__files__post_id__3E52440B" FromRole="posts" ToRole="files" />
     <NavigationProperty Name="PostCategories" Relationship="Self.FK__PostCateg__post___34C8D9D1" FromRole="posts" ToRole="PostCategories" />
     <NavigationProperty Name="user" Relationship="Self.FK__posts__user_id__300424B4" FromRole="posts" ToRole="users" />
+    <Property Name="main_image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="sysdiagram">
     <Key>

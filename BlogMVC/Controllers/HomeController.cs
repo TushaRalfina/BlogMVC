@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity.Validation;
+using System.Linq;
 using System.Web.Mvc;
 using BlogMVC.Models;
 using BlogMVC.Models.ViewModels;
@@ -14,12 +15,16 @@ namespace BlogMVC.Controllers
         private readonly IUserRepository userRepository;
         private readonly IBlogPostRepository blogPostRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IFilesRepository filesRepository;
+        private readonly BlogEntities db = new BlogEntities(); // Adjust according to your DbContext
+
 
         public HomeController( )
         {
             userRepository = new UserRepository();
             blogPostRepository=new BlogPostRepository();
             categoryRepository=new CategoryRepository();
+            filesRepository = new FilesRepository();
          }
        
 
@@ -149,6 +154,19 @@ namespace BlogMVC.Controllers
             }
         }
 
+        public ActionResult DownloadFile(int fileId)
+        {
+            //get file from repository
+            var file = filesRepository.GetFileById(fileId);
+            if (file != null)
+            {
+                byte[] fileBytes = Convert.FromBase64String(file.file_content); // Convert base64 string back to byte array
+                return File(fileBytes, "application/octet-stream", file.file_name); // Return file as download
+            }
+
+            return HttpNotFound();
+        }
+
         //GET:EDIT PROFILE
         public ActionResult EditProfile(int id)
         {
@@ -219,11 +237,7 @@ namespace BlogMVC.Controllers
             return View();
         }
 
-        public ActionResult Post()
-        {
-            return View();
-        }
-
+       
         public ActionResult Categories()
         {
             return View();

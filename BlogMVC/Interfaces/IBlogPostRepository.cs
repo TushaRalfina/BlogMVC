@@ -21,6 +21,7 @@ namespace BlogMVC.Repositories
 
         void DeleteBlogPost(int id);
 
+
        IEnumerable<post> GetBlogPostsApproved();
     }
 }

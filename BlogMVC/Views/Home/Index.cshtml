@@ -65,16 +65,14 @@
             <div class="bricks-wrapper" data-animate-block>
 
                 <div class="grid-sizer"></div>
-            @foreach (var post in Model)
-            {
+                @foreach (var post in Model)
+                {
                     <article class="brick entry" data-animate-el>
-
                         <div class="entry__thumb">
                             <a href="@Url.Action("Post", "Home")" class="thumb-link">
-                                <img src="/Content/images/thumbs/masonry/statue-600.jpg"
-                                     srcset="/Content/images/thumbs/masonry/statue-600.jpg 1x, /Content/images/thumbs/masonry/statue-1200.jpg 2x" alt="">
+                                <img src="@post.main_image" alt="">
                             </a>
-                        </div> <!-- end entry__thumb -->
+                        </div>
 
                         <div class="entry__text">
                             <div class="entry__header">
@@ -82,7 +80,7 @@
                                     @foreach (var postCategory in post.PostCategories)
                                     {
                                         <span class="cat-links">
-                                            <a href="#">@postCategory.category.name </a>
+                                            <a href="#">@postCategory.category.name</a>
                                         </span>
                                     }
 
@@ -93,18 +91,28 @@
                                 </div>
                                 <h1 class="entry__title"><a href="@Url.Action("Post", "Home")">@post.title</a></h1>
                             </div>
-                            <div class="entry__excerpt">
-                                <p>
-                                    Lorem ipsum Sed eiusmod esse aliqua sed incididunt aliqua incididunt mollit id et sit proident dolor nulla
-                                    sed commodo est ad minim elit reprehenderit nisi officia aute incididunt velit sint in aliqua cillum in.
-                                </p>
-                            </div>
+
+
+
+                            @if (post.files != null && post.files.Any())
+                            {
+                                <div class="entry__files">
+                                    <h4>Attached Files:</h4>
+                                    <ul>
+                                        @foreach (var file in post.files)
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("DownloadFile", "Home", new { fileId = file.id })">@file.file_name</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+
                             <a class="entry__more-link" href="#0">Read More</a>
-                        </div> <!-- end entry__text -->
-
-                    </article> <!-- end article -->
-            }
-
+                        </div>
+                    </article>
+                }
             </div> <!-- end bricks-wrapper -->
 
         </div> <!-- end masonry-->

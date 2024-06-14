@@ -46,6 +46,7 @@
     <EntitySetMapping Name="posts">
       <EntityTypeMapping TypeName="BlogModel.post">
         <MappingFragment StoreEntitySet="posts">
+          <ScalarProperty Name="main_image" ColumnName="main_image" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="title" ColumnName="title" />
           <ScalarProperty Name="content" ColumnName="content" />

@@ -49,6 +49,7 @@
     <Property Name="user_id" Type="int" Nullable="false" />
     <Property Name="created_at" Type="datetime" />
     <Property Name="updated_at" Type="datetime" />
+    <Property Name="main_image" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>

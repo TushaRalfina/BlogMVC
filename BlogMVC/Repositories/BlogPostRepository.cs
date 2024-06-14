@@ -25,8 +25,6 @@ namespace BlogMVC.Repositories
                 db.PostCategories.Add(postCategory);
             }
             db.SaveChanges();
-
-
  
         }
 

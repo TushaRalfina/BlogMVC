@@ -11,14 +11,18 @@ namespace BlogMVC.Repositories
         BlogEntities db = new BlogEntities();
         public IEnumerable<file> GetFiles()
         {
-           return  db.files.ToList();
+           return db.files.ToList();
         }
 
-         //add files to the database
-         public void AddFiles(file file)
+          public void AddFiles(file file)
             {
                 db.files.Add(file);
                 db.SaveChanges();
             }
+
+        public file GetFileById(int id)
+            {
+            return db.files.FirstOrDefault(f => f.id == id);
+            }
+        }
     }
-}

@@ -406,7 +406,7 @@
     <Content Include="Content\images\favicon-32x32.png" />
     <Content Include="Content\images\favicon.ico" />
     <Content Include="Content\images\icons\icon-quote.svg" />
-    <Content Include="Content\images\sample-1200.jpg" />
+    <Content Include="Content\Uploads\sample-1200.jpg" />
     <Content Include="Content\images\sample-2400.jpg" />
     <Content Include="Content\images\sample-600.jpg" />
     <Content Include="Content\images\sample-image.jpg" />
@@ -503,7 +503,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Post.cshtml" />
     <Content Include="Views\Home\Categories.cshtml" />
     <Content Include="Views\BlogPost\Add.cshtml" />
     <Content Include="Views\Shared\_LayoutPage1.cshtml" />
@@ -513,6 +512,7 @@
     <Content Include="Views\Admin\ManagePosts.cshtml" />
     <Content Include="Views\Home\Profile.cshtml" />
     <Content Include="Views\Home\EditProfile.cshtml" />
+    <Content Include="Views\BlogPost\Post.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

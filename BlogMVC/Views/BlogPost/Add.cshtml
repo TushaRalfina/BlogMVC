@@ -18,7 +18,7 @@
                 </header>
                 <h4>Be your own writer</h4>
 
-                @using (Html.BeginForm("Add", "BlogPost", FormMethod.Post, new { id = "addForm", @class = "entry__form" }))
+                @using (Html.BeginForm("Add", "BlogPost", FormMethod.Post, new { id = "addForm", @class = "entry__form", enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
 
@@ -42,9 +42,9 @@
                     @Html.TextAreaFor(model => model.content, new { @class = "u-fullwidth", placeholder = "Content" })
                     @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
                 </div>
-                <div>
-                    <label>Files</label>
-                    <input type="file" name="files" multiple />
+                <div class="column lg-12 form-field">
+                    <label>Additional Files</label>
+                    <input type="file" name="files" id="files" class="u-fullwidth" multiple />
                 </div>
 
                 <div class="column lg-12 form-field">
@@ -52,7 +52,10 @@
                     @Html.ListBoxFor(model => model.SelectedCategoryIds, new MultiSelectList(Model.categories, "Value", "Text"), new { @class = "form-select" })
                     @Html.ValidationMessageFor(model => model.SelectedCategoryIds, "", new { @class = "text-danger" })
                 </div>
-
+                <div class="column lg-12 form-field">
+                    <label for="main_imagee">Main Picture</label>
+                    <input type="file" name="main_imagee" id="main_imagee" class="u-fullwidth" />
+                </div>
                 <div class="column lg-12">
                     <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Post" type="submit">
                 </div>
