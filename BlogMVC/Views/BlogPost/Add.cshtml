@@ -42,6 +42,12 @@
                     @Html.TextAreaFor(model => model.content, new { @class = "u-fullwidth", placeholder = "Content" })
                     @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
                 </div>
+                <!-- Body Images -->
+                <div class="column lg-12 form-field">
+                    <label>Body Images</label>
+                    <input type="file" name="body_images" id="body_images" class="u-fullwidth" multiple />
+                </div>
+
                 <div class="column lg-12 form-field">
                     <label>Additional Files</label>
                     <input type="file" name="files" id="files" class="u-fullwidth" multiple />
@@ -68,6 +74,31 @@
 
 @section Scripts {
     <script>
-        var editor = new FroalaEditor('#content');
+        new FroalaEditor('#content', {
+            toolbarButtons: {
+                moreText: {
+                    buttons: [
+                        'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting'
+                    ]
+                },
+                moreParagraph: {
+                    buttons: [
+                        'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'
+                    ]
+                },
+                moreRich: {
+                    buttons: [
+                        'insertLink','emoticons', 'specialCharacters'
+                    ]
+                },
+                moreMisc: {
+                    buttons: [
+                        'undo', 'redo', 'fullscreen'
+                    ],
+                    align: 'right',
+                    buttonsVisible: 2
+                }
+            }
+        });
     </script>
 }

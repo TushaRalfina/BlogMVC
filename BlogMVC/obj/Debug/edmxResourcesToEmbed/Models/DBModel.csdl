@@ -33,6 +33,7 @@
     <Property Name="file_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="file_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="post" Relationship="Self.FK__files__post_id__3E52440B" FromRole="files" ToRole="posts" />
+    <Property Name="body_images" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="PostCategory">
     <Key>

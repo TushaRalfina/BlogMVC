@@ -48,11 +48,13 @@ namespace BlogMVC.Controllers
             return View(model);
         }
 
+
         [HttpPost]
-        public ActionResult Add(AddBlogPostRequest model)
+        public ActionResult Add(AddBlogPostRequest model, IEnumerable<HttpPostedFileBase> body_images)
         {
             if (ModelState.IsValid)
             {
+                // Ensure user is authenticated
                 if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
                 {
                     var user = userRepository.GetUserById(user_id);
@@ -61,11 +63,11 @@ namespace BlogMVC.Controllers
                         return RedirectToAction("Login", "Home");
                     }
 
+                    // Handle main image upload
                     if (model.main_imagee != null && model.main_imagee.ContentLength > 0)
                     {
                         try
                         {
-                            // Generate a unique file name to avoid overwriting
                             string fileName = Path.GetFileName(model.main_imagee.FileName);
                             string uploadsDir = Server.MapPath("~/Content/Uploads");
                             string filePath = Path.Combine(uploadsDir, fileName);
@@ -81,11 +83,10 @@ namespace BlogMVC.Controllers
 
                             // Update the model with the saved file path
                             model.main_image = "/Content/Uploads/" + fileName;
-
                         }
                         catch (Exception ex)
                         {
-                            ModelState.AddModelError("", $"An error occurred while saving the file: {ex.Message}");
+                            ModelState.AddModelError("", $"An error occurred while saving the main image: {ex.Message}");
                         }
                     }
                     else
@@ -93,72 +94,105 @@ namespace BlogMVC.Controllers
                         model.main_image = "/Content/images/thumbs/masonry/statue-1200.jpg";
                     }
 
+                    // Create a new post object
                     var post = new post
                     {
                         title = model.title,
                         content = model.content,
                         created_at = DateTime.Now,
                         user_id = user_id,
-                        main_image = model.main_image // Use the updated main_image path
+                        main_image = model.main_image
                     };
 
                     // Add the blog post with categories
                     blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
-                    // Handle additional files
-                    if (model.files != null && model.files.Count > 0)
+
+                    
+
+                     if (model.files != null && model.files.Any())
                     {
-                        foreach (var file in model.files)
+                       
+                        foreach (var file in model.files.Where(f => f != null && f.ContentLength > 0))
                         {
-                            if (file != null && file.ContentLength > 0)
+                            try
                             {
+                                
+ 
                                 using (var memoryStream = new MemoryStream())
                                 {
                                     file.InputStream.CopyTo(memoryStream);
                                     var fileBytes = memoryStream.ToArray();
 
-                                    // Save file to the database
-                                    var fileData = new file
+                                    
+                                   
+                                    foreach (var bodyImage in body_images)
+                                    {    
+                                        
+                                        var documentFile = new file
                                     {
-                                        post_id = post.id,
-                                        file_type = Path.GetExtension(file.FileName), // Get file extension
-                                        file_name = Path.GetFileName(file.FileName), // Get file name
-                                        file_content = Convert.ToBase64String(fileBytes) // Convert to base64
-                                    };
+                                        post_id = post.id,  
+                                        file_type = Path.GetExtension(file.FileName),
+                                        file_name = Path.GetFileName(file.FileName),
+                                        file_content = Convert.ToBase64String(fileBytes),
+                                        body_images = ""
+                                     };
+                                         documentFile.body_images += $"/Content/Uploads/{bodyImage.FileName};";  
+                                        if (!string.IsNullOrEmpty(documentFile.body_images))
+                                    {
+                                        documentFile.body_images = documentFile.body_images.TrimEnd(';');
+                                    } 
+                                        
+                                        
+                                    
 
-                                    filesRepository.AddFiles(fileData);
-                                }
+                                    filesRepository.AddFiles(documentFile);
+                                    }
+
+                                    
+
+                                 }
+                            }
+                            catch (Exception ex)
+                            {
+                                ModelState.AddModelError("", $"An error occurred while saving a document: {ex.Message}");
                             }
                         }
-
-
-
-                        // Get updated categories list
-                        var categories = categoryRepository.GetCategories();
-                        model.categories = categories.Select(c => new SelectListItem
-                        {
-                            Text = c.name,
-                            Value = c.id.ToString()
-                        }).ToList();
-
-                        return RedirectToAction("Index", "Home");
                     }
 
+                    // Get updated categories list
+                    var categories = categoryRepository.GetCategories();
+                    model.categories = categories.Select(c => new SelectListItem
+                    {
+                        Text = c.name,
+                        Value = c.id.ToString()
+                    }).ToList();
+
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
                     return RedirectToAction("Login", "Home");
                 }
-
-                return RedirectToAction("Index", "Home");
             }
 
+            // If ModelState is not valid, return to the same view with errors
             return View(model);
         }
 
 
 
 
-        public ActionResult Post()
+
+        public ActionResult Post(int id)
         {
-            return View();
-        }
+
+            var post = blogPostRepository.GetBlogPostById(id);
+            if (post != null) {
+                return View(post);
+            }
+
+            return HttpNotFound("Post not found.");
+         }
 
     }
 }

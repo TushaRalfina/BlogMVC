@@ -156,8 +156,9 @@ namespace BlogMVC.Controllers
 
         public ActionResult DownloadFile(int fileId)
         {
-            //get file from repository
+            //file nga repository
             var file = filesRepository.GetFileById(fileId);
+
             if (file != null)
             {
                 byte[] fileBytes = Convert.FromBase64String(file.file_content); // Convert base64 string back to byte array

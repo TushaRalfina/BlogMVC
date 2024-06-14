@@ -35,8 +35,11 @@ namespace BlogMVC.Repositories
 
         public post GetBlogPostById(int id)
         {
-            throw new NotImplementedException();
-        }
+           var post=db.posts.FirstOrDefault(x => x.id == id);
+            return post;
+
+
+         }
 
         public IEnumerable<post> GetBlogPosts()
         {
@@ -54,7 +57,8 @@ namespace BlogMVC.Repositories
          
         public IEnumerable<post> GetBlogPostsApproved()
         {
-            return db.posts.Where(p => p.approved == "yes").ToList();
+            var posts= db.posts.Where(p => p.approved == "yes").ToList();
+            return posts.OrderByDescending(p => p.created_at);
           }
     }
 }

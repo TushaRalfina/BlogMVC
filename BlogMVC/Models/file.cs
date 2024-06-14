@@ -19,6 +19,9 @@ namespace BlogMVC.Models
         public string file_type { get; set; }
         public string file_name { get; set; }
         public string file_content { get; set; }
+        public string body_images { get; set; }
+
+
     
         public virtual post post { get; set; }
     }

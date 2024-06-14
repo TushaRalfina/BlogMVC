@@ -29,6 +29,7 @@
     <Property Name="file_type" Type="varchar" MaxLength="45" Nullable="false" />
     <Property Name="file_name" Type="varchar" MaxLength="255" Nullable="false" />
     <Property Name="file_content" Type="varchar(max)" Nullable="false" />
+    <Property Name="body_images" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="PostCategories">
     <Key>

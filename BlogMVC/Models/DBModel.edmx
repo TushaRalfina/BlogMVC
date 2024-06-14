@@ -34,6 +34,7 @@
           <Property Name="file_type" Type="varchar" MaxLength="45" Nullable="false" />
           <Property Name="file_name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="file_content" Type="varchar(max)" Nullable="false" />
+          <Property Name="body_images" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PostCategories">
           <Key>
@@ -224,6 +225,7 @@
           <Property Name="file_name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="file_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="post" Relationship="Self.FK__files__post_id__3E52440B" FromRole="files" ToRole="posts" />
+          <Property Name="body_images" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PostCategory">
           <Key>
@@ -416,6 +418,7 @@
           <EntitySetMapping Name="files">
             <EntityTypeMapping TypeName="BlogModel.file">
               <MappingFragment StoreEntitySet="files">
+                <ScalarProperty Name="body_images" ColumnName="body_images" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="post_id" ColumnName="post_id" />
                 <ScalarProperty Name="file_type" ColumnName="file_type" />

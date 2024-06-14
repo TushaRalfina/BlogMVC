@@ -26,6 +26,7 @@
     <EntitySetMapping Name="files">
       <EntityTypeMapping TypeName="BlogModel.file">
         <MappingFragment StoreEntitySet="files">
+          <ScalarProperty Name="body_images" ColumnName="body_images" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="post_id" ColumnName="post_id" />
           <ScalarProperty Name="file_type" ColumnName="file_type" />
