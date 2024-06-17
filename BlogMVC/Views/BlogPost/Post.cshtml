@@ -3,6 +3,9 @@
 @{
     ViewBag.Title = "Post";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var groupedFiles = Model.files.GroupBy(f => f.file_name);
+    var groupedImages = Model.files.GroupBy(f => f.body_images);
+
 }
 
 
@@ -52,10 +55,10 @@
                         </div>
                     </div>
                 </header>
-
                 <div class="entry__media">
                     <figure class="featured-image">
                         <img src="@Model.main_image"
+                             style="vertical-align: bottom; margin-bottom: 0; position: relative; width: 100%;  "
                              sizes="(max-width: 2400px) 100vw, 2400px" alt="">
                     </figure>
                 </div>
@@ -66,27 +69,27 @@
                         <p class="lead">
                             @Html.Raw(Model.content)
                         </p>
-                         
-                            <h4>Body Images:</h4>
-                            @foreach (var file in Model.files)
-                            {
-                                <div class="file-link">
-                                    <img src="@file.body_images" alt="Body Image" />
-                                </div>
-                            }
-                       
+
+
+                        <h4>Blog Post Images:</h4>
+                        @foreach (var group in groupedImages)
+                        {
+                            var file = group.First();
+                            <img src="@file.body_images" alt="">
+
+                        }
+
 
                         <h4>Attached Files:</h4>
-
-                        @foreach (var file in Model.files)
+                        @foreach (var group in groupedFiles)
                         {
+                            var file = group.First();
                             <span class="file-link">
                                 <a href="@Url.Action("DownloadFile", "Home", new { fileId = file.id })">
                                     <i class="fas fa-file-alt"></i> @file.file_name
                                 </a>
                             </span>
                         }
-
 
 
 
@@ -108,24 +111,23 @@
 
                     </div> <!-- end entry-content -->
 
-                    <div class="post-nav">
-                        <div class="post-nav__prev">
-                            <a href="single-standard.html" rel="prev">
-                                <span>Prev</span>
-                                The Pomodoro Technique Really Works.
-                            </a>
-                        </div>
-                        <div class="post-nav__next">
-                            <a href="single-standard.html" rel="next">
-                                <span>Next</span>
-                                How Imagery Drives User Experience.
-                            </a>
-                        </div>
-                    </div>
 
                 </div> <!-- end content-primary -->
 
             </article> <!-- end entry -->
+            @if (Session["role"] != null && Session["role"].ToString() == "admin")
+            {
+                <div class="admin-buttons">
+                    <form action="@Url.Action("ApprovePost", "Admin", new { id = Model.id })" method="post">
+                        <button type="submit" class="btn btn-success">Approve Post</button>
+                    </form>
+                    <form action="@Url.Action("DeletePost", "Admin", new {id = Model.id })" method="post">
+                        <button type="submit" class="btn btn-danger">Reject Post</button>
+                    </form>
+                </div>
+
+            }
+
             <!-- comments -->
             <div class="comments-wrap">
 
@@ -166,104 +168,7 @@
                                 </div>
 
                             </li> <!-- end comment level 1 -->
-
-                            <li class="thread-alt depth-1 comment">
-
-                                <div class="comment__avatar">
-                                    <img class="avatar" src="/Content/images/avatars/user-04.jpg" alt="" width="50" height="50">
-                                </div>
-
-                                <div class="comment__content">
-
-                                    <div class="comment__info">
-                                        <div class="comment__author">John Doe</div>
-
-                                        <div class="comment__meta">
-                                            <div class="comment__time">Aug 14, 2021</div>
-                                            <div class="comment__reply">
-                                                <a class="comment-reply-link" href="#0">Reply</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="comment__text">
-                                        <p>
-                                            Sumo euismod dissentiunt ne sit, ad eos iudico qualisque adversarium, tota falli et mei. Esse euismod
-                                            urbanitas ut sed, et duo scaevola pericula splendide. Primis veritus contentiones nec ad, nec et
-                                            tantas semper delicatissimi.
-                                        </p>
-                                    </div>
-
-                                </div>
-
-                                <ul class="children">
-
-                                    <li class="depth-2 comment">
-
-                                        <div class="comment__avatar">
-                                            <img class="avatar" src="/Content/images/avatars/user-03.jpg" alt="" width="50" height="50">
-                                        </div>
-
-                                        <div class="comment__content">
-
-                                            <div class="comment__info">
-                                                <div class="comment__author">Kakashi Hatake</div>
-
-                                                <div class="comment__meta">
-                                                    <div class="comment__time">Aug 14, 2021</div>
-                                                    <div class="comment__reply">
-                                                        <a class="comment-reply-link" href="#0">Reply</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="comment__text">
-                                                <p>
-                                                    Duis sed odio sit amet nibh vulputate
-                                                    cursus a sit amet mauris. Morbi accumsan ipsum velit. Duis sed odio sit amet nibh vulputate
-                                                    cursus a sit amet mauris
-                                                </p>
-                                            </div>
-
-                                        </div>
-
-                                        <ul class="children">
-
-                                            <li class="depth-3 comment">
-
-                                                <div class="comment__avatar">
-                                                    <img class="avatar" src="/Content/images/avatars/user-04.jpg" alt="" width="50" height="50">
-                                                </div>
-
-                                                <div class="comment__content">
-
-                                                    <div class="comment__info">
-                                                        <div class="comment__author">John Doe</div>
-
-                                                        <div class="comment__meta">
-                                                            <div class="comment__time">Aug 14, 2021</div>
-                                                            <div class="comment__reply">
-                                                                <a class="comment-reply-link" href="#0">Reply</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="comment__text">
-                                                        <p>
-                                                            Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est
-                                                            etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.
-                                                        </p>
-                                                    </div>
-
-                                                </div>
-
-                                            </li>
-
-                                        </ul>
-
-                                    </li>
-
-                                </ul>
+                            </ul>
 
                             </li> <!-- end comment level 1 -->
 
@@ -280,9 +185,7 @@
 
                                         <div class="comment__meta">
                                             <div class="comment__time">Aug 13, 2021</div>
-                                            <div class="comment__reply">
-                                                <a class="comment-reply-link" href="#0">Reply</a>
-                                            </div>
+
                                         </div>
                                     </div>
 
@@ -322,9 +225,7 @@
                                     <input name="cEmail" id="cEmail" class="u-fullwidth h-remove-bottom" placeholder="Your Email" value="" type="text">
                                 </div>
 
-                                <div class="column lg-12 form-field">
-                                    <input name="cWebsite" id="cWebsite" class="u-fullwidth h-remove-bottom" placeholder="Website" value="" type="text">
-                                </div>
+
 
                                 <div class="column lg-12 message form-field">
                                     <textarea name="cMessage" id="cMessage" class="u-fullwidth" placeholder="Your Message"></textarea>

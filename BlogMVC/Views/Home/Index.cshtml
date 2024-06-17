@@ -1,12 +1,15 @@
-﻿@model IEnumerable<BlogMVC.Models.post>
+﻿
+@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<BlogMVC.Models.post>
 
 @{
     ViewBag.Title = "Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
- 
 
- 
+
+
 <!-- # site-content
 ================================================== -->
 <section id="content" class="s-content">
@@ -37,11 +40,10 @@
                                 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
                                 nostrud corporis est laudantium voluptatum consectetur adipiscing.
                             </p>
-                            <a class="hero__more-link" href="@Url.Action("Post", "Home")">Read More</a>
-                        </div>
+                         </div>
                     </div>
                 </article>
-                
+
             </div> <!-- swiper-wrapper -->
 
             <div class="swiper-pagination"></div>
@@ -94,61 +96,72 @@
 
 
 
-                            @if (post.files != null && post.files.Any())
-                            {
-                                <div class="entry__files">
-                                    <h4>Attached Files:</h4>
-                                    <ul>
-                                        @foreach (var file in post.files)
-                                        {
-                                            <li>
-                                                <a href="@Url.Action("DownloadFile", "Home", new { fileId = file.id })">@file.file_name</a>
-                                            </li>
-                                        }
-                                    </ul>
-                                </div>
-                            }
 
-                            <a class="entry__more-link" href="#0">Read More</a>
+
+                            <a class="entry__more-link" href="@Url.Action("Post", "BlogPost", new { id = post.id })">Read More</a>
                         </div>
                     </article>
                 }
             </div> <!-- end bricks-wrapper -->
 
         </div> <!-- end masonry-->
-        <!-- pagination -->
-        <div class="row pagination">
-            <div class="column lg-12">
-                <nav class="pgn">
-                    <ul>
-                        <li>
-                            <a class="pgn__prev" href="#0">
-                                <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.25 6.75L4.75 12L10.25 17.25"></path>
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.25 12H5"></path>
-                                </svg>
-                            </a>
-                        </li>
-                        <li><a class="pgn__num" href="#0">1</a></li>
-                        <li><span class="pgn__num current">2</span></li>
-                        <li><a class="pgn__num" href="#0">3</a></li>
-                        <li><a class="pgn__num" href="#0">4</a></li>
-                        <li><a class="pgn__num" href="#0">5</a></li>
-                        <li><span class="pgn__num dots">…</span></li>
-                        <li><a class="pgn__num" href="#0">8</a></li>
-                        <li>
-                            <a class="pgn__next" href="#0">
-                                <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.75 6.75L19.25 12L13.75 17.25"></path>
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 12H4.75"></path>
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </nav> <!-- end pgn -->
-            </div> <!-- end column -->
-        </div> <!-- end pagination -->
+  
+    <style>
+         .pagination-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+            .pagination-container .pagination {
+                display: inline-block;
+                padding-left: 0;
+                margin: 0;
+                border-radius: 0.25rem;
+            }
+
+                .pagination-container .pagination li {
+                    display: inline;
+                    margin-right: 5px;
+                }
+
+                    .pagination-container .pagination li a,
+                    .pagination-container .pagination li span {
+                        position: relative;
+                        float: left;
+                        padding: 6px 12px;
+                        line-height: 1.42857143;
+                        text-decoration: none;
+                        color: #000000;
+                        background-color: #fff;
+                        border: 1px solid #ddd;
+                        margin-left: -1px;
+                        font-weight: 400;
+                    }
+
+                    .pagination-container .pagination li.active a {
+                        z-index: 2;
+                        color: #fff;
+                        background-color: #000000;
+                        border-color: #000000;
+                    }
+
+                    .pagination-container .pagination li.disabled a,
+                    .pagination-container .pagination li.disabled span {
+                        color: #777;
+                        background-color: #fff;
+                        border-color: #ddd;
+                        cursor: not-allowed;
+                    }
+
+    </style>
+
+        <div class="pagination-container">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+        </div>
 
     </div> <!-- end bricks -->
 
 </section> <!-- end s-content -->
+
+
+

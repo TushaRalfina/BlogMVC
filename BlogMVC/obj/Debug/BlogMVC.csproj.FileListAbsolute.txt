@@ -182,3 +182,5 @@ C:\Users\User\Desktop\BlogMVC\BlogMVC\bin\WebActivatorEx.dll
 C:\Users\User\Desktop\BlogMVC\BlogMVC\bin\Unity.Mvc5.dll
 C:\Users\User\Desktop\BlogMVC\BlogMVC\obj\Debug\BlogMVC.csproj.SuggestedBindingRedirects.cache
 C:\Users\User\Desktop\BlogMVC\BlogMVC\obj\Debug\BlogMVC.dll.config
+C:\Users\User\Desktop\BlogMVC\BlogMVC\bin\PagedList.dll
+C:\Users\User\Desktop\BlogMVC\BlogMVC\bin\PagedList.Mvc.dll

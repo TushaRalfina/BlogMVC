@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using BlogMVC.Models;
 using BlogMVC.Models.ViewModels;
 using BlogMVC.Repositories;
+using PagedList;
 
 
 
@@ -13,10 +14,10 @@ namespace BlogMVC.Controllers
     public class HomeController : Controller
     {
         private readonly IUserRepository userRepository;
-        private readonly IBlogPostRepository blogPostRepository;
+         private readonly IBlogPostRepository blogPostRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IFilesRepository filesRepository;
-        private readonly BlogEntities db = new BlogEntities(); // Adjust according to your DbContext
+        private readonly BlogEntities db = new BlogEntities();  
 
 
         public HomeController( )
@@ -79,6 +80,7 @@ namespace BlogMVC.Controllers
         {
             return View("SignUp");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(user user)
@@ -91,6 +93,7 @@ namespace BlogMVC.Controllers
                 Session["username"] = usr.username;
                 Session["role"] = usr.role;
                 Session["password"] = usr.password;
+                Session["email"] = usr.email;
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -105,22 +108,25 @@ namespace BlogMVC.Controllers
 
 
 
-        public ActionResult Index()
+ 
+     public ActionResult Index(int? page)
+    {
+        if (Session["id"] == null)
         {
-            if (Session["id"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-            else
-            {
-                 var posts = blogPostRepository.GetBlogPostsApproved();  
-                 return View(posts);
-            }
+            return RedirectToAction("Login", "Home");
         }
 
-        
-        //GET:PROFILE
-        public ActionResult Profile()
+        var posts = blogPostRepository.GetBlogPostsApproved().ToList();
+        int pageSize = 8;
+        int pageNumber = (page ?? 1);
+
+        return View(posts.ToPagedList(pageNumber, pageSize));
+    }
+
+
+
+    //GET:PROFILE
+    public ActionResult Profile()
         {
             if (Session["id"] == null)
             {

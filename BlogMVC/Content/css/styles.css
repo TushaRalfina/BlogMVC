@@ -500,6 +500,36 @@ template {
 }
 
 
+.pgn {
+    text-align: center;
+}
+
+    .pgn ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .pgn li {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .pgn a {
+        display: inline-block;
+        padding: 5px 10px;
+        text-decoration: none;
+        border: 1px solid #ccc;
+        color: #333;
+        background-color: #fff;
+    }
+
+        .pgn a:hover,
+        .pgn .current {
+            background-color: #f0f0f0;
+        }
+
+
 /* ===================================================================
  * # BASE SETUP
  *
@@ -4904,8 +4934,10 @@ body.search-is-visible .s-header__search-inner {
 /* entry featured media
  */
 .entry__media {
-    margin-bottom : var(--vspace-2);
+    margin-bottom: var(--vspace-2);
+ 
 }
+
 
 .entry__media figure {
     margin : 0;
@@ -4914,6 +4946,9 @@ body.search-is-visible .s-header__search-inner {
 .entry__media img {
     vertical-align : bottom;
     margin-bottom  : 0;
+    position       : relative;
+    width          : 100%;
+    left           : 13%;
 }
 
 /* entry main content

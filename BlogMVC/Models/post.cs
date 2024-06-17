@@ -20,7 +20,7 @@ namespace BlogMVC.Models
             this.comments = new HashSet<comment>();
             this.files = new HashSet<file>();
             this.PostCategories = new HashSet<PostCategory>();
-            this.approved = "yes";
+            this.approved = "no";
         }
     
         public int id { get; set; }

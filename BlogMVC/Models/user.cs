@@ -11,7 +11,8 @@ namespace BlogMVC.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class user
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,7 +23,11 @@ namespace BlogMVC.Models
         }
     
         public int id { get; set; }
+
+        [Required(ErrorMessage = "Username is required")]
         public string username { get; set; }
+
+        [Required(ErrorMessage = "Password is required")]
         public string password { get; set; }
         public string email { get; set; }
         public string role { get; set; }
