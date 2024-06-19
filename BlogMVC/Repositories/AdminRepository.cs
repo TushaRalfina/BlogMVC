@@ -12,7 +12,7 @@ namespace BlogMVC.Repositories
     {
         public void ApproveBlogPost(int id)
         {
-             using (var db = new BlogEntities())
+            using (var db = new BlogEntities())
             {
                 var post = db.posts.Find(id);
                 post.approved = "yes";
@@ -28,7 +28,7 @@ namespace BlogMVC.Repositories
                 comment.approved = "yes";
                 db.SaveChanges();
             }
-            
+
         }
 
         public void DeleteBlogPosts(int id)
@@ -41,34 +41,55 @@ namespace BlogMVC.Repositories
                 db.posts.Remove(post);
                 db.SaveChanges();
             }
-           
+
         }
 
         public void DeleteComment(int id)
         {
-            
+
             using (var db = new BlogEntities())
             {
                 var comment = db.comments.Find(id);
+                db.replies.RemoveRange(comment.replies);
                 db.comments.Remove(comment);
                 db.SaveChanges();
             }
         }
 
+        public void FshiReply(int id)
+        {
+            using (var db = new BlogEntities())
+            {
+                var reply = db.replies.Find(id);
+                db.replies.Remove(reply);
+                db.SaveChanges();
+            }
+
+        }
+
         public IEnumerable<post> GetBlogPostsNotApproved()
         {
 
-             using (var db = new BlogEntities())
+            using (var db = new BlogEntities())
             {
                 return db.posts.Include(p => p.user).Where(x => x.approved == "no").ToList();
             }
-            
+
         }
+
+        public int GetCommentIdByReplyId(int id)
+        {
+            using (var db = new BlogEntities())
+            {
+                var reply = db.replies.Find(id);
+                return reply.comment_id;
+            }
+         }
 
         public IEnumerable<comment> GetCommentsNotApproved()
         {
-           using(var db = new BlogEntities())
-                {
+            using (var db = new BlogEntities())
+            {
                 return db.comments.Include(c => c.user).Where(x => x.approved == "no").ToList();
             }
         }
@@ -83,5 +104,7 @@ namespace BlogMVC.Repositories
                 return comment.post_id;
             }
         }
+
+   
     }
 }

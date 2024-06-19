@@ -53,6 +53,15 @@
     <Property Name="updated_at" Type="datetime" />
     <Property Name="main_image" Type="varchar(max)" />
   </EntityType>
+  <EntityType Name="replies">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="comment_id" Type="int" />
+    <Property Name="user_id" Type="int" />
+    <Property Name="reply_text" Type="nvarchar(max)" />
+  </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
       <PropertyRef Name="diagram_id" />
@@ -151,12 +160,37 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK__replies__comment__6FE99F9F">
+    <End Role="comments" Type="Self.comments" Multiplicity="0..1" />
+    <End Role="replies" Type="Self.replies" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="comments">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="replies">
+        <PropertyRef Name="comment_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__replies__user_id__70DDC3D8">
+    <End Role="users" Type="Self.users" Multiplicity="0..1" />
+    <End Role="replies" Type="Self.replies" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="replies">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="BlogModelStoreContainer">
     <EntitySet Name="categories" EntityType="Self.categories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="comments" EntityType="Self.comments" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="files" EntityType="Self.files" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PostCategories" EntityType="Self.PostCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="posts" EntityType="Self.posts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="replies" EntityType="Self.replies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__comments__post_i__38996AB5" Association="Self.FK__comments__post_i__38996AB5">
@@ -182,6 +216,14 @@
     <AssociationSet Name="FK__posts__user_id__300424B4" Association="Self.FK__posts__user_id__300424B4">
       <End Role="users" EntitySet="users" />
       <End Role="posts" EntitySet="posts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__replies__comment__6FE99F9F" Association="Self.FK__replies__comment__6FE99F9F">
+      <End Role="comments" EntitySet="comments" />
+      <End Role="replies" EntitySet="replies" />
+    </AssociationSet>
+    <AssociationSet Name="FK__replies__user_id__70DDC3D8" Association="Self.FK__replies__user_id__70DDC3D8">
+      <End Role="users" EntitySet="users" />
+      <End Role="replies" EntitySet="replies" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

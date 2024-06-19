@@ -96,6 +96,18 @@ namespace BlogMVC.Controllers
 
         }
 
+        //fshi reply
+        public ActionResult FshiReply(int id)
+        {
+
+            int commentId = adminRepository.GetCommentIdByReplyId(id);
+
+            int postId = adminRepository.GetPostIdByCommentId(commentId);
+            adminRepository.FshiReply(id);
+            return RedirectToAction("Post", "BlogPost", new { id = postId });
+
+        }
+
 
 
 

@@ -87,5 +87,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="replies">
+      <EntityTypeMapping TypeName="BlogModel.reply">
+        <MappingFragment StoreEntitySet="replies">
+          <ScalarProperty Name="reply_text" ColumnName="reply_text" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="comment_id" ColumnName="comment_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

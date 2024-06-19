@@ -188,9 +188,8 @@ namespace BlogMVC.Controllers
             var post = blogPostRepository.GetBlogPostById(id);
             if (post != null)
             {
-                 var approvedComments = post.comments.Where(c => c.approved == "yes").ToList();
+                var approvedComments = blogPostRepository.GetCommentsByPostId(id).ToList();
 
-                // view model to pass both post and comments
                 var viewModel = new PostViewModel
                 {
                     Post = post,
@@ -211,19 +210,19 @@ namespace BlogMVC.Controllers
             if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
             {
                 var user = userRepository.GetUserById(user_id);
-               
+
                 var newComment = new comment
                 {
                     post_id = post_id,
                     user_id = user_id,
                     comment1 = comment,
                     created_at = DateTime.Now,
-                    approved = "no"  
+                    approved = "no"
                 };
 
                 blogPostRepository.AddComment(newComment);
 
-                
+
                 newComment.user = user;
 
                 return Json(new
@@ -239,6 +238,48 @@ namespace BlogMVC.Controllers
             }
 
             return Json(new { success = false, message = "User not authenticated." });
+        }
+
+        //add a reply to a comment
+
+        [HttpPost]
+
+        public JsonResult AddReply(int comment_id, string reply_text)
+        {
+            if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
+            {
+                var user = userRepository.GetUserById(user_id);
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "User not found." });
+                }
+
+                var newReply = new reply
+                {
+                    comment_id = comment_id,
+                    user_id = user_id,
+                    reply_text = reply_text
+                };
+
+                blogPostRepository.AddReply(newReply);
+
+                newReply.user = user;
+
+                return Json(new
+                {
+                    success = true,
+                    reply = new
+                    {
+                        newReply.reply_text,
+                        user.username
+                    }
+                });
+            }
+
+            return Json(new { success = false, message = "User not authenticated." });
+
+
+
         }
     }
 }

@@ -32,6 +32,11 @@ namespace BlogMVC.Repositories
         
          IEnumerable<comment> GetCommentsApproved(int user_id);
 
+        //add a reply to a comment
+        void AddReply(reply reply);
+
+
+
 
     }
 }

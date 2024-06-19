@@ -127,13 +127,13 @@
                 </div>
                 <style>
                     .admin-buttons {
-                        display: flex;  
-                        gap: 10px; 
+                        display: flex;
+                        gap: 10px;
                     }
 
                     .inline-form {
-                        display: inline;  
-                        margin: 0;  
+                        display: inline;
+                        margin: 0;
                     }
 
                     .btn-success {
@@ -171,60 +171,146 @@
             </div>
 
 
+            <!----------------------------------------------------------- COMMENTS ---------------------------------------------------------------------------------------------------->
+            <div class="comments-wrap">
 
-            <div id="commentsContainer">
+                <div id="comments">
+                    <div class="large-12">
 
-                <h2>Comments of this post</h2>
+                        <h3>Comments Session!</h3>
 
-                @foreach (var comment in Model.ApprovedComments)
-                {
+                        <!-- START commentlist -->
+                        <ol class="commentlist">
 
+                            @foreach (var comment in Model.ApprovedComments)
+                            {
+                                <li class="thread-alt depth-1 comment">
 
-                    <ol class="commentlist">
-                        <li class="depth-1 comment">
+                                    <div class="comment__avatar">
+                                        <img class="avatar" src="/Content/images/avatars/default.png" alt="" width="50" height="50">
+                                    </div>
 
-                            <div class="comment__avatar">
-                                <img class="avatar" src="/Content/images/avatars/default.png" alt="" width="50" height="50">
-                            </div>
+                                    <div class="comment__content">
 
-                            <div class="comment__content">
+                                        <div class="comment__info">
+                                            <div class="comment__author">@comment.user.username</div>
 
-                                <div class="comment__info">
-                                    <div class="comment__author">@comment.user.username</div>
+                                            <div class="comment__meta">
+                                                <div class="comment__time">@comment.created_at</div>
+                                                <div class="comment__reply">
+                                                    <a class="comment-reply-link" href="javascript:void(0);" onclick="openReplyForm(@comment.id)">Reply  </a>
+                                                    @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == comment.user.username.ToString())
+                                                    {
+                                                          <a style="color:red" href="@Url.Action("FshiComment", "Admin", new {id = comment.id})"> /   Delete comment</a>
+                                                        }
 
-                                    <div class="comment__meta">
-                                        <div class="comment__time">@comment.created_at</div>
+                                                    </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="comment__text">
+                                            <p>@comment.comment1</p>
+                                        </div>
 
                                     </div>
-                                </div>
+ 
 
-                                <div class="comment__text">
-                                    <p>
-                                        @comment.comment1
-                                    </p>
-                                </div>
-                                @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == comment.user.username.ToString())
-                                {
-                                    <form action="@Url.Action("FshiComment", "Admin", new {id = comment.id})" method="post">
-                                        <button type="submit" class="btn btn-danger">Delete comment</button>
-                                    </form>
-                                }
+                                    @if (comment.replies.Any())
+                                    {
+                                        <ul class="children">
+                                            @foreach (var reply in comment.replies)
+                                            {
+                                                <li class="depth-2 comment">
 
+                                                     
 
-                            </div>
+                                                    <div class="comment__content">
 
-                        </li> <!-- end comment level 1 -->
-                    </ol>
+                                                        <div class="comment__info">
+                                                            <div class="comment__author">@reply.user.username</div>
+                                                        </div>
+
+                                                        <div class="comment__text">
+                                                            @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == reply.user.username.ToString())
+                                                            {
+                                                                <a style="color:red" href="@Url.Action("FshiReply", "Admin", new {id = reply.id})">Delete reply</a>
+                                                            }<p>@reply.reply_text</p>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+
+                                </li>
+ <!-- end comment level 1 -->
+                            }
+
+                        </ol>
+                        <!-- END commentlist -->
+
+                    </div> <!-- end col-full -->
+                </div> <!-- end comments -->
+                <!-- Popup reply form -->
+                <div id="replyFormPopup" class="popup">
+                    <div class="popup-content">
+                        <span class="close" onclick="closeReplyForm()">&times;</span>
+                        <h2>Reply to Comment</h2>
+                        <form id="replyForm">
+                            <input type="hidden" name="comment_id" id="comment_id" value="">
+                            <textarea name="reply" id="reply" rows="4" cols="50" placeholder="Write your reply here..."></textarea><br>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div> <!-- end comments-wrap -->
+
+            <style>
+                /* Pop-up form styles */
+                .popup {
+                    display: none;
+                    position: fixed;
+                    z-index: 9;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    overflow: auto;
+                    background-color: rgba(0, 0, 0, 0.5);
                 }
 
+                .popup-content {
+                    background-color: #fff;
+                    margin: 15% auto;
+                    padding: 20px;
+                    border: 1px solid #888;
+                    width: 80%;
+                    max-width: 500px;
+                    border-radius: 5px;
+                }
 
+                .close {
+                    color: #aaa;
+                    float: right;
+                    font-size: 28px;
+                    font-weight: bold;
+                }
 
+                    .close:hover,
+                    .close:focus {
+                        color: #000;
+                        text-decoration: none;
+                        cursor: pointer;
+                    }
+            </style>
 
-
-            </div>
         </div>
 
-        </div> <!-- end content -->
+    </div> <!-- end content -->
     @section Scripts {
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
@@ -245,7 +331,7 @@
                         if (response.success) {
 
                             alert('Comment added successfully!');
-                            
+
                         } else {
                             alert('Error adding comment.');
                         }
@@ -256,6 +342,53 @@
                 });
             });
         });
+
+            function openReplyForm(comment_id) {
+                document.getElementById('comment_id').value = comment_id;
+                document.getElementById("replyFormPopup").style.display = "block";
+            }
+
+
+            function closeReplyForm() {
+                document.getElementById("replyFormPopup").style.display = "none";
+            }
+
+            // Close the form if the user clicks outside of it
+            window.onclick = function (event) {
+                var popup = document.getElementById("replyFormPopup");
+                if (event.target == popup) {
+                    popup.style.display = "none";
+                }
+            }
+
+$(document).ready(function() {
+    $('#replyForm').on('submit', function(event) {
+        event.preventDefault();
+        var comment_id = $('#comment_id').val();
+        var replyText = $('#reply').val();
+
+        $.ajax({
+            url: '@Url.Action("AddReply", "BlogPost")',
+            type: 'POST',
+            data: {
+                comment_id: comment_id,
+                reply_text: replyText
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert('Reply added successfully!');
+                    closeReplyForm();
+                } else {
+                    alert('Error adding reply.');
+                }
+            },
+            error: function() {
+                alert('Error adding reply.');
+            }
+        });
+    });
+});
+
         </script>
     }
 
@@ -282,49 +415,6 @@
 
 
 
-
-    <!--
-    <script>
-        $(document).ready(function () {
-            $('#commentForm').submit(function (e) {
-                e.preventDefault();
-
-                var comment1 = $('#comment').val();
-                var post_id = $('#post_id').val();
-
-                $.ajax({
-                    url: '/BlogPost/AddComment',
-                    type: 'POST',
-                    data: {
-                        id: post_id,
-                        comment1: comment1
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            alert('Comment added successfully!');
-
-                             $('#comment').val('');
-
-                             var commentsHtml = '';
-                            $.each(response.comments, function (index, comment) {
-                                commentsHtml += '<div class="comment">';
-                                commentsHtml += '<p>' + comment.comment1 + '</p>';
-                                commentsHtml += '<p><small>' + comment.user.username + ' on ' + comment.created_at + '</small></p>';
-                                commentsHtml += '</div>';
-                            });
-                            $('#commentsContainer').html(commentsHtml);
-                        } else {
-                            alert('Error: ' + response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        alert('An error occurred while adding the comment: ' + error);
-                    }
-                });
-            });
-        });
-
-    </script>end entry-wrap -->
 
 
 

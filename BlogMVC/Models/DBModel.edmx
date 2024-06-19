@@ -58,6 +58,15 @@
           <Property Name="updated_at" Type="datetime" />
           <Property Name="main_image" Type="varchar(max)" />
         </EntityType>
+        <EntityType Name="replies">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="comment_id" Type="int" />
+          <Property Name="user_id" Type="int" />
+          <Property Name="reply_text" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -156,12 +165,37 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__replies__comment__6FE99F9F">
+          <End Role="comments" Type="Self.comments" Multiplicity="0..1" />
+          <End Role="replies" Type="Self.replies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="comments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="replies">
+              <PropertyRef Name="comment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__replies__user_id__70DDC3D8">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="replies" Type="Self.replies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="replies">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="BlogModelStoreContainer">
           <EntitySet Name="categories" EntityType="Self.categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="comments" EntityType="Self.comments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="files" EntityType="Self.files" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PostCategories" EntityType="Self.PostCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="posts" EntityType="Self.posts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="replies" EntityType="Self.replies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__comments__post_i__38996AB5" Association="Self.FK__comments__post_i__38996AB5">
@@ -187,6 +221,14 @@
           <AssociationSet Name="FK__posts__user_id__300424B4" Association="Self.FK__posts__user_id__300424B4">
             <End Role="users" EntitySet="users" />
             <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__replies__comment__6FE99F9F" Association="Self.FK__replies__comment__6FE99F9F">
+            <End Role="comments" EntitySet="comments" />
+            <End Role="replies" EntitySet="replies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__replies__user_id__70DDC3D8" Association="Self.FK__replies__user_id__70DDC3D8">
+            <End Role="users" EntitySet="users" />
+            <End Role="replies" EntitySet="replies" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -216,6 +258,7 @@
           <NavigationProperty Name="post" Relationship="Self.FK__comments__post_i__38996AB5" FromRole="comments" ToRole="posts" />
           <NavigationProperty Name="user" Relationship="Self.FK__comments__user_i__398D8EEE" FromRole="comments" ToRole="users" />
           <Property Name="approved" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="replies" Relationship="BlogModel.FK__replies__comment__6FE99F9F" FromRole="comment" ToRole="reply" />
         </EntityType>
         <EntityType Name="file">
           <Key>
@@ -283,6 +326,7 @@
           <Property Name="updated_at" Type="DateTime" Precision="3" />
           <NavigationProperty Name="comments" Relationship="Self.FK__comments__user_i__398D8EEE" FromRole="users" ToRole="comments" />
           <NavigationProperty Name="posts" Relationship="Self.FK__posts__user_id__300424B4" FromRole="users" ToRole="posts" />
+          <NavigationProperty Name="replies" Relationship="BlogModel.FK__replies__user_id__70DDC3D8" FromRole="user" ToRole="reply" />
         </EntityType>
         <Association Name="FK__PostCateg__categ__35BCFE0A">
           <End Role="categories" Type="Self.category" Multiplicity="1" />
@@ -388,7 +432,51 @@
             <End Role="users" EntitySet="users" />
             <End Role="posts" EntitySet="posts" />
           </AssociationSet>
+          <EntitySet Name="replies" EntityType="BlogModel.reply" />
+          <AssociationSet Name="FK__replies__comment__6FE99F9F" Association="BlogModel.FK__replies__comment__6FE99F9F">
+            <End Role="comment" EntitySet="comments" />
+            <End Role="reply" EntitySet="replies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__replies__user_id__70DDC3D8" Association="BlogModel.FK__replies__user_id__70DDC3D8">
+            <End Role="user" EntitySet="users" />
+            <End Role="reply" EntitySet="replies" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="reply">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="comment_id" Type="Int32" />
+          <Property Name="user_id" Type="Int32" />
+          <Property Name="reply_text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="comment" Relationship="BlogModel.FK__replies__comment__6FE99F9F" FromRole="reply" ToRole="comment" />
+          <NavigationProperty Name="user" Relationship="BlogModel.FK__replies__user_id__70DDC3D8" FromRole="reply" ToRole="user" />
+        </EntityType>
+        <Association Name="FK__replies__comment__6FE99F9F">
+          <End Type="BlogModel.comment" Role="comment" Multiplicity="0..1" />
+          <End Type="BlogModel.reply" Role="reply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="comment">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reply">
+              <PropertyRef Name="comment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__replies__user_id__70DDC3D8">
+          <End Type="BlogModel.user" Role="user" Multiplicity="0..1" />
+          <End Type="BlogModel.reply" Role="reply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="reply">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -478,6 +566,16 @@
                 <ScalarProperty Name="bio" ColumnName="bio" />
                 <ScalarProperty Name="created_at" ColumnName="created_at" />
                 <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="replies">
+            <EntityTypeMapping TypeName="BlogModel.reply">
+              <MappingFragment StoreEntitySet="replies">
+                <ScalarProperty Name="reply_text" ColumnName="reply_text" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="comment_id" ColumnName="comment_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

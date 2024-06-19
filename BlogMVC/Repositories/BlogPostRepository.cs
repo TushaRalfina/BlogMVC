@@ -68,10 +68,11 @@ namespace BlogMVC.Repositories
 
         public IEnumerable<comment> GetCommentsByPostId(int post_id)
         {
-            
-            var comments = db.comments.Where(c => c.post_id == post_id && c.approved == "yes")
-                       .OrderByDescending(c => c.created_at)
-                       .ToList();
+            var comments = db.comments
+                             .Include("replies")
+                             .Where(c => c.post_id == post_id && c.approved == "yes")
+                             .OrderByDescending(c => c.created_at)
+                             .ToList();
             return comments;
         }
 
@@ -81,7 +82,13 @@ namespace BlogMVC.Repositories
             return comments;
         }
 
-        
+        public void AddReply(reply reply)
+        {
+
+            db.replies.Add(reply);
+            db.SaveChanges();
+            
+        }
     }
 }
 

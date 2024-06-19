@@ -32,6 +32,13 @@ namespace BlogMVC.Interfaces
 
         int GetPostIdByCommentId(int id);
 
+        
+        void FshiReply(int id);
+        //GetCommentIdByReplyId
+
+        int GetCommentIdByReplyId(int id);
+
+
 
 
     }
