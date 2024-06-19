@@ -21,6 +21,8 @@ namespace BlogMVC.Repositories
 
         string HashPassword(string password);
 
+         IEnumerable<post> GetPostsByUserId(int id);
+
 
 
 

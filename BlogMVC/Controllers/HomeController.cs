@@ -144,6 +144,8 @@ namespace BlogMVC.Controllers
                 {
                      return HttpNotFound("User not found.");
                 }
+                var userPosts = userRepository.GetPostsByUserId(id);
+
 
                 var userProfileViewModel = new UserProfileViewModel
                 {
@@ -156,7 +158,8 @@ namespace BlogMVC.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     created_at = user.created_at,
-                    updated_at = user.updated_at
+                    updated_at = user.updated_at,
+                    posts = userPosts.ToList() 
                 };
 
                 return View(userProfileViewModel);

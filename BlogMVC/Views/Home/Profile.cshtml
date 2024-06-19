@@ -71,36 +71,28 @@
         Your Posts are shown here.
     </h1>
     <div class="card-container">
-        <div class="card">
-            <img src="https://picsum.photos/300/200?grayscale" alt="Image 3">
-            <div class="card-context">
-                <h3>Card Title 3</h3>
-                <p>This is a description of the card. It provides brief details about the content.</p>
+        @foreach (var post in Model.posts)
+        {
+            <div class="card">
+                <img src="@post.main_image" alt="Image 1">
+                <div class="card-context">
+                    <h3>@post.title</h3>
+                    @if (post.approved == "yes")
+                    {
+                        <p style="color:green">Approved by admin</p>
+                    }
+                    else
+                    {
+                        <p style="color:red">Not Approved by admin yet</p>
+                    }   
+                     
+                </div>
+                <div class="card-hidden">
+                    <button class="card-button"><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">Open Post</a></button>
+                </div>
             </div>
-            <div class="card-hidden">
-                <button class="card-button">Learn More</button>
-            </div>
-        </div>
-        <div class="card">
-            <img src="https://picsum.photos/300/200?grayscale" alt="Image 3">
-            <div class="card-context">
-                <h3>Card Title 3</h3>
-                <p>This is a description of the card. It provides brief details about the content.</p>
-            </div>
-            <div class="card-hidden">
-                <button class="card-button">Learn More</button>
-            </div>
-        </div>
-        <div class="card">
-            <img src="https://picsum.photos/300/200?grayscale" alt="Image 3">
-            <div class="card-context">
-                <h3>Card Title 3</h3>
-                <p>This is a description of the card. It provides brief details about the content.</p>
-            </div>
-            <div class="card-hidden">
-                <button class="card-button">Learn More</button>
-            </div>
-        </div>
+        }
+ 
 
     </div>
     <style>

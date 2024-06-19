@@ -1,6 +1,7 @@
 ﻿using BlogMVC.Models;
 using BlogMVC.Models.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Security.Cryptography;
@@ -108,7 +109,11 @@ namespace BlogMVC.Repositories
             }
         }
 
-       
+        public IEnumerable<post> GetPostsByUserId(int id)
+        {
+            return db.posts.Where(p => p.user_id == id).ToList();
+            
+        }
     }
 }
 

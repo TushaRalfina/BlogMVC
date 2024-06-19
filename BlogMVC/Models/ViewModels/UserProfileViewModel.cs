@@ -20,5 +20,8 @@ namespace BlogMVC.Models.ViewModels
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> updated_at { get; set; }
 
+        public virtual ICollection<post> posts { get; set; }
+
+ 
     }
 }
