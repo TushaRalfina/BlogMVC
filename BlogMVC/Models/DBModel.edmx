@@ -24,6 +24,7 @@
           <Property Name="comment" Type="text" Nullable="false" />
           <Property Name="created_at" Type="datetime" />
           <Property Name="updated_at" Type="datetime" />
+          <Property Name="approved" Type="varchar" MaxLength="45" />
         </EntityType>
         <EntityType Name="files">
           <Key>
@@ -214,6 +215,7 @@
           <Property Name="updated_at" Type="DateTime" Precision="3" />
           <NavigationProperty Name="post" Relationship="Self.FK__comments__post_i__38996AB5" FromRole="comments" ToRole="posts" />
           <NavigationProperty Name="user" Relationship="Self.FK__comments__user_i__398D8EEE" FromRole="comments" ToRole="users" />
+          <Property Name="approved" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="file">
           <Key>
@@ -406,10 +408,11 @@
           <EntitySetMapping Name="comments">
             <EntityTypeMapping TypeName="BlogModel.comment">
               <MappingFragment StoreEntitySet="comments">
+                <ScalarProperty Name="comment1" ColumnName="comment" />
+                <ScalarProperty Name="approved" ColumnName="approved" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="post_id" ColumnName="post_id" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="comment1" ColumnName="comment" />
                 <ScalarProperty Name="created_at" ColumnName="created_at" />
                 <ScalarProperty Name="updated_at" ColumnName="updated_at" />
               </MappingFragment>

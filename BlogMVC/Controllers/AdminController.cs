@@ -59,6 +59,44 @@ namespace BlogMVC.Controllers
             return RedirectToAction("ManagePosts");
         }
 
+        //manageComments
+        [HttpGet]
+        public ActionResult ManageComments()
+        {
+            if (Session["role"] == null || Session["role"].ToString() != "admin")
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            var comments = adminRepository.GetCommentsNotApproved();
+
+            return View(comments);
+        }
+
+        //ApproveComment
+        public ActionResult ApproveComment(int id)
+        {
+            adminRepository.ApproveComment(id);
+            return RedirectToAction("ManageComments");
+        }
+
+        //DeleteComment
+        public ActionResult DeleteComment(int id)
+        {
+            adminRepository.DeleteComment(id);
+            return RedirectToAction("ManageComments");
+        }
+        //fshi koment
+        public ActionResult FshiComment(int id)
+        {
+            int postId = adminRepository.GetPostIdByCommentId(id);
+
+            adminRepository.DeleteComment(id);
+            return RedirectToAction("Post","BlogPost", new { id = postId });
+
+        }
+
+
 
 
 

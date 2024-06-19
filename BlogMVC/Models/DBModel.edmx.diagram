@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="6ed36dc9bb1c4ec4be4af5ec4bab9aa4" Name="Diagram1">
         <EntityTypeShape EntityType="BlogModel.category" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogModel.comment" Width="1.5" PointX="5.25" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlogModel.comment" Width="1.5" PointX="6.5" PointY="2.875" IsExpanded="true" />
         <EntityTypeShape EntityType="BlogModel.file" Width="1.5" PointX="5.25" PointY="7.5" IsExpanded="true" />
         <EntityTypeShape EntityType="BlogModel.PostCategory" Width="1.5" PointX="5.25" PointY="10.625" IsExpanded="true" />
         <EntityTypeShape EntityType="BlogModel.post" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />

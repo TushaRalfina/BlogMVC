@@ -18,6 +18,20 @@ namespace BlogMVC.Interfaces
 
         void DeleteBlogPosts(int id);
 
+        //GetCommentsNotApproved
+
+        IEnumerable<comment> GetCommentsNotApproved();
+
+        //ApproveComment
+        void ApproveComment(int id);
+
+        //DeleteComment
+        void DeleteComment(int id);
+
+        //GetPostIdByCommentId
+
+        int GetPostIdByCommentId(int id);
+
 
 
     }

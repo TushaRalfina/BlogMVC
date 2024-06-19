@@ -2,6 +2,7 @@
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web.Mvc;
+using BlogMVC.Interfaces;
 using BlogMVC.Models;
 using BlogMVC.Models.ViewModels;
 using BlogMVC.Repositories;
@@ -17,6 +18,7 @@ namespace BlogMVC.Controllers
          private readonly IBlogPostRepository blogPostRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IFilesRepository filesRepository;
+        private readonly IAdminRepository adminRepository;
         private readonly BlogEntities db = new BlogEntities();  
 
 
@@ -26,6 +28,7 @@ namespace BlogMVC.Controllers
             blogPostRepository=new BlogPostRepository();
             categoryRepository=new CategoryRepository();
             filesRepository = new FilesRepository();
+            adminRepository = new AdminRepository();
          }
        
 
@@ -249,7 +252,8 @@ namespace BlogMVC.Controllers
         {
             return View();
         }
+      
 
-        
+
     }
 }

@@ -50,14 +50,35 @@
 
                 <div class="column lg-12 form-field">
                     <label>Additional Files</label>
-                    <input type="file" name="files" id="files" class="u-fullwidth" accept=".pdf, .docx, .xlsx"  multiple />
+                    <input type="file" name="files" id="files" class="u-fullwidth" accept=".pdf, .docx, .xlsx" multiple />
                 </div>
+                <style>
+                    .checkbox-inline {
+                        display: inline-block;
+                        margin-right: 10px; 
+                    }
+
+                        .checkbox-inline label {
+                            display: inline-block;
+                            vertical-align: middle;  
+                            margin-left: 5px; 
+                        }
+                </style>
 
                 <div class="column lg-12 form-field">
                     <label>PLACE A CATEGORY</label>
-                    @Html.ListBoxFor(model => model.SelectedCategoryIds, new MultiSelectList(Model.categories, "Value", "Text"), new { @class = "form-select" })
+                     @foreach (var category in Model.categories)
+                    {
+                        <div class="checkbox-inline">
+                            <input type="checkbox" id="@("category_" + category.Value)" name="SelectedCategoryIds" value="@category.Value" class="form-check-input" />
+                            <label for="@("category_" + category.Value)" class="form-check-label">@category.Text</label>
+                        </div>
+                    }
                     @Html.ValidationMessageFor(model => model.SelectedCategoryIds, "", new { @class = "text-danger" })
                 </div>
+
+
+
                 <div class="column lg-12 form-field">
                     <label for="main_imagee">Main Picture</label>
                     <input type="file" name="main_imagee" id="main_imagee" class="u-fullwidth" />

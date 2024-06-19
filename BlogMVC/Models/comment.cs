@@ -20,6 +20,7 @@ namespace BlogMVC.Models
         public string comment1 { get; set; }
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> updated_at { get; set; }
+        public string approved { get; set; }
     
         public virtual post post { get; set; }
         public virtual user user { get; set; }

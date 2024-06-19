@@ -19,6 +19,7 @@
     <Property Name="comment" Type="text" Nullable="false" />
     <Property Name="created_at" Type="datetime" />
     <Property Name="updated_at" Type="datetime" />
+    <Property Name="approved" Type="varchar" MaxLength="45" />
   </EntityType>
   <EntityType Name="files">
     <Key>

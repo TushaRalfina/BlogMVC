@@ -68,14 +68,13 @@
                                 </ul>
                             </li>
                             <li><a href="@Url.Action("About", "Home")">About</a></li>
-                            <li><a href="@Url.Action("Contact", "Home")">Contact</a></li>
-
+ 
                             @if (Session["username"] != null)
                             {
                                 if (Session["role"] != null && Session["role"].ToString() == "admin")
                                 {
                                     <li><a href="@Url.Action("ManagePosts", "Admin")">ManagePosts</a></li>
-                                   // <li><a href="@Url.Action("Add", "BlogPost")">AddBlogPost</a></li>
+                                    <li><a href="@Url.Action("ManageComments", "Admin")">ManageComments</a></li>
                                     <li><a href="@Url.Action("Logout", "Home")">Logout</a></li>
 
                                 }
@@ -110,8 +109,7 @@
                ================================================== -->
             <footer id="colophon" class="s-footer">
 
-                <h2 class="p-2">THIS IS RADIANCE BLOG WEBSITE</h2>
-
+ 
 
                 <div class="row s-footer__main">
 

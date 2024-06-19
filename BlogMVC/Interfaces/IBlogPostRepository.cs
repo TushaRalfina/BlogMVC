@@ -23,5 +23,15 @@ namespace BlogMVC.Repositories
 
 
        IEnumerable<post> GetBlogPostsApproved();
+
+ 
+        void AddComment(comment comment);
+
+        IEnumerable<comment> GetCommentsByPostId(int post_id);
+
+        
+         IEnumerable<comment> GetCommentsApproved(int user_id);
+
+
     }
 }
