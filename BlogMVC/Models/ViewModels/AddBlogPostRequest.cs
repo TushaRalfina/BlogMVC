@@ -11,27 +11,22 @@ namespace BlogMVC.Models.ViewModels
     {
 
         [AllowHtml]
-        //title of the blog post
-        public string title { get; set; }
+         public string title { get; set; }
 
-        //content of the blog post
-        [AllowHtml]
+         [AllowHtml]
         public string content { get; set; }
 
-        //id of the user who created the blog post
-
+ 
         public int user_id { get; set; }
 
-        //main image of the blog post
-        public string main_image { get; set; }
+         public string main_image { get; set; }
 
         public HttpPostedFileBase main_imagee { get; set; }  
 
 
 
 
-        //display categories
-        public List<int> SelectedCategoryIds { get; set; }
+         public List<int> SelectedCategoryIds { get; set; }
         public IEnumerable<SelectListItem> categories { get; set; }
 
         public List<HttpPostedFileBase> files { get; set; }

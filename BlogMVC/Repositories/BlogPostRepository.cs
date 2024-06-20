@@ -89,6 +89,31 @@ namespace BlogMVC.Repositories
             db.SaveChanges();
             
         }
+
+        public IEnumerable<post> GetBlogPostsByUserId(int user_id)
+        {
+            var posts = db.posts.Where(p => p.user_id == user_id && p.approved=="yes").ToList();
+            return posts; 
+        }
+
+        public comment GetCommentById(int id)
+        {
+            var comment = db.comments.FirstOrDefault(c => c.id == id);
+            return comment;
+             
+        }
+
+        public void UpdateComment(comment comment)
+        {
+            var commentToUpdate = db.comments.FirstOrDefault(c => c.id == comment.id);
+            if (commentToUpdate != null)
+            {
+                commentToUpdate.comment1 = comment.comment1;  
+                commentToUpdate.approved = comment.approved;
+                
+                db.SaveChanges();
+            }
+        }
     }
 }
 

@@ -36,6 +36,19 @@ namespace BlogMVC.Repositories
         void AddReply(reply reply);
 
 
+        //get blogposts created by a user
+        IEnumerable<post> GetBlogPostsByUserId(int user_id);
+
+        //GetCommentById
+        comment GetCommentById(int id);
+
+        //UpdateComment
+        void UpdateComment(comment comment);
+
+
+
+
+
 
 
     }

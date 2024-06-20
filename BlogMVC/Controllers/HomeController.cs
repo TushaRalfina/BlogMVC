@@ -106,11 +106,6 @@ namespace BlogMVC.Controllers
             }
         }
 
-
-
-
-
-
  
      public ActionResult Index(int? page)
     {
@@ -128,7 +123,7 @@ namespace BlogMVC.Controllers
 
 
 
-    //GET:PROFILE
+    
     public ActionResult Profile()
         {
             if (Session["id"] == null)
@@ -168,8 +163,7 @@ namespace BlogMVC.Controllers
 
         public ActionResult DownloadFile(int fileId)
         {
-            //file nga repository
-            var file = filesRepository.GetFileById(fileId);
+             var file = filesRepository.GetFileById(fileId);
 
             if (file != null)
             {

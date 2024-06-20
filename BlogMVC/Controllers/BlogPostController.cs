@@ -33,7 +33,6 @@ namespace BlogMVC.Controllers
             {
                 return RedirectToAction("Login", "Home");
             }
-            //get all categories
             var categories = categoryRepository.GetCategories();
 
             var model = new AddBlogPostRequest
@@ -54,8 +53,7 @@ namespace BlogMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Ensure user is authenticated
-                if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
+                 if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
                 {
                     var user = userRepository.GetUserById(user_id);
                     if (user == null)
@@ -63,8 +61,7 @@ namespace BlogMVC.Controllers
                         return RedirectToAction("Login", "Home");
                     }
 
-                    // Handle main image upload
-                    if (model.main_imagee != null && model.main_imagee.ContentLength > 0)
+                     if (model.main_imagee != null && model.main_imagee.ContentLength > 0)
                     {
                         try
                         {
@@ -72,8 +69,7 @@ namespace BlogMVC.Controllers
                             string uploadsDir = Server.MapPath("~/Content/Uploads");
                             string filePath = Path.Combine(uploadsDir, fileName);
 
-                            // Ensure the directory exists
-                            if (!Directory.Exists(uploadsDir))
+                             if (!Directory.Exists(uploadsDir))
                             {
                                 Directory.CreateDirectory(uploadsDir);
                             }
@@ -175,8 +171,7 @@ namespace BlogMVC.Controllers
                 }
             }
 
-            // If ModelState is not valid, return to the same view with errors
-            return View(model);
+             return View(model);
         }
 
 
@@ -240,8 +235,7 @@ namespace BlogMVC.Controllers
             return Json(new { success = false, message = "User not authenticated." });
         }
 
-        //add a reply to a comment
-
+ 
         [HttpPost]
 
         public JsonResult AddReply(int comment_id, string reply_text)
@@ -281,6 +275,36 @@ namespace BlogMVC.Controllers
 
 
         }
+
+
+        //get : blogposts of a user by user_id
+        public ActionResult UserPosts(int id)
+        {
+            var posts = blogPostRepository.GetBlogPostsByUserId(id).ToList();
+            return View(posts);
+        }
+
+
+        [HttpPost]
+        public JsonResult EditComment(int comment_id, string comment_text)
+        {
+            var comment = blogPostRepository.GetCommentById(comment_id);
+            if (comment == null)
+            {
+                return Json(new { success = false, message = "Comment not found." });
+            }
+
+            comment.comment1 = comment_text;
+            blogPostRepository.UpdateComment(comment);
+            return Json(new { success = true });
+
+
+
+        }
+
+
+
+
     }
 }
 

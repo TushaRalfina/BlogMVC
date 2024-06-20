@@ -463,10 +463,13 @@ textarea {
     box-sizing : border-box;
     padding    : 0;
 }
+.rounded-circle{
+        border-radius: 50%;
+}
 
 [type="number"]::-webkit-inner-spin-button,
 [type="number"]::-webkit-outer-spin-button {
-    height : auto;
+    height: auto;
 }
 
 [type="search"] {

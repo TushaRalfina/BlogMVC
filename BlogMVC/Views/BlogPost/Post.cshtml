@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var groupedFiles = Model.Post.files.GroupBy(f => f.file_name);
     var groupedImages = Model.Post.files.GroupBy(f => f.body_images);
-
 }
 
 
@@ -99,7 +98,7 @@
                             </figure>
                             <div class="entry__author-info">
                                 <h5 class="entry__author-name">
-                                    <a href="#0">
+                                    <a href="@Url.Action("UserPosts", "BlogPost", new { id = @Model.Post.user.id })">
                                         @Model.Post.user.username
                                     </a>
                                 </h5>
@@ -117,13 +116,18 @@
             </article> <!-- end entry -->
             @if (Session["role"] != null && Session["role"].ToString() == "admin")
             {
+
+
+                if (Model.Post.approved == "no")
+                {
                 <div class="admin-buttons">
                     <form action="@Url.Action("ApprovePost", "Admin", new { id = Model.Post.id })" method="post">
                         <button type="submit" class="btn btn-success">Approve Post</button>
                     </form>
-                    <form action="@Url.Action("DeletePost", "Admin", new {id = Model.Post.id })" method="post">
+                    <form action="@Url.Action("DeletePost", "Admin", new { id = Model.Post.id })" method="post">
                         <button type="submit" class="btn btn-danger">Reject Post</button>
                     </form>
+                    }
                 </div>
                 <style>
                     .admin-buttons {
@@ -145,6 +149,7 @@
                     }
                 </style>
 
+                }
             }
 
             <div class="comment-respond">
@@ -198,13 +203,18 @@
                                             <div class="comment__meta">
                                                 <div class="comment__time">@comment.created_at</div>
                                                 <div class="comment__reply">
-                                                    <a class="comment-reply-link" href="javascript:void(0);" onclick="openReplyForm(@comment.id)">Reply  </a>
+                                                    <a class="comment-reply-link" href="javascript:void(0);" onclick="openReplyForm(@comment.id)">Reply</a>
                                                     @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == comment.user.username.ToString())
                                                     {
-                                                          <a style="color:red" href="@Url.Action("FshiComment", "Admin", new {id = comment.id})"> /   Delete comment</a>
-                                                        }
+                                                        <a style="color:red" href="@Url.Action("FshiComment", "Admin", new {id = comment.id})"> /   Delete comment</a>
+                                                    }
+                                                    @if (Session["username"].ToString() == comment.user.username.ToString())
+                                                    {
+                                                        <a style="color:green" href="javascript:void(0);" onclick="openEditForm(@comment.id, '@comment.comment1')"> / Edit comment</a>
+                                                    }
 
-                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
 
@@ -213,7 +223,7 @@
                                         </div>
 
                                     </div>
- 
+
 
                                     @if (comment.replies.Any())
                                     {
@@ -222,7 +232,7 @@
                                             {
                                                 <li class="depth-2 comment">
 
-                                                     
+
 
                                                     <div class="comment__content">
 
@@ -246,7 +256,7 @@
                                     }
 
                                 </li>
- <!-- end comment level 1 -->
+                                <!-- end comment level 1 -->
                             }
 
                         </ol>
@@ -266,6 +276,20 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Popup edit form -->
+                <div id="editFormPopup" class="popup">
+                    <div class="popup-content">
+                        <span class="close" onclick="closeEditForm()">&times;</span>
+                        <h2>Edit Comment</h2>
+                        <form id="editForm">
+                            <input type="hidden" name="comment_id" id="comment_id" value="">
+                            <textarea name="comment1" id="comment1" rows="4" cols="50" placeholder="Edit your comment here..."></textarea><br>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
 
             </div> <!-- end comments-wrap -->
 
@@ -335,10 +359,7 @@
                         } else {
                             alert('Error adding comment.');
                         }
-                    },
-                    error: function() {
-                        alert('Error adding comment.');
-                    }
+                    } 
                 });
             });
         });
@@ -353,8 +374,7 @@
                 document.getElementById("replyFormPopup").style.display = "none";
             }
 
-            // Close the form if the user clicks outside of it
-            window.onclick = function (event) {
+             window.onclick = function (event) {
                 var popup = document.getElementById("replyFormPopup");
                 if (event.target == popup) {
                     popup.style.display = "none";
@@ -388,6 +408,54 @@ $(document).ready(function() {
         });
     });
 });
+
+
+
+        $(document).ready(function() {
+    $('#editForm').on('submit', function(event) {
+        event.preventDefault();
+        var comment_id = $('#comment_id').val();
+        var commentText = $('#comment1').val();
+
+        $.ajax({
+            url: '@Url.Action("EditComment", "BlogPost")',
+            type: 'POST',
+            data: {
+                comment_id: comment_id,
+                comment_text: commentText
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert('Comment edited successfully!');
+                    closeEditForm();
+                    location.reload();  
+                } 
+                else {
+                    alert('Error editing comment.');
+                }
+            },
+            error: function() {
+                alert('Error editing comment.');
+            }
+
+
+            
+        });
+    });
+});
+
+function openEditForm(comment_id, comment_text) {
+    document.getElementById('comment_id').value = comment_id;
+    document.getElementById('comment1').value = comment_text;
+    document.getElementById("editFormPopup").style.display = "block";
+}
+
+function closeEditForm() {
+    document.getElementById("editFormPopup").style.display = "none";
+}
+
+ 
+
 
         </script>
     }

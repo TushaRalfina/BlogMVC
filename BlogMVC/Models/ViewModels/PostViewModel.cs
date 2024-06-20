@@ -9,8 +9,6 @@ namespace BlogMVC.Models.ViewModels
     {
         public post Post { get; set; }
         public List<comment> ApprovedComments { get; set; }
-
-
     }
 
 }
