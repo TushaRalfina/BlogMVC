@@ -21,8 +21,7 @@
         <EntityTypeShape EntityType="BlogModel.reply" Width="1.5" PointX="10.625" PointY="5.125" />
         <AssociationConnector Association="BlogModel.FK__replies__comment__6FE99F9F" />
         <AssociationConnector Association="BlogModel.FK__replies__user_id__70DDC3D8" />
-        <EntityTypeShape EntityType="BlogModel.subcategory" Width="1.5" PointX="1.875" PointY="14.75" />
-        <AssociationConnector Association="BlogModel.FK_subcategories_categories" />
+        <AssociationConnector Association="BlogModel.FK_categories_parent" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

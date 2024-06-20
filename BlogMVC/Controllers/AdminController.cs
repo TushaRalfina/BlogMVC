@@ -145,12 +145,12 @@ namespace BlogMVC.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            var categoriesandsubcategories = categoryRepository.GetCategoriesWithSubCategories();
+            var categoriesandsubcategories = categoryRepository.GetCategories();
              
             return View(categoriesandsubcategories);
         }
 
-        [HttpPost]
+       [HttpPost]
 
         public JsonResult AddSubCategory(string name, int category_id)
         {
@@ -162,7 +162,7 @@ namespace BlogMVC.Controllers
             return Json(new { success = true });
 
 
-        }
+        } 
 
 
 

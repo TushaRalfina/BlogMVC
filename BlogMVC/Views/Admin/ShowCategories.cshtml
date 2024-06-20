@@ -67,22 +67,27 @@
                         <ul>
                             @foreach (var category in Model)
                             {
-                                <li>
-                                    <a href="#" onclick="openReplyForm(@category.id); return false;"><strong>CATEGORY: @category.name</strong></a>
-                                    @if (category.subcategories != null && category.subcategories.Any())
-                                    {
-                                        <ol>
-                                            @foreach (var subcategory in category.subcategories)
+                                if (category.parent_id == null || category.parent_id == 0)
+                                {
+                                    <li>
+                                         <a href="#" onclick="openReplyForm(@category.id); return false;"><strong>CATEGORY: @category.name</strong></a>
+                                        @foreach(var category2 in Model)
+                                         {
+
+                                          if (category2.parent_id == category.id)
                                             {
-                                                <li>SUB: @subcategory.name</li>
+                                                <ul style="list-style:none">
+                                                    <li>
+                                                        <a href="#"><span style="color:green">SUBCATEGORY: @category2.name </span> </a>
+                                                    </li>
+                                                </ul>
                                             }
-                                        </ol>
-                                    }
-                                    else
-                                        {
-                                            <p style="color:darkred">No subcategories found.</p>
-                                        }
-                                </li>
+                                          } 
+
+                                    </li> 
+                                }
+                                
+                                
                             }
                         </ul>
 

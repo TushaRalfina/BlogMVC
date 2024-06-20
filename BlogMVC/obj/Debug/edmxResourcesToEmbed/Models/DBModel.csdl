@@ -9,7 +9,9 @@
     <Property Name="created_at" Type="DateTime" Precision="3" />
     <Property Name="updated_at" Type="DateTime" Precision="3" />
     <NavigationProperty Name="PostCategories" Relationship="Self.FK__PostCateg__categ__35BCFE0A" FromRole="categories" ToRole="PostCategories" />
-    <NavigationProperty Name="subcategories" Relationship="BlogModel.FK_subcategories_categories" FromRole="category" ToRole="subcategory" />
+    <Property Name="parent_id" Type="Int32" />
+    <NavigationProperty Name="categories1" Relationship="BlogModel.FK_categories_parent" FromRole="category" ToRole="category1" />
+    <NavigationProperty Name="category1" Relationship="BlogModel.FK_categories_parent" FromRole="category1" ToRole="category" />
   </EntityType>
   <EntityType Name="comment">
     <Key>
@@ -207,10 +209,9 @@
       <End Role="user" EntitySet="users" />
       <End Role="reply" EntitySet="replies" />
     </AssociationSet>
-    <EntitySet Name="subcategories" EntityType="BlogModel.subcategory" />
-    <AssociationSet Name="FK_subcategories_categories" Association="BlogModel.FK_subcategories_categories">
+    <AssociationSet Name="FK_categories_parent" Association="BlogModel.FK_categories_parent">
       <End Role="category" EntitySet="categories" />
-      <End Role="subcategory" EntitySet="subcategories" />
+      <End Role="category1" EntitySet="categories" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="reply">
@@ -248,26 +249,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="subcategory">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="category_id" Type="Int32" Nullable="false" />
-    <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="created_at" Type="DateTime" Precision="7" />
-    <Property Name="updated_at" Type="DateTime" Precision="7" />
-    <NavigationProperty Name="category" Relationship="BlogModel.FK_subcategories_categories" FromRole="subcategory" ToRole="category" />
-  </EntityType>
-  <Association Name="FK_subcategories_categories">
-    <End Type="BlogModel.category" Role="category" Multiplicity="1" />
-    <End Type="BlogModel.subcategory" Role="subcategory" Multiplicity="*" />
+  <Association Name="FK_categories_parent">
+    <End Type="BlogModel.category" Role="category" Multiplicity="0..1" />
+    <End Type="BlogModel.category" Role="category1" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="category">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="subcategory">
-        <PropertyRef Name="category_id" />
+      <Dependent Role="category1">
+        <PropertyRef Name="parent_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

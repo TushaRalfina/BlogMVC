@@ -40,8 +40,8 @@ namespace BlogMVC.Controllers
                 categories = categories.Select(c => new SelectListItem
                 {
                     Text = c.name,
-                    Value = c.id.ToString()
-                }).ToList()
+                    Value = c.id.ToString(),
+                 }).ToList()
             };
 
             return View(model);
@@ -162,7 +162,6 @@ namespace BlogMVC.Controllers
                         Text = c.name,
                         Value = c.id.ToString()
                     }).ToList();
-
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -231,7 +230,6 @@ namespace BlogMVC.Controllers
                     }
                 });
             }
-
             return Json(new { success = false, message = "User not authenticated." });
         }
 
@@ -269,12 +267,8 @@ namespace BlogMVC.Controllers
                     }
                 });
             }
-
             return Json(new { success = false, message = "User not authenticated." });
-
-
-
-        }
+         }
 
 
         //get : blogposts of a user by user_id

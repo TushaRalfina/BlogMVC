@@ -55,19 +55,19 @@
                 <style>
                     .checkbox-inline {
                         display: inline-block;
-                        margin-right: 10px; 
+                        margin-right: 10px;
                     }
 
                         .checkbox-inline label {
                             display: inline-block;
-                            vertical-align: middle;  
-                            margin-left: 5px; 
+                            vertical-align: middle;
+                            margin-left: 5px;
                         }
                 </style>
 
                 <div class="column lg-12 form-field">
                     <label>PLACE A CATEGORY</label>
-                     @foreach (var category in Model.categories)
+                    @foreach (var category in Model.categories)
                     {
                         <div class="checkbox-inline">
                             <input type="checkbox" id="@("category_" + category.Value)" name="SelectedCategoryIds" value="@category.Value" class="form-check-input" />
@@ -76,6 +76,9 @@
                     }
                     @Html.ValidationMessageFor(model => model.SelectedCategoryIds, "", new { @class = "text-danger" })
                 </div>
+
+
+
 
 
 

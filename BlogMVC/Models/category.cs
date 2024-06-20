@@ -18,17 +18,19 @@ namespace BlogMVC.Models
         public category()
         {
             this.PostCategories = new HashSet<PostCategory>();
-            this.subcategories = new HashSet<subcategory>();
+            this.categories1 = new HashSet<category>();
         }
     
         public int id { get; set; }
         public string name { get; set; }
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> updated_at { get; set; }
+        public Nullable<int> parent_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PostCategory> PostCategories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<subcategory> subcategories { get; set; }
+        public virtual ICollection<category> categories1 { get; set; }
+        public virtual category category1 { get; set; }
     }
 }

@@ -4,6 +4,7 @@
     <EntitySetMapping Name="categories">
       <EntityTypeMapping TypeName="BlogModel.category">
         <MappingFragment StoreEntitySet="categories">
+          <ScalarProperty Name="parent_id" ColumnName="parent_id" />
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="created_at" ColumnName="created_at" />
@@ -93,17 +94,6 @@
           <ScalarProperty Name="reply_text" ColumnName="reply_text" />
           <ScalarProperty Name="user_id" ColumnName="user_id" />
           <ScalarProperty Name="comment_id" ColumnName="comment_id" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="subcategories">
-      <EntityTypeMapping TypeName="BlogModel.subcategory">
-        <MappingFragment StoreEntitySet="subcategories">
-          <ScalarProperty Name="updated_at" ColumnName="updated_at" />
-          <ScalarProperty Name="created_at" ColumnName="created_at" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="category_id" ColumnName="category_id" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>

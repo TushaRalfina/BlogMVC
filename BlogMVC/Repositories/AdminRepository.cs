@@ -29,13 +29,13 @@ namespace BlogMVC.Repositories
                 {
                     throw new Exception("Category not found");
                 }
-                var subcategory = new subcategory
+                var subcategory = new category
                 {
                     name = name,
-                    category_id = category_id
+                    parent_id = category_id
 
                 };
-                db.subcategories.Add(subcategory);
+                db.categories.Add(subcategory);
                 db.SaveChanges();
 
                  
@@ -44,7 +44,7 @@ namespace BlogMVC.Repositories
 
 
         }
-
+      
 
 
         public void ApproveBlogPost(int id)

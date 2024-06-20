@@ -21,7 +21,6 @@ namespace BlogMVC.Models
             this.files = new HashSet<file>();
             this.PostCategories = new HashSet<PostCategory>();
             this.approved = "no";
-
         }
     
         public int id { get; set; }

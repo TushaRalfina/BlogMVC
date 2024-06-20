@@ -9,8 +9,7 @@ namespace BlogMVC.Models.ViewModels
     {
         public IEnumerable<category> categories { get; set; }
 
-        public IEnumerable<subcategory> subcategories { get; set; }
- 
+  
 
 
     }

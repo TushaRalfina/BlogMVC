@@ -27,12 +27,13 @@ namespace BlogMVC.Models.ViewModels
 
 
          public List<int> SelectedCategoryIds { get; set; }
-        public IEnumerable<SelectListItem> categories { get; set; }
-
+        
         public List<HttpPostedFileBase> files { get; set; }
 
- 
+         public IEnumerable<SelectListItem> categories { get; set; }
+
 
 
     }
+   
 }

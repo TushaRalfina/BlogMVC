@@ -354,9 +354,6 @@
     <Compile Include="Models\reply.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\subcategory.cs">
-      <DependentUpon>DBModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
