@@ -293,13 +293,9 @@ namespace BlogMVC.Controllers
             {
                 return Json(new { success = false, message = "Comment not found." });
             }
-
             comment.comment1 = comment_text;
             blogPostRepository.UpdateComment(comment);
             return Json(new { success = true });
-
-
-
         }
 
 

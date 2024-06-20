@@ -412,7 +412,7 @@ $(document).ready(function() {
 
 
         $(document).ready(function() {
-    $('#editForm').on('submit', function(event) {
+        $('#editForm').on('submit', function(event) {
         event.preventDefault();
         var comment_id = $('#comment_id').val();
         var commentText = $('#comment1').val();
@@ -444,21 +444,21 @@ $(document).ready(function() {
     });
 });
 
-function openEditForm(comment_id, comment_text) {
+    function openEditForm(comment_id, comment_text) {
     document.getElementById('comment_id').value = comment_id;
     document.getElementById('comment1').value = comment_text;
     document.getElementById("editFormPopup").style.display = "block";
 }
 
-function closeEditForm() {
+    function closeEditForm() {
     document.getElementById("editFormPopup").style.display = "none";
 }
 
  
 
 
-        </script>
-    }
+ </script>
+ }
 
 
 

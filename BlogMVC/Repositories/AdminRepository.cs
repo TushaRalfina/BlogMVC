@@ -10,6 +10,43 @@ namespace BlogMVC.Repositories
 {
     public class AdminRepository : IAdminRepository
     {
+        public void AddCategory(category category)
+        { 
+            //ADD CATEGORY
+            using (var db = new BlogEntities())
+            {
+                db.categories.Add(category);
+                db.SaveChanges();
+            }
+        }
+
+        public void AddSubCategory(string name,int category_id)
+        {
+            using (var db = new BlogEntities())
+            {
+                var category = db.categories.Find(category_id);
+                if (category == null)
+                {
+                    throw new Exception("Category not found");
+                }
+                var subcategory = new subcategory
+                {
+                    name = name,
+                    category_id = category_id
+
+                };
+                db.subcategories.Add(subcategory);
+                db.SaveChanges();
+
+                 
+            }
+
+
+
+        }
+
+
+
         public void ApproveBlogPost(int id)
         {
             using (var db = new BlogEntities())
@@ -94,8 +131,7 @@ namespace BlogMVC.Repositories
             }
         }
 
-        //GetPostIdByCommentId
-
+ 
         public int GetPostIdByCommentId(int id)
         {
             using (var db = new BlogEntities())

@@ -8,7 +8,7 @@
         <EntityTypeShape EntityType="BlogModel.category" Width="1.5" PointX="3" PointY="11.625" IsExpanded="true" />
         <EntityTypeShape EntityType="BlogModel.comment" Width="1.5" PointX="6.75" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="BlogModel.file" Width="1.5" PointX="5.25" PointY="7.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="BlogModel.PostCategory" Width="1.5" PointX="5.25" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BlogModel.PostCategory" Width="1.5" PointX="7.875" PointY="10.875" IsExpanded="true" />
         <EntityTypeShape EntityType="BlogModel.post" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
         <EntityTypeShape EntityType="BlogModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BlogModel.user" Width="1.5" PointX="0.75" PointY="3.625" IsExpanded="true" />
@@ -21,6 +21,8 @@
         <EntityTypeShape EntityType="BlogModel.reply" Width="1.5" PointX="10.625" PointY="5.125" />
         <AssociationConnector Association="BlogModel.FK__replies__comment__6FE99F9F" />
         <AssociationConnector Association="BlogModel.FK__replies__user_id__70DDC3D8" />
+        <EntityTypeShape EntityType="BlogModel.subcategory" Width="1.5" PointX="1.875" PointY="14.75" />
+        <AssociationConnector Association="BlogModel.FK_subcategories_categories" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -62,6 +62,16 @@
     <Property Name="user_id" Type="int" />
     <Property Name="reply_text" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="subcategories">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="category_id" Type="int" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="created_at" Type="datetime2" Precision="7" />
+    <Property Name="updated_at" Type="datetime2" Precision="7" />
+  </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
       <PropertyRef Name="diagram_id" />
@@ -184,6 +194,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_subcategories_categories">
+    <End Role="categories" Type="Self.categories" Multiplicity="1" />
+    <End Role="subcategories" Type="Self.subcategories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="categories">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="subcategories">
+        <PropertyRef Name="category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="BlogModelStoreContainer">
     <EntitySet Name="categories" EntityType="Self.categories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="comments" EntityType="Self.comments" Schema="dbo" store:Type="Tables" />
@@ -191,6 +213,7 @@
     <EntitySet Name="PostCategories" EntityType="Self.PostCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="posts" EntityType="Self.posts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="replies" EntityType="Self.replies" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="subcategories" EntityType="Self.subcategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK__comments__post_i__38996AB5" Association="Self.FK__comments__post_i__38996AB5">
@@ -224,6 +247,10 @@
     <AssociationSet Name="FK__replies__user_id__70DDC3D8" Association="Self.FK__replies__user_id__70DDC3D8">
       <End Role="users" EntitySet="users" />
       <End Role="replies" EntitySet="replies" />
+    </AssociationSet>
+    <AssociationSet Name="FK_subcategories_categories" Association="Self.FK_subcategories_categories">
+      <End Role="categories" EntitySet="categories" />
+      <End Role="subcategories" EntitySet="subcategories" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

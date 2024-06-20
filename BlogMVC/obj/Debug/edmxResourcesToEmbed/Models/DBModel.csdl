@@ -9,6 +9,7 @@
     <Property Name="created_at" Type="DateTime" Precision="3" />
     <Property Name="updated_at" Type="DateTime" Precision="3" />
     <NavigationProperty Name="PostCategories" Relationship="Self.FK__PostCateg__categ__35BCFE0A" FromRole="categories" ToRole="PostCategories" />
+    <NavigationProperty Name="subcategories" Relationship="BlogModel.FK_subcategories_categories" FromRole="category" ToRole="subcategory" />
   </EntityType>
   <EntityType Name="comment">
     <Key>
@@ -206,6 +207,11 @@
       <End Role="user" EntitySet="users" />
       <End Role="reply" EntitySet="replies" />
     </AssociationSet>
+    <EntitySet Name="subcategories" EntityType="BlogModel.subcategory" />
+    <AssociationSet Name="FK_subcategories_categories" Association="BlogModel.FK_subcategories_categories">
+      <End Role="category" EntitySet="categories" />
+      <End Role="subcategory" EntitySet="subcategories" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="reply">
     <Key>
@@ -239,6 +245,29 @@
       </Principal>
       <Dependent Role="reply">
         <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="subcategory">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="category_id" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="created_at" Type="DateTime" Precision="7" />
+    <Property Name="updated_at" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="category" Relationship="BlogModel.FK_subcategories_categories" FromRole="subcategory" ToRole="category" />
+  </EntityType>
+  <Association Name="FK_subcategories_categories">
+    <End Type="BlogModel.category" Role="category" Multiplicity="1" />
+    <End Type="BlogModel.subcategory" Role="subcategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="subcategory">
+        <PropertyRef Name="category_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

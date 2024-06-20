@@ -13,5 +13,13 @@ namespace BlogMVC.Repositories
         //get all categories
 
         IEnumerable<category> GetCategories();
+
+        //get all subcategories for a category
+
+        IEnumerable<subcategory> GetSubCategories(int category_id);
+
+        //get all categories with subcategories
+
+        IEnumerable<category> GetCategoriesWithSubCategories();
     }
 }

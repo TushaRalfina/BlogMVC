@@ -38,6 +38,13 @@ namespace BlogMVC.Interfaces
 
         int GetCommentIdByReplyId(int id);
 
+        //add categories and subcategories
+        void AddCategory(category category);
+
+        void AddSubCategory(string name, int category_id);
+
+
+
 
 
 

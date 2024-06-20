@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BlogMVC.Models;
 
 
 namespace BlogMVC.Controllers
@@ -108,9 +109,60 @@ namespace BlogMVC.Controllers
 
         }
 
-        
+        [HttpGet]
+        public ActionResult AddCategory()
+        {
+            if (Session["role"] == null || Session["role"].ToString() != "admin")
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+ 
+             return View( );  
+        }
+
+         [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddCategory(category category)
+        {
+            if (ModelState.IsValid)
+            {
+                category.created_at = DateTime.Now;
+                category.updated_at = DateTime.Now;
+
+                adminRepository.AddCategory(category);
+
+                return RedirectToAction("AddCategory");
+            }
+              return View();  
+        }
+
+        //show categories and subcategories
+        public ActionResult ShowCategories()
+        {
+            if (Session["role"] == null || Session["role"].ToString() != "admin")
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            var categoriesandsubcategories = categoryRepository.GetCategoriesWithSubCategories();
+             
+            return View(categoriesandsubcategories);
+        }
+
+        [HttpPost]
+
+        public JsonResult AddSubCategory(string name, int category_id)
+        {
+            if (string.IsNullOrWhiteSpace(name) || category_id <= 0)
+            {
+                return Json(new { success = false, message = "Invalid input." });
+            }
+            adminRepository.AddSubCategory(name, category_id);
+            return Json(new { success = true });
 
 
+        }
 
 
 
@@ -127,4 +179,18 @@ namespace BlogMVC.Controllers
 
 
 
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+

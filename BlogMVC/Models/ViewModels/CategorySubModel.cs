@@ -5,10 +5,12 @@ using System.Web;
 
 namespace BlogMVC.Models.ViewModels
 {
-    public class CategoryPostViewModel
+    public class CategorySubModel
     {
         public IEnumerable<category> categories { get; set; }
-        public IEnumerable<post> posts { get; set; }
+
+        public IEnumerable<subcategory> subcategories { get; set; }
+ 
 
 
     }

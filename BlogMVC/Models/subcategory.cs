@@ -12,23 +12,14 @@ namespace BlogMVC.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class category
+    public partial class subcategory
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public category()
-        {
-            this.PostCategories = new HashSet<PostCategory>();
-            this.subcategories = new HashSet<subcategory>();
-        }
-    
         public int id { get; set; }
+        public int category_id { get; set; }
         public string name { get; set; }
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> updated_at { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PostCategory> PostCategories { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<subcategory> subcategories { get; set; }
+        public virtual category category { get; set; }
     }
 }

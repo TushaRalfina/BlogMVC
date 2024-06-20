@@ -16,5 +16,21 @@ namespace BlogMVC.Repositories
                 return db.categories.ToList();
             }
         }
+
+        public IEnumerable<subcategory> GetSubCategories(int category_id)
+        {
+            using (var db = new BlogEntities())
+            {
+                return db.subcategories.Where(x => x.category_id == category_id).ToList();
+            }
+        }
+
+         public IEnumerable<category> GetCategoriesWithSubCategories()
+        {
+            using (var db = new BlogEntities())
+            {
+                return db.categories.Include("subcategories").ToList();
+            }
+        }
     }
 }

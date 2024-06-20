@@ -1,0 +1,155 @@
+﻿@model IEnumerable<BlogMVC.Models.category>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- # site-content
+================================================== -->
+<div id="content" class="s-content s-content--page">
+
+    <div class="row entry-wrap">
+        <div class="column lg-12">
+
+            <article class="entry">
+
+                <header class="entry__header entry__header--narrow">
+
+                    <h1 class="">
+                        Click on the category to add subcategories.
+                    </h1>
+
+                </header>
+
+
+                <div class="content-primary">
+
+                    <div class="entry__content">
+                        <style>
+                            /* Pop-up form styles */
+                            .popup {
+                                display: none;
+                                position: fixed;
+                                z-index: 9;
+                                left: 0;
+                                top: 0;
+                                width: 100%;
+                                height: 100%;
+                                overflow: auto;
+                                background-color: rgba(0, 0, 0, 0.5);
+                            }
+
+                            .popup-content {
+                                background-color: #fff;
+                                margin: 15% auto;
+                                padding: 20px;
+                                border: 1px solid #888;
+                                width: 80%;
+                                max-width: 500px;
+                                border-radius: 5px;
+                            }
+
+                            .close {
+                                color: #aaa;
+                                float: right;
+                                font-size: 28px;
+                                font-weight: bold;
+                            }
+
+                                .close:hover,
+                                .close:focus {
+                                    color: #000;
+                                    text-decoration: none;
+                                    cursor: pointer;
+                                }
+                        </style>
+
+                        <ul>
+                            @foreach (var category in Model)
+                            {
+                                <li>
+                                    <a href="#" onclick="openReplyForm(@category.id); return false;"><strong>CATEGORY: @category.name</strong></a>
+                                    @if (category.subcategories != null && category.subcategories.Any())
+                                    {
+                                        <ol>
+                                            @foreach (var subcategory in category.subcategories)
+                                            {
+                                                <li>SUB: @subcategory.name</li>
+                                            }
+                                        </ol>
+                                    }
+                                    else
+                                        {
+                                            <p style="color:darkred">No subcategories found.</p>
+                                        }
+                                </li>
+                            }
+                        </ul>
+
+                        <!-- Popup edit form -->
+                        <div id="subFormPopup" class="popup">
+                            <div class="popup-content">
+                                <span class="close" onclick="closeEditForm()">&times;</span>
+                                <h2>ADD SUBCATEGORY</h2>
+                                <form id="subForm">
+                                    <input type="hidden" name="category_id" id="category_id" value="">
+                                    <textarea name="name" id="name" rows="4" cols="50" placeholder="Enter your subcategory..."></textarea><br>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                </div> <!-- end content-primary -->
+
+        </div> <!-- end entry__content -->
+        </article> <!-- end entry -->
+
+    </div>
+</div> <!-- end entry-wrap -->
+</div> <!-- end content -->
+    </div> <!-- end page -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+        function openReplyForm(category_id) {
+            document.getElementById("category_id").value = category_id;
+            document.getElementById("subFormPopup").style.display = "block";
+        }
+
+        function closeEditForm() {
+            document.getElementById("subFormPopup").style.display = "none";
+        }
+
+        $(document).ready(function() {
+            $('#subForm').on('submit', function(event) {
+                event.preventDefault();
+                var category_id = $('#category_id').val();
+                var name = $('#name').val();
+
+                $.ajax({
+                    url: '@Url.Action("AddSubCategory", "Admin")',
+                    type: 'POST',
+                    data: {
+                        category_id: category_id,
+                        name: name
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Reply added successfully!');
+                            closeEditForm();
+                            location.reload();  // Reload to reflect changes
+                        } else {
+                            alert('Error adding reply.');
+                        }
+                    },
+                    error: function() {
+                        alert('Error adding reply.');
+                    }
+                });
+            });
+        });
+</script>
