@@ -1,28 +1,20 @@
 ﻿@model BlogMVC.Models.ViewModels.PostViewModel
-
 @{
     ViewBag.Title = "Post";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var groupedFiles = Model.Post.files.GroupBy(f => f.file_name);
     var groupedImages = Model.Post.files.GroupBy(f => f.body_images);
 }
-
-
 <!-- # site-content
-================================================== -->
+   ================================================== -->
 <div id="content" class="s-content s-content--blog">
-
     <div class="row entry-wrap">
         <div class="column lg-12">
-
             <article class="entry format-standard">
-
                 <header class="entry__header">
-
                     <h1 class="entry__title">
                         @Model.Post.title
                     </h1>
-
                     <div class="entry__meta">
                         <div class="entry__meta-author">
                             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -37,30 +29,49 @@
                                 <path stroke="currentColor" stroke-width="1.5" d="M12 8V12L14 14"></path>
                             </svg>
                             @Model.Post.created_at
-
                         </div>
                         <div class="entry__meta-cat">
                             <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.25 17.25V9.75C19.25 8.64543 18.3546 7.75 17.25 7.75H4.75V17.25C4.75 18.3546 5.64543 19.25 6.75 19.25H17.25C18.3546 19.25 19.25 18.3546 19.25 17.25Z"></path>
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 7.5L12.5685 5.7923C12.2181 5.14977 11.5446 4.75 10.8127 4.75H6.75C5.64543 4.75 4.75 5.64543 4.75 6.75V11"></path>
                             </svg>
-
                             <div class="breadcrumbs">
                                 @foreach (var postCategory in Model.Post.PostCategories)
                                 {
-                                   
-                                    <span class="breadcrumb-item">
-                                        <a href="@Url.Action("Categories", "Home", new { category_id = postCategory.category.id })">
-                                            @postCategory.category.name/
-                                        </a>
-                                    </span>
-                                    
-
-
+                                    if (postCategory.category.parent_id == null)
+                                    {
+                                        <div class="breadcrumb-path">
+                                            <span class="breadcrumb-item">
+                                                <a href="@Url.Action("Categories", "Home", new { category_id = postCategory.category.id })">
+                                                    @postCategory.category.name/
+                                                </a>
+                                            </span>
+                                            @foreach (var subcategory in Model.Post.PostCategories)
+                                            {
+                                                if (subcategory.category.parent_id == postCategory.category.id)
+                                                {
+                                                    <span class="breadcrumb-item">
+                                                        <a href="@Url.Action("Categories", "Home", new { category_id = subcategory.category.id })">
+                                                            @subcategory.category.name/
+                                                        </a>
+                                                    </span>
+                                                }
+                                            }
+                                            <span class="breadcrumb-item">@Model.Post.title</span>
+                                        </div>
+                                    }
                                 }
-                                <span class="breadcrumb-item">@Model.Post.title</span>
                             </div>
-                          
+
+                            <style>
+                                .breadcrumb-path {
+                                    display: block;
+                                }
+
+                                .breadcrumb-item {
+                                    display: inline;
+                                }
+                            </style>
 
 
                         </div>
@@ -73,24 +84,17 @@
                              sizes="(max-width: 2400px) 100vw, 2400px" alt="">
                     </figure>
                 </div>
-
                 <div class="content-primary">
-
                     <div class="entry__content">
                         <p class="lead">
                             @Html.Raw(Model.Post.content)
                         </p>
-
-
                         <h4>Blog Post Images:</h4>
                         @foreach (var group in groupedImages)
                         {
                             var file = group.First();
                             <img src="@file.body_images" alt="">
-
                         }
-
-
                         <h4>Attached Files:</h4>
                         @foreach (var group in groupedFiles)
                         {
@@ -101,9 +105,6 @@
                                 </a>
                             </span>
                         }
-
-
-
                         <div class="entry__author-box">
                             <figure class="entry__author-avatar">
                                 <img alt="" src="/Content/images/avatars/default.png" class="avatar">
@@ -119,66 +120,56 @@
                                 </p>
                             </div>
                         </div>
-
-                    </div> <!-- end entry-content -->
-
-
-                </div> <!-- end content-primary -->
-
-            </article> <!-- end entry -->
+                    </div>
+                    <!-- end entry-content -->
+                </div>
+                <!-- end content-primary -->
+            </article>
+            <!-- end entry -->
             @if (Session["role"] != null && Session["role"].ToString() == "admin")
             {
-
-
                 if (Model.Post.approved == "no")
                 {
-                <div class="admin-buttons">
-                    <form action="@Url.Action("ApprovePost", "Admin", new { id = Model.Post.id })" method="post">
-                        <button type="submit" class="btn btn-success">Approve Post</button>
-                    </form>
-                    <form action="@Url.Action("DeletePost", "Admin", new { id = Model.Post.id })" method="post">
-                        <button type="submit" class="btn btn-danger">Reject Post</button>
-                    </form>
-                    
-                </div>
-                <style>
-                    .admin-buttons {
-                        display: flex;
-                        gap: 10px;
-                    }
+                    <div class="admin-buttons">
+                        <form action="@Url.Action("ApprovePost", "Admin", new { id = Model.Post.id })" method="post">
+                            <button type="submit" class="btn btn-success">Approve Post</button>
+                        </form>
+                        <form action="@Url.Action("DeletePost", "Admin", new { id = Model.Post.id })" method="post">
+                            <button type="submit" class="btn btn-danger">Reject Post</button>
+                        </form>
+                    </div>
+                    <style>
+                        .admin-buttons {
+                            display: flex;
+                            gap: 10px;
+                        }
 
-                    .inline-form {
-                        display: inline;
-                        margin: 0;
-                    }
+                        .inline-form {
+                            display: inline;
+                            margin: 0;
+                        }
 
-                    .btn-success {
-                        background-color: forestgreen;
-                    }
+                        .btn-success {
+                            background-color: forestgreen;
+                        }
 
-                    .btn-danger {
-                        background-color: darkred;
-                    }
-                </style>
-
+                        .btn-danger {
+                            background-color: darkred;
+                        }
+                    </style>
                 }
             }
-
             <div class="comment-respond">
                 <div id="respond">
                     <h3>
                         Add Comment
                     </h3>
-
                     <form name="contactForm" id="commentForm" method="post" action="" autocomplete="off" data-post-id="@Model.Post.id">
                         <fieldset class="row">
                             <input type="hidden" id="post_id" name="post_id" value="@Model.Post.id" />
-
-
                             <div class="column lg-12 message form-field">
                                 <textarea name="comment" id="comment" class="u-fullwidth" placeholder="Your Message"></textarea>
                             </div>
-
                             <div class="column lg-12">
                                 <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Comment" type="submit">
                             </div>
@@ -186,32 +177,22 @@
                     </form>
                 </div>
             </div>
-
-
             <!----------------------------------------------------------- COMMENTS ---------------------------------------------------------------------------------------------------->
             <div class="comments-wrap">
-
                 <div id="comments">
                     <div class="large-12">
-
                         <h3>Comments Session!</h3>
-
                         <!-- START commentlist -->
                         <ol class="commentlist">
-
                             @foreach (var comment in Model.ApprovedComments)
                             {
                                 <li class="thread-alt depth-1 comment">
-
                                     <div class="comment__avatar">
                                         <img class="avatar" src="/Content/images/avatars/default.png" alt="" width="50" height="50">
                                     </div>
-
                                     <div class="comment__content">
-
                                         <div class="comment__info">
                                             <div class="comment__author">@comment.user.username</div>
-
                                             <div class="comment__meta">
                                                 <div class="comment__time">@comment.created_at</div>
                                                 <div class="comment__reply">
@@ -224,58 +205,44 @@
                                                     {
                                                         <a style="color:green" href="javascript:void(0);" onclick="openEditForm(@comment.id, '@comment.comment1')"> / Edit comment</a>
                                                     }
-
-
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="comment__text">
                                             <p>@comment.comment1</p>
                                         </div>
-
                                     </div>
-
-
                                     @if (comment.replies.Any())
                                     {
                                         <ul class="children">
                                             @foreach (var reply in comment.replies)
                                             {
                                                 <li class="depth-2 comment">
-
-
-
                                                     <div class="comment__content">
-
                                                         <div class="comment__info">
                                                             <div class="comment__author">@reply.user.username</div>
                                                         </div>
-
                                                         <div class="comment__text">
                                                             @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == reply.user.username.ToString())
                                                             {
                                                                 <a style="color:red" href="@Url.Action("FshiReply", "Admin", new {id = reply.id})">Delete reply</a>
-                                                            }<p>@reply.reply_text</p>
-
+                                                            }
+                                                            <p>@reply.reply_text</p>
                                                         </div>
-
                                                     </div>
-
                                                 </li>
                                             }
                                         </ul>
                                     }
-
                                 </li>
                                 <!-- end comment level 1 -->
                             }
-
                         </ol>
                         <!-- END commentlist -->
-
-                    </div> <!-- end col-full -->
-                </div> <!-- end comments -->
+                    </div>
+                    <!-- end col-full -->
+                </div>
+                <!-- end comments -->
                 <!-- Popup reply form -->
                 <div id="replyFormPopup" class="popup">
                     <div class="popup-content">
@@ -288,7 +255,6 @@
                         </form>
                     </div>
                 </div>
-
                 <!-- Popup edit form -->
                 <div id="editFormPopup" class="popup">
                     <div class="popup-content">
@@ -301,10 +267,8 @@
                         </form>
                     </div>
                 </div>
-
-
-            </div> <!-- end comments-wrap -->
-
+            </div>
+            <!-- end comments-wrap -->
             <style>
                 /* Pop-up form styles */
                 .popup {
@@ -343,160 +307,130 @@
                         cursor: pointer;
                     }
             </style>
-
         </div>
-
-    </div> <!-- end content -->
+    </div>
+    <!-- end content -->
     @section Scripts {
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-        $(document).ready(function() {
-            $('#commentForm').on('submit', function(event) {
-                event.preventDefault();
-                var postId = $('#post_id').val();
-                var comment = $('#comment').val();
+   $(document).ready(function() {
+       $('#commentForm').on('submit', function(event) {
+           event.preventDefault();
+           var postId = $('#post_id').val();
+           var comment = $('#comment').val();
 
-                $.ajax({
-                    url: '@Url.Action("AddComment", "BlogPost")',
-                    type: 'POST',
-                    data: {
-                        post_id: postId,
-                        comment: comment
-                    },
-                    success: function(response) {
-                        if (response.success) {
+           $.ajax({
+               url: '@Url.Action("AddComment", "BlogPost")',
+               type: 'POST',
+               data: {
+                   post_id: postId,
+                   comment: comment
+               },
+               success: function(response) {
+                   if (response.success) {
 
-                            alert('Comment added successfully!');
+                       alert('Comment added successfully!');
 
-                        } else {
-                            alert('Error adding comment.');
-                        }
-                    } 
-                });
-            });
-        });
+                   } else {
+                       alert('Error adding comment.');
+                   }
+               }
+           });
+       });
+   });
 
-            function openReplyForm(comment_id) {
-                document.getElementById('comment_id').value = comment_id;
-                document.getElementById("replyFormPopup").style.display = "block";
-            }
-
-
-            function closeReplyForm() {
-                document.getElementById("replyFormPopup").style.display = "none";
-            }
-
-             window.onclick = function (event) {
-                var popup = document.getElementById("replyFormPopup");
-                if (event.target == popup) {
-                    popup.style.display = "none";
-                }
-            }
-
-$(document).ready(function() {
-    $('#replyForm').on('submit', function(event) {
-        event.preventDefault();
-        var comment_id = $('#comment_id').val();
-        var replyText = $('#reply').val();
-
-        $.ajax({
-            url: '@Url.Action("AddReply", "BlogPost")',
-            type: 'POST',
-            data: {
-                comment_id: comment_id,
-                reply_text: replyText
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert('Reply added successfully!');
-                    closeReplyForm();
-                } else {
-                    alert('Error adding reply.');
-                }
-            },
-            error: function() {
-                alert('Error adding reply.');
-            }
-        });
-    });
-});
+       function openReplyForm(comment_id) {
+           document.getElementById('comment_id').value = comment_id;
+           document.getElementById("replyFormPopup").style.display = "block";
+       }
 
 
+       function closeReplyForm() {
+           document.getElementById("replyFormPopup").style.display = "none";
+       }
 
-        $(document).ready(function() {
-        $('#editForm').on('submit', function(event) {
-        event.preventDefault();
-        var comment_id = $('#comment_id').val();
-        var commentText = $('#comment1').val();
+        window.onclick = function (event) {
+           var popup = document.getElementById("replyFormPopup");
+           if (event.target == popup) {
+               popup.style.display = "none";
+           }
+       }
 
-        $.ajax({
-            url: '@Url.Action("EditComment", "BlogPost")',
-            type: 'POST',
-            data: {
-                comment_id: comment_id,
-                comment_text: commentText
-            },
-            success: function(response) {
-                if (response.success) {
-                    alert('Comment edited successfully!');
-                    closeEditForm();
-                    location.reload();  
-                } 
-                else {
-                    alert('Error editing comment.');
-                }
-            },
-            error: function() {
-                alert('Error editing comment.');
-            }
+   $(document).ready(function() {
+   $('#replyForm').on('submit', function(event) {
+   event.preventDefault();
+   var comment_id = $('#comment_id').val();
+   var replyText = $('#reply').val();
 
-
-            
-        });
-    });
-});
-
-    function openEditForm(comment_id, comment_text) {
-    document.getElementById('comment_id').value = comment_id;
-    document.getElementById('comment1').value = comment_text;
-    document.getElementById("editFormPopup").style.display = "block";
-}
-
-    function closeEditForm() {
-    document.getElementById("editFormPopup").style.display = "none";
-}
-
- 
+   $.ajax({
+       url: '@Url.Action("AddReply", "BlogPost")',
+       type: 'POST',
+       data: {
+           comment_id: comment_id,
+           reply_text: replyText
+       },
+       success: function(response) {
+           if (response.success) {
+               alert('Reply added successfully!');
+               closeReplyForm();
+           } else {
+               alert('Error adding reply.');
+           }
+       },
+       error: function() {
+           alert('Error adding reply.');
+       }
+   });
+   });
+   });
 
 
- </script>
- }
+
+   $(document).ready(function() {
+   $('#editForm').on('submit', function(event) {
+   event.preventDefault();
+   var comment_id = $('#comment_id').val();
+   var commentText = $('#comment1').val();
+
+   $.ajax({
+       url: '@Url.Action("EditComment", "BlogPost")',
+       type: 'POST',
+       data: {
+           comment_id: comment_id,
+           comment_text: commentText
+       },
+       success: function(response) {
+           if (response.success) {
+               alert('Comment edited successfully!');
+               closeEditForm();
+               location.reload();
+           }
+           else {
+               alert('Error editing comment.');
+           }
+       },
+       error: function() {
+           alert('Error editing comment.');
+       }
+
+
+
+   });
+   });
+   });
+
+   function openEditForm(comment_id, comment_text) {
+   document.getElementById('comment_id').value = comment_id;
+   document.getElementById('comment1').value = comment_text;
+   document.getElementById("editFormPopup").style.display = "block";
+   }
+
+   function closeEditForm() {
+   document.getElementById("editFormPopup").style.display = "none";
+   }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        </script>
+    }

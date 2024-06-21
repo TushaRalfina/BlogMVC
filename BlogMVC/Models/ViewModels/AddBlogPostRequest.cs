@@ -11,7 +11,7 @@ namespace BlogMVC.Models.ViewModels
     {
 
         [AllowHtml]
-         public string title { get; set; }
+        public string title { get; set; }
 
          [AllowHtml]
         public string content { get; set; }
@@ -19,18 +19,15 @@ namespace BlogMVC.Models.ViewModels
  
         public int user_id { get; set; }
 
-         public string main_image { get; set; }
+        public string main_image { get; set; }
 
         public HttpPostedFileBase main_imagee { get; set; }  
 
-
-
-
-         public List<int> SelectedCategoryIds { get; set; }
+        public List<int> SelectedCategoryIds { get; set; }
         
         public List<HttpPostedFileBase> files { get; set; }
 
-         public IEnumerable<SelectListItem> categories { get; set; }
+       
         public IEnumerable<category> categoriess { get; set; }
 
 

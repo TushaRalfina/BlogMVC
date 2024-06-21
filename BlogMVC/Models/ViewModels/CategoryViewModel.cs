@@ -10,8 +10,5 @@ namespace BlogMVC.Models.ViewModels
     {
         public category category { get; set; }
         public List<post> posts { get; set; }
-
-        //PostCategories is a join table between posts and categories
-        public List<PostCategory> PostCategories { get; set; }
     }
 }

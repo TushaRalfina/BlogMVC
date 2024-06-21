@@ -32,18 +32,18 @@ namespace BlogMVC.Repositories
         
          IEnumerable<comment> GetCommentsApproved(int user_id);
 
-        //add a reply to a comment
-        void AddReply(reply reply);
+         void AddReply(reply reply);
 
 
-        //get blogposts created by a user
-        IEnumerable<post> GetBlogPostsByUserId(int user_id);
+         IEnumerable<post> GetBlogPostsByUserId(int user_id);
 
-        //GetCommentById
-        comment GetCommentById(int id);
+         comment GetCommentById(int id);
 
-        //UpdateComment
-        void UpdateComment(comment comment);
+         void UpdateComment(comment comment);
+
+         IEnumerable<post> GetBlogPostsByCategory(string category);
+
+         IEnumerable<post> GetBlogPostsByDate(DateTime? fromDate, DateTime? toDate);
 
 
 

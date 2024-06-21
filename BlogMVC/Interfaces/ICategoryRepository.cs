@@ -10,8 +10,7 @@ namespace BlogMVC.Repositories
     internal interface ICategoryRepository
     {
 
-        //get all categories
-
+ 
         IEnumerable<category> GetCategories();
 
         category GetCategoryById(int id);

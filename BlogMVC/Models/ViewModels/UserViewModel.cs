@@ -19,7 +19,6 @@ namespace BlogMVC.Models.ViewModels
 
         [Required(ErrorMessage = "Username is required")]
         [StringLength(16, MinimumLength = 4, ErrorMessage = "Username must be at least 4 characters")]
-
         public string username { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
@@ -27,7 +26,7 @@ namespace BlogMVC.Models.ViewModels
         public string password { get; set; }
 
 
-        //confirm password
+         
         [Required(ErrorMessage = "Confirm Password is required")]
         [DataType(DataType.Password)]
         [Compare("password", ErrorMessage = "Password and Confirm Password must match")]
@@ -46,9 +45,13 @@ namespace BlogMVC.Models.ViewModels
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
         public string profile_picture { get; set; }
+
         public string bio { get; set; }
+
         public Nullable<System.DateTime> created_at { get; set; }
+
         public Nullable<System.DateTime> updated_at { get; set; }
 
 

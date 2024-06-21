@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
 using System.Web.Mvc;
@@ -105,21 +106,71 @@ namespace BlogMVC.Controllers
                 return View("SignUp");
             }
         }
-
-
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string category, string sortBy, DateTime? fromDate, DateTime? toDate)
         {
             if (Session["id"] == null)
             {
                 return RedirectToAction("Login", "Home");
             }
 
-            var posts = blogPostRepository.GetBlogPostsApproved().ToList();
+            // Get all approved blog posts initially
+            var posts = blogPostRepository.GetBlogPostsApproved();
+
+            // Apply filtering based on category
+            if (!string.IsNullOrEmpty(category) && category != "All")
+            {
+                posts = posts.Where(p => p.PostCategories.Any(pc => pc.category.name == category));
+            }
+
+            // Apply date range filtering
+            if (fromDate != null && toDate != null)
+            {
+                posts = posts.Where(p => p.created_at >= fromDate && p.created_at <= toDate);
+            }
+
+            // Apply sorting based on sortBy parameter
+            switch (sortBy)
+            {
+                case "date_asc":
+                    posts = posts.OrderBy(p => p.created_at);
+                    break;
+                case "date_desc":
+                    posts = posts.OrderByDescending(p => p.created_at);
+                    break;
+                default:
+                    posts = posts.OrderByDescending(p => p.created_at); // Default sorting: newest posts first
+                    break;
+            }
+
             int pageSize = 8;
             int pageNumber = (page ?? 1);
 
+            // Fetch categories
+            var categories = db.categories
+                .Where(c => c.parent_id == null)
+                .OrderBy(c => c.name)
+                .Select(c => new SelectListItem
+                {
+                    Value = c.name,
+                    Text = c.name
+                })
+                .ToList();
+
+            categories.Insert(0, new SelectListItem { Value = "All", Text = "All Categories" });
+
+            // Store filter/sort parameters in ViewBag
+            ViewBag.Category = category;
+            ViewBag.FromDate = fromDate;
+            ViewBag.ToDate = toDate;
+            ViewBag.SortBy = sortBy;
+            ViewBag.Categories = categories;
+
+            // Return paginated view of posts
             return View(posts.ToPagedList(pageNumber, pageSize));
         }
+
+
+
 
 
 
@@ -236,17 +287,29 @@ namespace BlogMVC.Controllers
         }
         public ActionResult About()
         {
+            if (Session["id"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             return View();
         }
 
         public ActionResult Contact()
         {
+            if (Session["id"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             return View();
         }
 
 
         public ActionResult Categories(int category_id)
         {
+            if (Session["id"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             var category = categoryRepository.GetCategoryById(category_id);
             var posts = categoryRepository.GetBlogPostsByCategoryId(category_id).ToList();
 

@@ -250,6 +250,10 @@ namespace BlogMVC.Controllers
         //get : blogposts of a user by user_id
         public ActionResult UserPosts(int id)
         {
+            if (Session["id"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
             var posts = blogPostRepository.GetBlogPostsByUserId(id).ToList();
             return View(posts);
         }

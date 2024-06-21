@@ -27,7 +27,14 @@
             <div class="bricks-wrapper" data-animate-block>
                 <div class="grid-sizer"></div>
 
-                @foreach (var post in Model.posts)
+            @if (Model.posts.Count == 0)
+            {
+                <h1>No posts created for this category</h1>
+            }
+            else
+            {
+
+                foreach (var post in Model.posts)
                 {
                      <article class="brick entry" data-animate-el>
                         <div class="entry__thumb">
@@ -52,6 +59,7 @@
                         </div>
                     </article>
                 }
+            }
             </div> <!-- end bricks-wrapper -->
         </div> <!-- end masonry-->
 

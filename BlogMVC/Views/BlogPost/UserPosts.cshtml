@@ -1,163 +1,132 @@
 ﻿@model IEnumerable<BlogMVC.Models.post>
-@{
-    ViewBag.Title = "UserPosts";
-    Layout = "~/Views/Shared/_Layout.cshtml";}
-
-<!-- # site-content
-    ================================================== -->
- 
-<div id="content" class="s-content s-content--page">
-
-    <div class="row entry-wrap">
-        <div class="column lg-12">
-
-            <article class="entry">
-
-                <header class="entry__header entry__header--narrow">
-
-                    <h1 class="entry__title">
-                        Posts by @Model.FirstOrDefault().user.username
-                    </h1>
-
-                </header>
-
-                <div class="entry__media">
-                    <figure class="featured-image">
-                        <img src="~/Content//Content/images/sample-600.jpg" srcset="~/Content//Content/images/sample-1200.jpg 1200w,
-                                           ~/Content//Content/images/sample-2400.jpg 2400w,
-                                           ~/Content//Content/images/sample-600.jpg 600w" sizes="(max-width: 2400px) 100vw, 2400px" alt="">
-
-                    </figure>
-                </div>
-
-                <div class="content-primary">
-
-                    <div class="entry__content">
-                        <div class="card-container">
-                            @foreach (var post in Model)
-                            {
-                                <div class="card">
-                                    <img src="@post.main_image" alt="Image 1">
-                                    <div class="card-context">
-                                        <h3>@post.title</h3>
-
+    @{
+        ViewBag.Title = "UserPosts";
+        Layout = "~/Views/Shared/_Layout.cshtml";}
+    <!-- # site-content
+       ================================================== -->
+    <div id="content" class="s-content s-content--page">
+        <div class="row entry-wrap">
+            <div class="column lg-12">
+                <article class="entry">
+                    <header class="entry__header entry__header--narrow">
+                        <h1 class="entry__title">
+                            Posts by @Model.FirstOrDefault().user.username
+                        </h1>
+                    </header>
+                    <div class="content-primary">
+                        <div class="entry__content">
+                            <div class="card-container">
+                                @foreach (var post in Model)
+                                {
+                                    <div class="card">
+                                        <img src="@post.main_image" alt="Image 1">
+                                        <div class="card-context">
+                                            <h3>@post.title</h3>
+                                        </div>
+                                        <div class="card-hidden">
+                                            <button class=""><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">Open Post</a></button>
+                                        </div>
                                     </div>
-                                    <div class="card-hidden">
-                                        <button class="card-button"><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">Open Post</a></button>
-                                    </div>
-                                </div>
-                            }
-
-
-                        </div>
-                        <style>
-                            .card-container {
-                                display: flex;
-                                flex-wrap: wrap;
-                                gap: 20px;
-                                justify-content: center;
-                                max-width: 1200px;
-                                margin: 20px;
-                            }
-
-                            .card {
-                                background: white;
-                                border-radius: 8px;
-                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                                overflow: hidden;
-                                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                                max-width: 300px;
-                                margin: 10px;
-                                position: relative;
-                            }
-
-                                .card:hover {
-                                    transform: translateY(-10px);
-                                    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+                                }
+                            </div>
+                            <style>
+                                .card-container {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    gap: 20px;
+                                    justify-content: center;
+                                    max-width: 1200px;
+                                    margin: 20px;
                                 }
 
-                            .card-image {
-                                overflow: hidden;
-                            }
+                                .card {
+                                    background: white;
+                                    border-radius: 8px;
+                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                    overflow: hidden;
+                                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                                    max-width: 300px;
+                                    margin: 10px;
+                                    position: relative;
+                                }
 
-                                .card-image img {
+                                    .card:hover {
+                                        transform: translateY(-10px);
+                                        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+                                    }
+
+                                .card-image {
+                                    overflow: hidden;
+                                }
+
+                                    .card-image img {
+                                        width: 100%;
+                                        height: auto;
+                                        transition: transform 0.3s ease;
+                                    }
+
+                                .card:hover .card-image img {
+                                    transform: scale(1.1);
+                                }
+
+                                .card-hidden {
+                                    padding: 0px 20px 15px;
+                                    opacity: 0;
+                                    transform: translateY(20px);
+                                    transition: opacity 0.3s ease, transform 0.3s ease;
+                                }
+
+                                .card-context {
+                                    padding: 10px 20px 0px;
+                                }
+
+                                .card:hover .card-hidden {
+                                    opacity: 1;
+                                    transform: translateY(0);
+                                }
+
+                                .card h3 {
+                                    margin-top: 0;
+                                    font-size: 1.5em;
+                                }
+
+                                .card p {
+                                    color: #666;
+                                    line-height: 1.5;
+                                }
+
+                                .card-button {
+                                    display: block;
                                     width: 100%;
-                                    height: auto;
-                                    transition: transform 0.3s ease;
+                                    padding: 10px;
+                                    background-color: #3498db;
+                                    color: white;
+                                    border: none;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    text-align: center;
+                                    font-size: 1em;
+                                    margin-top: 10px;
+                                    transition: background-color 0.3s ease;
                                 }
 
-                            .card:hover .card-image img {
-                                transform: scale(1.1);
-                            }
+                                    .card-button:hover {
+                                        background-color: #2980b9;
+                                    }
 
-                            .card-hidden {
-                                padding: 0px 20px 15px;
-                                opacity: 0;
-                                transform: translateY(20px);
-                                transition: opacity 0.3s ease, transform 0.3s ease;
-                            }
-
-                            .card-context {
-                                padding: 10px 20px 0px;
-                            }
-
-                            .card:hover .card-hidden {
-                                opacity: 1;
-                                transform: translateY(0);
-                            }
-
-                            .card h3 {
-                                margin-top: 0;
-                                font-size: 1.5em;
-                            }
-
-                            .card p {
-                                color: #666;
-                                line-height: 1.5;
-                            }
-
-                            .card-button {
-                                display: block;
-                                width: 100%;
-                                padding: 10px;
-                                background-color: #3498db;
-                                color: white;
-                                border: none;
-                                border-radius: 4px;
-                                cursor: pointer;
-                                text-align: center;
-                                font-size: 1em;
-                                margin-top: 10px;
-                                transition: background-color 0.3s ease;
-                            }
-
-                                .card-button:hover {
-                                    background-color: #2980b9;
+                                .entry__title {
+                                    text-align: center;
+                                    font-size: 58px;
                                 }
-
-                            .entry__title {
-                                text-align: center;
-                                font-size: 58px;
-                            }
-                        </style>
-
-
-
+                            </style>
+                        </div>
                     </div>
-
-                    </div> <!-- end content-primary -->
-
-                </div> <!-- end entry__content -->
-
+                    <!-- end content-primary -->
+            </div>
+            <!-- end entry__content -->
             </article> <!-- end entry -->
-
         </div>
-    </div> <!-- end entry-wrap -->
-
-
-</div> <!-- end content -->
- </div> <!-- end page -->
-
-
-
- 
+    </div>
+    <!-- end entry-wrap -->
+    </div> <!-- end content -->
+    </div> <!-- end page -->

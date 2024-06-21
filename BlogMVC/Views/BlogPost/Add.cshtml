@@ -22,100 +22,100 @@
                 {
                     @Html.AntiForgeryToken()
 
-            <fieldset class="row">
-                <div class="column lg-6 tab-12 form-field">
-                    <input name="username" id="username" class="u-fullwidth" placeholder="Your Username" value="@Session["username"]" type="text" readonly>
-                </div>
+                    <fieldset class="row">
+                        <div class="column lg-6 tab-12 form-field">
+                            <input name="username" id="username" class="u-fullwidth" placeholder="Your Username" value="@Session["username"]" type="text" readonly>
+                        </div>
 
-                <div class="column lg-6 tab-12 form-field">
-                    <input name="email" id="email" class="u-fullwidth" placeholder="Your Email" value="@Session["email"]" type="text" readonly>
-                </div>
+                        <div class="column lg-6 tab-12 form-field">
+                            <input name="email" id="email" class="u-fullwidth" placeholder="Your Email" value="@Session["email"]" type="text" readonly>
+                        </div>
 
-                <div class="column lg-12 form-field">
-                    @Html.LabelFor(model => model.title, "Title")
-                    @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "u-fullwidth", placeholder = "Title" } })
-                    @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-                </div>
+                        <div class="column lg-12 form-field">
+                            @Html.LabelFor(model => model.title, "Title")
+                            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "u-fullwidth", placeholder = "Title" } })
+                            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                        </div>
 
-                <div class="column lg-12 message form-field mt-2 mb-2">
-                    @Html.LabelFor(model => model.content, "Content")
-                    @Html.TextAreaFor(model => model.content, new { @class = "u-fullwidth", placeholder = "Content" })
-                    @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
-                </div>
-                <!-- Body Images -->
-                <div class="column lg-12 form-field">
-                    <label>Body Images</label>
-                    <input type="file" name="body_images" id="body_images" class="u-fullwidth" accept=".png, .jpg, .jpeg" multiple />
-                </div>
+                        <div class="column lg-12 message form-field mt-2 mb-2">
+                            @Html.LabelFor(model => model.content, "Content")
+                            @Html.TextAreaFor(model => model.content, new { @class = "u-fullwidth", placeholder = "Content" })
+                            @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
+                        </div>
+                        <!-- Body Images -->
+                        <div class="column lg-12 form-field">
+                            <label>Body Images</label>
+                            <input type="file" name="body_images" id="body_images" class="u-fullwidth" accept=".png, .jpg, .jpeg" multiple />
+                        </div>
 
-                <div class="column lg-12 form-field">
-                    <label>Additional Files</label>
-                    <input type="file" name="files" id="files" class="u-fullwidth" accept=".pdf, .docx, .xlsx" multiple />
-                </div>
-                <style>
-                    .checkbox-inline {
-                        display: inline-block;
-                        margin-right: 10px;
-                    }
+                        <div class="column lg-12 form-field">
+                            <label>Additional Files</label>
+                            <input type="file" name="files" id="files" class="u-fullwidth" accept=".pdf, .docx, .xlsx" multiple />
+                        </div>
+                        <style>
+                            .checkbox-inline {
+                                display: inline-block;
+                                margin-right: 10px;
+                            }
 
-                        .checkbox-inline label {
-                            display: inline-block;
-                            vertical-align: middle;
-                            margin-left: 5px;
-                        }
-                </style>
+                                .checkbox-inline label {
+                                    display: inline-block;
+                                    vertical-align: middle;
+                                    margin-left: 5px;
+                                }
+                        </style>
 
-                <div class="form-group">
-                    <h3>Categories</h3>
-                    @foreach (var category in Model.categoriess)
-                    {
-                        if (category.parent_id == null)
-                        {
-                            <div class="category-item">
-                                <input type="checkbox" id="category_@category.id" name="SelectedCategoryIds" value="@category.id" class="category-checkbox form-check" />
-                                <label for="category_@category.id" class="form-check-label">@category.name</label>
+                        <div class="form-group">
+                            <h3>Categories</h3>
+                            @foreach (var category in Model.categoriess)
+                            {
+                                if (category.parent_id == null)
+                                {
+                                    <div class="category-item">
+                                        <input type="checkbox" id="category_@category.id" name="SelectedCategoryIds" value="@category.id" class="category-checkbox form-check" />
+                                        <label for="category_@category.id" class="form-check-label">@category.name</label>
 
-                                <div class="subcategory-list" style="display:none;">
-                                    @foreach (var subcategory in Model.categoriess.Where(sub => sub.parent_id == category.id))
-                                    {
-                                        <div class="checkbox-inline subcategory-item">
-                                            <input type="checkbox" id="category_@subcategory.id" name="SelectedCategoryIds" value="@subcategory.id" class="subcategory-checkbox form-check" data-category-id="@category.id" />
-                                            <label for="category_@subcategory.id" class=" ">@subcategory.name</label>
+                                        <div class="subcategory-list" style="display:none;">
+                                            @foreach (var subcategory in Model.categoriess.Where(sub => sub.parent_id == category.id))
+                                            {
+                                                <div class="checkbox-inline subcategory-item" >
+                                                    <input type="checkbox" id="category_@subcategory.id" name="SelectedCategoryIds" value="@subcategory.id" class="subcategory-checkbox form-check" data-category-id="@category.id" />
+                                                    <label for="category_@subcategory.id" class=" ">@subcategory.name</label>
+                                                </div>
+                                            }
                                         </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    }
-                </div>
+                                    </div>
+                                }
+                            }
+                        </div>
 
 
-                <style>
-                    .category-item {
-                        display: flex;
-                        align-items: center;
-                    }
+                        <style>
+                            .category-item {
+                                display: flex;
+                                align-items: center;
+                            }
 
-                        .category-item h4 {
-                            margin-right: 10px;
-                            font-size: 1em;
-                        }
+                                .category-item h4 {
+                                    margin-right: 10px;
+                                    font-size: 1em;
+                                }
 
-                    .checkbox-inline {
-                        margin-right: 10px;
-                        vertical-align: middle;
-                    }
-                </style>
+                            .checkbox-inline {
+                                margin-right: 10px;
+                                vertical-align: middle;
+                            }
+                        </style>
 
 
-                <div class="column lg-12 form-field">
-                    <label for="main_imagee">Main Picture</label>
-                    <input type="file" name="main_imagee" id="main_imagee" class="u-fullwidth" />
-                </div>
-                <div class="column lg-12">
-                    <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Post" type="submit">
-                </div>
-            </fieldset>
+                        <div class="column lg-12 form-field">
+                            <label for="main_imagee">Main Picture</label>
+                            <input type="file" name="main_imagee" id="main_imagee" class="u-fullwidth" />
+                        </div>
+                        <div class="column lg-12">
+                            <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Post" type="submit">
+                        </div>
+                    </fieldset>
                 }
             </article> <!-- end entry -->
         </div>
@@ -182,8 +182,8 @@
                 }
             });
         });
-         
-            
+
+
 
 
 
