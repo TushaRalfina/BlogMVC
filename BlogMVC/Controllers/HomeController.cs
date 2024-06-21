@@ -15,22 +15,22 @@ namespace BlogMVC.Controllers
     public class HomeController : Controller
     {
         private readonly IUserRepository userRepository;
-         private readonly IBlogPostRepository blogPostRepository;
+        private readonly IBlogPostRepository blogPostRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IFilesRepository filesRepository;
         private readonly IAdminRepository adminRepository;
-        private readonly BlogEntities db = new BlogEntities();  
+        private readonly BlogEntities db = new BlogEntities();
 
 
-        public HomeController( )
+        public HomeController()
         {
             userRepository = new UserRepository();
-            blogPostRepository=new BlogPostRepository();
-            categoryRepository=new CategoryRepository();
+            blogPostRepository = new BlogPostRepository();
+            categoryRepository = new CategoryRepository();
             filesRepository = new FilesRepository();
             adminRepository = new AdminRepository();
-         }
-       
+        }
+
 
         public ActionResult SignUp()
         {
@@ -55,8 +55,8 @@ namespace BlogMVC.Controllers
                 }
                 else
                 {
-                     userRepository.AddUser(userViewModel);
-                    
+                    userRepository.AddUser(userViewModel);
+
                     var user = userRepository.GetUserByUsername(userViewModel.username);
 
                     Session["id"] = user.id.ToString();
@@ -68,7 +68,7 @@ namespace BlogMVC.Controllers
             }
             catch (Exception ex)
             {
-                 return View("Error");
+                return View("Error");
             }
         }
 
@@ -106,25 +106,25 @@ namespace BlogMVC.Controllers
             }
         }
 
- 
-     public ActionResult Index(int? page)
-    {
-        if (Session["id"] == null)
+
+        public ActionResult Index(int? page)
         {
-            return RedirectToAction("Login", "Home");
+            if (Session["id"] == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            var posts = blogPostRepository.GetBlogPostsApproved().ToList();
+            int pageSize = 8;
+            int pageNumber = (page ?? 1);
+
+            return View(posts.ToPagedList(pageNumber, pageSize));
         }
 
-        var posts = blogPostRepository.GetBlogPostsApproved().ToList();
-        int pageSize = 8;
-        int pageNumber = (page ?? 1);
-
-        return View(posts.ToPagedList(pageNumber, pageSize));
-    }
 
 
 
-    
-    public ActionResult Profile()
+        public ActionResult Profile()
         {
             if (Session["id"] == null)
             {
@@ -137,7 +137,7 @@ namespace BlogMVC.Controllers
 
                 if (user == null)
                 {
-                     return HttpNotFound("User not found.");
+                    return HttpNotFound("User not found.");
                 }
                 var userPosts = userRepository.GetPostsByUserId(id);
 
@@ -154,7 +154,7 @@ namespace BlogMVC.Controllers
                     LastName = user.LastName,
                     created_at = user.created_at,
                     updated_at = user.updated_at,
-                    posts = userPosts.ToList() 
+                    posts = userPosts.ToList()
                 };
 
                 return View(userProfileViewModel);
@@ -163,7 +163,7 @@ namespace BlogMVC.Controllers
 
         public ActionResult DownloadFile(int fileId)
         {
-             var file = filesRepository.GetFileById(fileId);
+            var file = filesRepository.GetFileById(fileId);
 
             if (file != null)
             {
@@ -190,7 +190,7 @@ namespace BlogMVC.Controllers
                     email = user.email,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    bio = user.bio   
+                    bio = user.bio
                 };
 
                 return View(usermodel);
@@ -211,7 +211,7 @@ namespace BlogMVC.Controllers
                 password = Session["password"].ToString(),
                 username = Session["username"].ToString(),
                 role = Session["role"].ToString(),
-                 FirstName = editProfileRequest.FirstName,
+                FirstName = editProfileRequest.FirstName,
                 LastName = editProfileRequest.LastName,
                 email = editProfileRequest.email,
                 bio = editProfileRequest.bio
@@ -244,12 +244,25 @@ namespace BlogMVC.Controllers
             return View();
         }
 
-       
-        public ActionResult Categories()
+
+        public ActionResult Categories(int category_id)
         {
-            return View();
+            var category = categoryRepository.GetCategoryById(category_id);
+            var posts = categoryRepository.GetBlogPostsByCategoryId(category_id).ToList();
+
+            if (category == null)
+            {
+                return HttpNotFound("Category not found.");
+            }
+
+            var viewModel = new CategoryViewModel
+            {
+                category = category,
+                posts = posts
+            };
+
+            return View(viewModel);
         }
-      
 
 
     }

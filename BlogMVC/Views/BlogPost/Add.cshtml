@@ -65,21 +65,47 @@
                         }
                 </style>
 
-                <div class="column lg-12 form-field">
-                    <label>PLACE A CATEGORY</label>
-                    @foreach (var category in Model.categories)
+                <div class="form-group">
+                    <h3>Categories</h3>
+                    @foreach (var category in Model.categoriess)
                     {
-                        <div class="checkbox-inline">
-                            <input type="checkbox" id="@("category_" + category.Value)" name="SelectedCategoryIds" value="@category.Value" class="form-check-input" />
-                            <label for="@("category_" + category.Value)" class="form-check-label">@category.Text</label>
-                        </div>
+                        if (category.parent_id == null)
+                        {
+                            <div class="category-item">
+                                <input type="checkbox" id="category_@category.id" name="SelectedCategoryIds" value="@category.id" class="category-checkbox form-check" />
+                                <label for="category_@category.id" class="form-check-label">@category.name</label>
+
+                                <div class="subcategory-list" style="display:none;">
+                                    @foreach (var subcategory in Model.categoriess.Where(sub => sub.parent_id == category.id))
+                                    {
+                                        <div class="checkbox-inline subcategory-item">
+                                            <input type="checkbox" id="category_@subcategory.id" name="SelectedCategoryIds" value="@subcategory.id" class="subcategory-checkbox form-check" data-category-id="@category.id" />
+                                            <label for="category_@subcategory.id" class=" ">@subcategory.name</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
                     }
-                    @Html.ValidationMessageFor(model => model.SelectedCategoryIds, "", new { @class = "text-danger" })
                 </div>
 
 
+                <style>
+                    .category-item {
+                        display: flex;
+                        align-items: center;
+                    }
 
+                        .category-item h4 {
+                            margin-right: 10px;
+                            font-size: 1em;
+                        }
 
+                    .checkbox-inline {
+                        margin-right: 10px;
+                        vertical-align: middle;
+                    }
+                </style>
 
 
                 <div class="column lg-12 form-field">
@@ -97,6 +123,8 @@
 </div> <!-- end site-content -->
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         new FroalaEditor('#content', {
             toolbarButtons: {
@@ -112,7 +140,7 @@
                 },
                 moreRich: {
                     buttons: [
-                        'insertLink','emoticons', 'specialCharacters'
+                        'insertLink', 'emoticons', 'specialCharacters'
                     ]
                 },
                 moreMisc: {
@@ -124,5 +152,41 @@
                 }
             }
         });
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get all subcategory checkboxes
+            const subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
+
+            subcategoryCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        // Get the category ID of the changed checkbox
+                        const categoryId = this.getAttribute('data-category-id');
+                        // Uncheck all other subcategory checkboxes with the same category ID
+                        subcategoryCheckboxes.forEach(subCheckbox => {
+                            if (subCheckbox !== this && subCheckbox.getAttribute('data-category-id') === categoryId) {
+                                subCheckbox.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            // Handle change event for category checkboxes
+            $('.category-checkbox').change(function () {
+                var subcategoryList = $(this).siblings('.subcategory-list');
+                if ($(this).is(':checked')) {
+                    subcategoryList.slideDown();
+                } else {
+                    subcategoryList.slideUp();
+                }
+            });
+        });
+         
+            
+
+
+
+
     </script>
 }

@@ -13,6 +13,10 @@ namespace BlogMVC.Repositories
         //get all categories
 
         IEnumerable<category> GetCategories();
+
+        category GetCategoryById(int id);
+
+        IEnumerable<post> GetBlogPostsByCategoryId(int id);
  
 
        

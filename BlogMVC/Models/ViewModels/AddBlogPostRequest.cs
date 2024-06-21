@@ -31,9 +31,11 @@ namespace BlogMVC.Models.ViewModels
         public List<HttpPostedFileBase> files { get; set; }
 
          public IEnumerable<SelectListItem> categories { get; set; }
+        public IEnumerable<category> categoriess { get; set; }
+
 
 
 
     }
-   
+
 }

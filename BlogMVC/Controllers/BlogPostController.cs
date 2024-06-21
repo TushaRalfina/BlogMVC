@@ -37,13 +37,8 @@ namespace BlogMVC.Controllers
 
             var model = new AddBlogPostRequest
             {
-                categories = categories.Select(c => new SelectListItem
-                {
-                    Text = c.name,
-                    Value = c.id.ToString(),
-                 }).ToList()
+                categoriess = categories
             };
-
             return View(model);
         }
 
@@ -53,7 +48,7 @@ namespace BlogMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                 if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
+                if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
                 {
                     var user = userRepository.GetUserById(user_id);
                     if (user == null)
@@ -61,7 +56,7 @@ namespace BlogMVC.Controllers
                         return RedirectToAction("Login", "Home");
                     }
 
-                     if (model.main_imagee != null && model.main_imagee.ContentLength > 0)
+                    if (model.main_imagee != null && model.main_imagee.ContentLength > 0)
                     {
                         try
                         {
@@ -69,7 +64,7 @@ namespace BlogMVC.Controllers
                             string uploadsDir = Server.MapPath("~/Content/Uploads");
                             string filePath = Path.Combine(uploadsDir, fileName);
 
-                             if (!Directory.Exists(uploadsDir))
+                            if (!Directory.Exists(uploadsDir))
                             {
                                 Directory.CreateDirectory(uploadsDir);
                             }
@@ -103,27 +98,19 @@ namespace BlogMVC.Controllers
                     // Add the blog post with categories
                     blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
 
-
-
                     if (model.files != null && model.files.Any())
                     {
-
                         foreach (var file in model.files.Where(f => f != null && f.ContentLength > 0))
                         {
                             try
                             {
-
-
                                 using (var memoryStream = new MemoryStream())
                                 {
                                     file.InputStream.CopyTo(memoryStream);
                                     var fileBytes = memoryStream.ToArray();
 
-
-
                                     foreach (var bodyImage in body_images)
                                     {
-
                                         var documentFile = new file
                                         {
                                             post_id = post.id,
@@ -138,14 +125,8 @@ namespace BlogMVC.Controllers
                                             documentFile.body_images = documentFile.body_images.TrimEnd(';');
                                         }
 
-
-
-
                                         filesRepository.AddFiles(documentFile);
                                     }
-
-
-
                                 }
                             }
                             catch (Exception ex)
@@ -155,13 +136,8 @@ namespace BlogMVC.Controllers
                         }
                     }
 
-                    // Get updated categories list
                     var categories = categoryRepository.GetCategories();
-                    model.categories = categories.Select(c => new SelectListItem
-                    {
-                        Text = c.name,
-                        Value = c.id.ToString()
-                    }).ToList();
+                    model.categoriess = categories;
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -170,7 +146,7 @@ namespace BlogMVC.Controllers
                 }
             }
 
-             return View(model);
+            return View(model);
         }
 
 

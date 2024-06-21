@@ -45,12 +45,24 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 7.5L12.5685 5.7923C12.2181 5.14977 11.5446 4.75 10.8127 4.75H6.75C5.64543 4.75 4.75 5.64543 4.75 6.75V11"></path>
                             </svg>
 
-                            @foreach (var postCategory in Model.Post.PostCategories)
-                            {
-                                <span class="cat-links">
-                                    <a href="#">@postCategory.category.name</a>
-                                </span>
-                            }
+                            <div class="breadcrumbs">
+                                @foreach (var postCategory in Model.Post.PostCategories)
+                                {
+                                   
+                                    <span class="breadcrumb-item">
+                                        <a href="@Url.Action("Categories", "Home", new { category_id = postCategory.category.id })">
+                                            @postCategory.category.name/
+                                        </a>
+                                    </span>
+                                    
+
+
+                                }
+                                <span class="breadcrumb-item">@Model.Post.title</span>
+                            </div>
+                          
+
+
                         </div>
                     </div>
                 </header>
@@ -127,7 +139,7 @@
                     <form action="@Url.Action("DeletePost", "Admin", new { id = Model.Post.id })" method="post">
                         <button type="submit" class="btn btn-danger">Reject Post</button>
                     </form>
-                    }
+                    
                 </div>
                 <style>
                     .admin-buttons {
