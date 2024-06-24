@@ -23,14 +23,14 @@
             <div class="categories" style="display:flex;align-items:center;justify-content:center; gap:20px">
                 <div class="row">
                     <div class="column large-12">
-                        <div class="categories" style="display: flex; align-items: center; justify-content: center;right  gap: 10px; position:relative;right:300px">
+                        <div class="categories" style="display: flex; align-items: center; justify-content: center;right  gap: 10px; position:relative;right:300px; font-weight:bold">
 
                             @if (Model.category.parent_id == null)
                             {
                                 <div style="position: relative; padding: 20px;">
                                     <span class="breadcrumb-item">
                                         <a href="@Url.Action("Categories", "Home", new { category_id = Model.category.id })">
-                                            @Model.category.name/
+                                            @Model.category.name /
                                         </a>
                                     </span>
                                 </div>
@@ -44,7 +44,7 @@
                                     <div style="position: relative;">
                                         <span class="breadcrumb-item">
                                             <a href="@Url.Action("Categories", "Home", new { category_id = parentCategory.id })">
-                                                @parentCategory.name/
+                                                @parentCategory.name /
                                             </a>
                                         </span>
                                     </div>

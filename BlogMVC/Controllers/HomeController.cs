@@ -60,11 +60,10 @@ namespace BlogMVC.Controllers
 
                  
 
-                // Generate a verification code
-                userViewModel.VerificationCode = GenerateVerificationCode();
+                // gjeneroj verification code
+                 userViewModel.VerificationCode = GenerateVerificationCode();
 
-                // Send the verification code to the user's email
-                SendVerificationEmail(userViewModel.email, userViewModel.VerificationCode);
+                 SendVerificationEmail(userViewModel.email, userViewModel.VerificationCode);
 
                 // Store user in session temporarily
                 Session["TempUser"] = userViewModel;

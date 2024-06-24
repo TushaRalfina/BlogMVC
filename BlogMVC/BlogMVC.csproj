@@ -397,7 +397,6 @@
     <Content Include="Content\css\profile.css" />
     <Content Include="Content\css\signup.css" />
     <Content Include="Content\css\style.css" />
-    <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\vendor.css" />
     <Content Include="Content\images\android-chrome-192x192.png" />
     <Content Include="Content\images\android-chrome-512x512.png" />
