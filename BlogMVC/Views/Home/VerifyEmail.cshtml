@@ -1,0 +1,33 @@
+﻿@model BlogMVC.Models.ViewModels.UserViewModel
+
+
+@{
+    ViewBag.Title = "Verify Email";
+    
+}
+
+<h2>Verify Email</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Verification</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Verification Code</label>
+            <div class="col-md-10">
+                <input type="text" name="verificationCode" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Verify" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

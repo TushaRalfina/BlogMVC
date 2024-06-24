@@ -10,5 +10,10 @@ namespace BlogMVC.Models.ViewModels
     {
         public category category { get; set; }
         public List<post> posts { get; set; }
+
+        public IEnumerable<category> subcategories { get; set; }
+        public IEnumerable<category> categories { get; set; }
+
+
     }
 }

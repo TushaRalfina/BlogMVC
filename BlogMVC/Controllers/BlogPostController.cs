@@ -85,8 +85,7 @@ namespace BlogMVC.Controllers
                         model.main_image = "/Content/images/thumbs/masonry/statue-1200.jpg";
                     }
 
-                    // Create a new post object
-                    var post = new post
+                     var post = new post
                     {
                         title = model.title,
                         content = model.content,
@@ -95,8 +94,7 @@ namespace BlogMVC.Controllers
                         main_image = model.main_image
                     };
 
-                    // Add the blog post with categories
-                    blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
+                     blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
 
                     if (model.files != null && model.files.Any())
                     {
@@ -109,7 +107,7 @@ namespace BlogMVC.Controllers
                                     file.InputStream.CopyTo(memoryStream);
                                     var fileBytes = memoryStream.ToArray();
 
-                                    foreach (var bodyImage in body_images)
+                                     if (body_images == null || !body_images.Any())
                                     {
                                         var documentFile = new file
                                         {
@@ -119,13 +117,29 @@ namespace BlogMVC.Controllers
                                             file_content = Convert.ToBase64String(fileBytes),
                                             body_images = ""
                                         };
-                                        documentFile.body_images += $"/Content/Uploads/{bodyImage.FileName};";
-                                        if (!string.IsNullOrEmpty(documentFile.body_images))
-                                        {
-                                            documentFile.body_images = documentFile.body_images.TrimEnd(';');
-                                        }
 
                                         filesRepository.AddFiles(documentFile);
+                                    }
+                                    else
+                                    {
+                                        foreach (var bodyImage in body_images)
+                                        {
+                                            var documentFile = new file
+                                            {
+                                                post_id = post.id,
+                                                file_type = Path.GetExtension(file.FileName),
+                                                file_name = Path.GetFileName(file.FileName),
+                                                file_content = Convert.ToBase64String(fileBytes),
+                                                body_images = ""
+                                            };
+                                            documentFile.body_images += $"/Content/Uploads/{bodyImage.FileName};";
+                                            if (!string.IsNullOrEmpty(documentFile.body_images))
+                                            {
+                                                documentFile.body_images = documentFile.body_images.TrimEnd(';');
+                                            }
+
+                                            filesRepository.AddFiles(documentFile);
+                                        }
                                     }
                                 }
                             }
@@ -136,13 +150,14 @@ namespace BlogMVC.Controllers
                         }
                     }
 
+
                     var categories = categoryRepository.GetCategories();
                     model.categoriess = categories;
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index","Home");
                 }
                 else
                 {
-                    return RedirectToAction("Login", "Home");
+                    return RedirectToAction("Login","Home");
                 }
             }
 
@@ -247,8 +262,7 @@ namespace BlogMVC.Controllers
          }
 
 
-        //get : blogposts of a user by user_id
-        public ActionResult UserPosts(int id)
+         public ActionResult UserPosts(int id)
         {
             if (Session["id"] == null)
             {

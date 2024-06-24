@@ -9,17 +9,77 @@
 <section id="content" class="s-content-categorie">
 
 
-    <!-- pageheader -->
-    <div class="s-pageheader">
+     <div class="s-pageheader">
         <div class="row">
             <div class="column large-12">
-                <h1 class="page-title">
-                    <span class="page-title__small-type">Category:@Model.category.name</span>
-                     
-                </h1>
+                <h2 class="page-title">
+                    <span class="">@Model.category.name</span>
+                </h2>
             </div>
         </div>
-    </div> <!-- end s-pageheader-->
+    </div> 
+     <div class="row">
+        <div class="column large-12">
+            <div class="categories" style="display:flex;align-items:center;justify-content:center; gap:20px">
+                <div class="row">
+                    <div class="column large-12">
+                        <div class="categories" style="display: flex; align-items: center; justify-content: center;right  gap: 10px; position:relative;right:300px">
+
+                            @if (Model.category.parent_id == null)
+                            {
+                                <div style="position: relative; padding: 20px;">
+                                    <span class="breadcrumb-item">
+                                        <a href="@Url.Action("Categories", "Home", new { category_id = Model.category.id })">
+                                            @Model.category.name/
+                                        </a>
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                 var parentCategory = Model.categories.FirstOrDefault(c => c.id == Model.category.parent_id);
+
+                                if (parentCategory != null)
+                                {
+                                    <div style="position: relative;">
+                                        <span class="breadcrumb-item">
+                                            <a href="@Url.Action("Categories", "Home", new { category_id = parentCategory.id })">
+                                                @parentCategory.name/
+                                            </a>
+                                        </span>
+                                    </div>
+                                }
+
+                                <div style="position: relative;">
+                                    <span class="breadcrumb-item">
+                                        <a href="@Url.Action("Categories", "Home", new { category_id = Model.category.id })">
+                                            @Model.category.name/
+                                        </a>
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div style="position: relative; left: 300px; padding: 20px; gap:10px">
+                    <h7 class="page-title">Subcategories of @Model.category.name:</h7>
+
+                    @foreach (var subcategory in Model.subcategories.Where(sub => sub.parent_id == Model.category.id))
+                    {
+                        <h7 class="page-title">
+                            <span class="page-title__small-type" style="font-weight:bold">
+                                <a href="@Url.Action("Categories", "Home", new { category_id = subcategory.id })">@subcategory.name</a>
+                            </span>
+                        </h7>
+                    }
+                 </div>
+             </div>
+         </div>
+      </div>
+ 
+
+
     <!--  masonry -->
     <div id="bricks" class="bricks">
 
@@ -50,12 +110,12 @@
                                     
                                      
                                 </div>
-                                <h1 class="entry__title"><a href="@Url.Action("Post", "Home", new { id = post.id })">@post.title</a></h1>
+                                <h1 class="entry__title"><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">@post.title</a></h1>
                             </div>
                             <div class="entry__excerpt">
                                 <p></p>
                             </div>
-                            <a class="entry__more-link" href="@Url.Action("Post", "Home", new { id = post.id })">Read More</a>
+                            <a class="entry__more-link" href="@Url.Action("Post", "BlogPost", new { id = post.id })">Read More</a>
                         </div>
                     </article>
                 }

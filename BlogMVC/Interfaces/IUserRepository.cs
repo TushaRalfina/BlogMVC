@@ -23,6 +23,10 @@ namespace BlogMVC.Repositories
 
          IEnumerable<post> GetPostsByUserId(int id);
 
+         user GetUserByVerificationToken(string token);
+
+
+
 
 
 

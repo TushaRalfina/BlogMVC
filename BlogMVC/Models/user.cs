@@ -40,5 +40,8 @@ namespace BlogMVC.Models
         public virtual ICollection<post> posts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<reply> replies { get; set; }
+        public bool IsEmailVerified { get; set; }
+        public string VerificationCode { get; set; }
+
     }
 }

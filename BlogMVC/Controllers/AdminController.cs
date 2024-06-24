@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BlogMVC.Models;
+using System.Net.Mail;
+using System.Web.Configuration;
 
 
 namespace BlogMVC.Controllers
@@ -47,16 +49,62 @@ namespace BlogMVC.Controllers
         }
 
         //ApprovePost
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ApprovePost(int id)
         {
-            adminRepository.ApproveBlogPost(id);
+            var post = blogPostRepository.GetBlogPostById(id);
+            {
+                adminRepository.ApproveBlogPost(id);
+                post.approved = "yes";
+                SendApprovalEmail(post.user.email, post.title,post.user.username,post.approved);
+            }
             return RedirectToAction("ManagePosts");
         }
+
+        private void SendApprovalEmail(string toEmail, string postTitle,string username,string approved)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+
+                string emailUsername = WebConfigurationManager.AppSettings["EmailUsername"];
+                string emailPassword = WebConfigurationManager.AppSettings["EmailPassword"];
+
+                mail.From = new MailAddress(emailUsername);
+                mail.To.Add(toEmail);
+                if (approved == "yes")
+                {
+                    mail.Subject = "Your blog post has been approved";
+                    mail.Body = $"Dear {username},\n\n Your blog post titled '{postTitle}' has been approved and is now live on our site.\n\nBest regards,\nRadianceBlog Team";
+                }
+                else
+                {
+                    mail.Subject = "Your blog post has been rejected";
+                    mail.Body = $"Dear {username},\n\n Your blog post titled '{postTitle}' has been rejected.\n\nBest regards,\nRadianceBlog Team";
+                }
+                smtpServer.Port = 587;  
+                smtpServer.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
+                smtpServer.EnableSsl = true;
+
+                smtpServer.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                 Console.WriteLine("Error sending email: " + ex.Message);
+            }
+        }
+
 
         //DeletePost
         public ActionResult DeletePost(int id)
         {
-            adminRepository.DeleteBlogPosts(id);
+            var post = blogPostRepository.GetBlogPostById(id);
+            {
+                adminRepository.DeleteBlogPosts(id);
+                SendApprovalEmail(post.user.email, post.title, post.user.username, post.approved);
+            }
             return RedirectToAction("ManagePosts");
         }
 
@@ -109,6 +157,8 @@ namespace BlogMVC.Controllers
 
         }
 
+
+        //add category
         [HttpGet]
         public ActionResult AddCategory()
         {
@@ -121,6 +171,7 @@ namespace BlogMVC.Controllers
              return View( );  
         }
 
+        //add category
          [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddCategory(category category)
@@ -150,8 +201,8 @@ namespace BlogMVC.Controllers
             return View(categoriesandsubcategories);
         }
 
+        //add subcategory
        [HttpPost]
-
         public JsonResult AddSubCategory(string name, int category_id)
         {
             if (string.IsNullOrWhiteSpace(name) || category_id <= 0)
@@ -160,32 +211,9 @@ namespace BlogMVC.Controllers
             }
             adminRepository.AddSubCategory(name, category_id);
             return Json(new { success = true });
-
-
         } 
 
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 

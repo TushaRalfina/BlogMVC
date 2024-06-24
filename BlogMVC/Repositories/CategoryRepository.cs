@@ -37,7 +37,14 @@ namespace BlogMVC.Repositories
             }
         }
 
+        public IEnumerable<category> GetSubcategoriesByCategoryId(int id)
+        {
 
+            using (var db = new BlogEntities())
+            {
+                return db.categories.Where(c => c.parent_id == id).ToList();
+            }
+         }
     }
 }
  

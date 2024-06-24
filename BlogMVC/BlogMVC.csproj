@@ -396,6 +396,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\css\profile.css" />
     <Content Include="Content\css\signup.css" />
+    <Content Include="Content\css\style.css" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\css\vendor.css" />
     <Content Include="Content\images\android-chrome-192x192.png" />
@@ -512,7 +513,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Categories.cshtml" />
     <Content Include="Views\BlogPost\Add.cshtml" />
-    <Content Include="Views\Shared\_LayoutPage1.cshtml" />
     <Content Include="Views\Home\SignUp.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Admin\ManagePosts.cshtml" />
@@ -524,6 +524,7 @@
     <Content Include="Views\Shared\_Categories.cshtml" />
     <Content Include="Views\Admin\AddCategory.cshtml" />
     <Content Include="Views\Admin\ShowCategories.cshtml" />
+    <Content Include="Views\Home\VerifyEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -117,12 +117,12 @@ namespace BlogMVC.Repositories
 
         public IEnumerable<post> GetBlogPostsByCategory(string category)
         {
-            return db.posts.Where(p => p.PostCategories.Any(pc => pc.category.name == category)).ToList();
+            return db.posts.Where(p => p.PostCategories.Any(pc => pc.category.name == category) && p.approved == "yes").ToList();
         }
 
         public IEnumerable<post> GetBlogPostsByDate(DateTime? fromDate, DateTime? toDate)
         {
-             return db.posts.Where(p => p.created_at >= fromDate && p.created_at <= toDate).ToList();
+            return db.posts.Where(p => p.created_at >= fromDate && p.created_at <= toDate && p.approved == "yes").ToList();
         }
     }
 }

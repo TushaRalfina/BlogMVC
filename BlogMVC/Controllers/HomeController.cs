@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Web.Mvc;
 using BlogMVC.Interfaces;
 using BlogMVC.Models;
 using BlogMVC.Models.ViewModels;
 using BlogMVC.Repositories;
 using PagedList;
-
+using System.Web.Configuration;
+ 
 
 
 namespace BlogMVC.Controllers
@@ -54,24 +57,90 @@ namespace BlogMVC.Controllers
                     ViewBag.Notification = "This username is already taken";
                     return View(userViewModel);
                 }
-                else
-                {
-                    userRepository.AddUser(userViewModel);
 
-                    var user = userRepository.GetUserByUsername(userViewModel.username);
+                 
 
-                    Session["id"] = user.id.ToString();
-                    Session["username"] = user.username;
-                    Session["role"] = user.role;
+                // Generate a verification code
+                userViewModel.VerificationCode = GenerateVerificationCode();
 
-                    return RedirectToAction("Index", "Home");
-                }
+                // Send the verification code to the user's email
+                SendVerificationEmail(userViewModel.email, userViewModel.VerificationCode);
+
+                // Store user in session temporarily
+                Session["TempUser"] = userViewModel;
+
+                return RedirectToAction("VerifyEmail");
             }
             catch (Exception ex)
             {
                 return View("Error");
             }
         }
+        public ActionResult VerifyEmail()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult VerifyEmail(string verificationCode)
+        {
+            var userViewModel = (UserViewModel)Session["TempUser"];
+
+            if (userViewModel != null && userViewModel.VerificationCode == verificationCode)
+            {
+                userRepository.AddUser(userViewModel);
+
+                var user = userRepository.GetUserByUsername(userViewModel.username);
+
+                Session["id"] = user.id.ToString();
+                Session["username"] = user.username;
+                Session["role"] = user.role;
+
+                Session.Remove("TempUser");
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Notification = "Invalid verification code";
+            return View();
+        }
+        private void SendVerificationEmail(string email, string verificationCode)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient smtpServer = new SmtpClient("smtp.gmail.com");
+
+                string emailUsername = WebConfigurationManager.AppSettings["EmailUsername"];
+                string emailPassword = WebConfigurationManager.AppSettings["EmailPassword"];
+
+                mail.From = new MailAddress(emailUsername);
+                mail.To.Add(email);
+                 
+                    mail.Subject = "Verification Code";
+                    mail.Body = $"Your verification code is: {verificationCode}";
+                
+                smtpServer.Port = 587;
+                smtpServer.Credentials = new System.Net.NetworkCredential(emailUsername, emailPassword);
+                smtpServer.EnableSsl = true;
+
+                smtpServer.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error sending email: " + ex.Message);
+            }
+
+        }
+
+        private string GenerateVerificationCode()
+        {
+            var random = new Random();
+            return random.Next(100000, 999999).ToString();
+        }
+
+
 
 
         public ActionResult Logout()
@@ -113,23 +182,19 @@ namespace BlogMVC.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            // Get all approved blog posts initially
-            var posts = blogPostRepository.GetBlogPostsApproved();
+             var posts = blogPostRepository.GetBlogPostsApproved();
 
-            // Apply filtering based on category
-            if (!string.IsNullOrEmpty(category) && category != "All")
+             if (!string.IsNullOrEmpty(category) && category != "All")
             {
-                posts = posts.Where(p => p.PostCategories.Any(pc => pc.category.name == category));
+                posts = blogPostRepository.GetBlogPostsByCategory(category);
             }
 
-            // Apply date range filtering
-            if (fromDate != null && toDate != null)
+             if (fromDate != null && toDate != null)
             {
-                posts = posts.Where(p => p.created_at >= fromDate && p.created_at <= toDate);
+                posts = blogPostRepository.GetBlogPostsByDate(fromDate, toDate);
             }
 
-            // Apply sorting based on sortBy parameter
-            switch (sortBy)
+             switch (sortBy)
             {
                 case "date_asc":
                     posts = posts.OrderBy(p => p.created_at);
@@ -138,15 +203,13 @@ namespace BlogMVC.Controllers
                     posts = posts.OrderByDescending(p => p.created_at);
                     break;
                 default:
-                    posts = posts.OrderByDescending(p => p.created_at); // Default sorting: newest posts first
+                    posts = posts.OrderByDescending(p => p.created_at);  
                     break;
             }
-
             int pageSize = 8;
             int pageNumber = (page ?? 1);
 
-            // Fetch categories
-            var categories = db.categories
+             var categories = db.categories
                 .Where(c => c.parent_id == null)
                 .OrderBy(c => c.name)
                 .Select(c => new SelectListItem
@@ -158,16 +221,15 @@ namespace BlogMVC.Controllers
 
             categories.Insert(0, new SelectListItem { Value = "All", Text = "All Categories" });
 
-            // Store filter/sort parameters in ViewBag
             ViewBag.Category = category;
             ViewBag.FromDate = fromDate;
             ViewBag.ToDate = toDate;
             ViewBag.SortBy = sortBy;
             ViewBag.Categories = categories;
 
-            // Return paginated view of posts
-            return View(posts.ToPagedList(pageNumber, pageSize));
+             return View(posts.ToPagedList(pageNumber, pageSize));
         }
+
 
 
 
@@ -321,10 +383,19 @@ namespace BlogMVC.Controllers
             var viewModel = new CategoryViewModel
             {
                 category = category,
-                posts = posts
+                posts = posts,
+                subcategories = categoryRepository.GetSubcategoriesByCategoryId(category_id),
+                categories = categoryRepository.GetCategories()
             };
 
             return View(viewModel);
+        }
+        [ChildActionOnly]
+        public ActionResult CategoriesPartial()
+        {
+             var categories = categoryRepository.GetCategories();
+
+            return PartialView("_Categories", categories);
         }
 
 

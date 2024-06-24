@@ -54,6 +54,9 @@ namespace BlogMVC.Models.ViewModels
 
         public Nullable<System.DateTime> updated_at { get; set; }
 
+        public bool IsEmailVerified { get; set; }
+        public string VerificationCode { get; set; }
+
 
 
 

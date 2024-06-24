@@ -114,6 +114,13 @@ namespace BlogMVC.Repositories
             return db.posts.Where(p => p.user_id == id).ToList();
             
         }
+
+        public user GetUserByVerificationToken(string token)
+        {
+            throw new NotImplementedException();
+ 
+
+        }
     }
 }
 

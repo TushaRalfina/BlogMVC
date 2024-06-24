@@ -38,28 +38,10 @@
                             <div class="breadcrumbs">
                                 @foreach (var postCategory in Model.Post.PostCategories)
                                 {
-                                    if (postCategory.category.parent_id == null)
-                                    {
-                                        <div class="breadcrumb-path">
-                                            <span class="breadcrumb-item">
-                                                <a href="@Url.Action("Categories", "Home", new { category_id = postCategory.category.id })">
-                                                    @postCategory.category.name/
-                                                </a>
-                                            </span>
-                                            @foreach (var subcategory in Model.Post.PostCategories)
-                                            {
-                                                if (subcategory.category.parent_id == postCategory.category.id)
-                                                {
-                                                    <span class="breadcrumb-item">
-                                                        <a href="@Url.Action("Categories", "Home", new { category_id = subcategory.category.id })">
-                                                            @subcategory.category.name/
-                                                        </a>
-                                                    </span>
-                                                }
-                                            }
-                                            <span class="breadcrumb-item">@Model.Post.title</span>
-                                        </div>
-                                    }
+                                    <span class="cat-links">
+                                        <a href="@Url.Action("Categories", "Home", new { category_id = postCategory.category.id })">@postCategory.category.name</a>
+                                    </span>
+
                                 }
                             </div>
 
@@ -89,21 +71,21 @@
                         <p class="lead">
                             @Html.Raw(Model.Post.content)
                         </p>
-                        <h4>Blog Post Images:</h4>
-                        @foreach (var group in groupedImages)
-                        {
-                            var file = group.First();
-                            <img src="@file.body_images" alt="">
-                        }
-                        <h4>Attached Files:</h4>
-                        @foreach (var group in groupedFiles)
-                        {
-                            var file = group.First();
-                            <span class="file-link">
-                                <a href="@Url.Action("DownloadFile", "Home", new { fileId = file.id })">
-                                    <i class="fas fa-file-alt"></i> @file.file_name
-                                </a>
-                            </span>
+                        
+                             @foreach (var group in groupedImages)
+                            {
+                                var file = group.First();
+                                <img src="@file.body_images" alt="">
+                            }
+                            <h4>Additional Files:</h4>
+                            @foreach (var group in groupedFiles)
+                            {
+                                var file = group.First();
+                                <span class="file-link">
+                                    <a href="@Url.Action("DownloadFile", "Home", new { fileId = file.id })">
+                                        <i class="fas fa-file-alt"></i> @file.file_name
+                                    </a>
+                                </span>
                         }
                         <div class="entry__author-box">
                             <figure class="entry__author-avatar">
@@ -132,10 +114,10 @@
                 {
                     <div class="admin-buttons">
                         <form action="@Url.Action("ApprovePost", "Admin", new { id = Model.Post.id })" method="post">
-                            <button type="submit" class="btn btn-success">Approve Post</button>
+                            <button type="submit" class="btn btn-success" style="background-color: forestgreen; ">Approve Post</button>
                         </form>
                         <form action="@Url.Action("DeletePost", "Admin", new { id = Model.Post.id })" method="post">
-                            <button type="submit" class="btn btn-danger">Reject Post</button>
+                            <button type="submit" class="btn btn-danger" style="background-color: darkred;">Reject Post</button>
                         </form>
                     </div>
                     <style>
@@ -147,14 +129,6 @@
                         .inline-form {
                             display: inline;
                             margin: 0;
-                        }
-
-                        .btn-success {
-                            background-color: forestgreen;
-                        }
-
-                        .btn-danger {
-                            background-color: darkred;
                         }
                     </style>
                 }
