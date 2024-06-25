@@ -3,7 +3,7 @@
 * Data: 25/06/2024  
 * Programuesi: Ralfina Tusha
 * Pershkrimi: Interface qe permban metodat qe mund te perdoren nga BlogPostRepository
-* Metodat: AddBlogPost, GetBlogPosts, GetBlogPostById, UpdateBlogPost, DeleteBlogPost, GetBlogPostsApproved, AddComment,
+* Metodat: AddBlogPost, GetBlogPosts, GetBlogPostById,GetBlogPostsApproved, AddComment,
 * GetCommentsByPostId, GetCommentsApproved, AddReply, GetBlogPostsByUserId, GetCommentById, UpdateComment, GetBlogPostsByCategory,GetBlogPostsByDate
 (c) Copyright by Soft & Solution 
 **/
@@ -31,10 +31,7 @@ namespace BlogMVC.Repositories
         post GetBlogPostById(int id);
 
 
-        void UpdateBlogPost(post blogPostView);
 
-
-        void DeleteBlogPost(int id);
 
 
         IEnumerable<post> GetBlogPostsApproved();

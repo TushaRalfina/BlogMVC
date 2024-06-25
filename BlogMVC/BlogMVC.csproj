@@ -363,7 +363,6 @@
     <Compile Include="Models\ViewModels\AddBlogPostRequest.cs" />
     <Compile Include="Models\ViewModels\CategoryViewModel.cs" />
     <Compile Include="Models\ViewModels\EditProfileRequest.cs" />
-    <Compile Include="Models\ViewModels\PostsCategoriesModel.cs" />
     <Compile Include="Models\ViewModels\PostViewModel.cs" />
     <Compile Include="Models\ViewModels\UserProfileViewModel.cs" />
     <Compile Include="Models\ViewModels\UserViewModel.cs" />

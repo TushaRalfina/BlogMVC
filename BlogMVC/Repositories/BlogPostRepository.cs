@@ -1,4 +1,29 @@
-﻿using BlogMVC.Models;
+﻿/**
+* Versioni:  V 1.0.0
+* Data: 25/06/2024
+* Programuesi: Ralfina Tusha
+* Klasa: BlogPostRepository
+* Arsyeja: Implementimi i metodave per menaxhimin e postimeve në blog dhe komenteve.
+* Pershkrimi: Kjo klase ofron funksionalitete per te shtuar dhe marre poste dhe komente, për te aprovuar postime dhe komente, si dhe për te marre postime dhe komente te specifikuara nga useri, kategoria, ose data.
+* Interfaces: IBlogPostRepository
+* Metodat: 
+  - AddBlogPost(post post, List<int> categoryIds): Shton nje post se bashku me kategorite e tij.
+  - GetBlogPostById(int id): Kthen nje post me id e dhene.
+  - GetBlogPosts(): MKthen nje liste te postimeve te blogut.
+  - GetBlogPostsApproved(): Kthen nje liste te postimeve te aprovuara.
+  - AddComment(comment comment): Shton nje koment te ri.
+  - GetCommentsByPostId(int post_id):Kthen liste te komenteve te aprovuara per nje post te caktuar.
+  - GetCommentsApproved(int user_id): Kthen nje liste te komenteve te aprovuara nga nje perdorues i caktuar.
+  - AddReply(reply reply): Shton nje reply ne nje koment.
+  - GetBlogPostsByUserId(int user_id): Kthen nje liste te posteve te aprovuara nga nje user i caktuar.
+  - GetCommentById(int id): Kthen koment me id e dhene.
+  - UpdateComment(comment comment): update një koment ekzistues.
+  - GetBlogPostsByCategory(string category): Kthen nje liste te postimeve te aprovuara per nje kategori te caktuar.
+  - GetBlogPostsByDate(DateTime? fromDate, DateTime? toDate): Kthen nje liste te postimeve te aprovuara per nje periudhe te caktuar.
+*/
+
+
+using BlogMVC.Models;
 using BlogMVC.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,11 +52,7 @@ namespace BlogMVC.Repositories
             db.SaveChanges();
 
         }
-
-        public void DeleteBlogPost(int id)
-        {
-            throw new NotImplementedException();
-        }
+ 
 
        
         public post GetBlogPostById(int id)
@@ -47,11 +68,7 @@ namespace BlogMVC.Repositories
 
             return blogPosts;
         }
-
-        public void UpdateBlogPost(post blogPostView)
-        {
-            throw new NotImplementedException();
-        }
+ 
 
         public IEnumerable<post> GetBlogPostsApproved()
         {

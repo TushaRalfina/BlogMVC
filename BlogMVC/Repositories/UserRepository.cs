@@ -1,4 +1,20 @@
-﻿using BlogMVC.Models;
+﻿/**
+* Versioni:  V 1.0.0
+* Data: 25/06/2024
+* Programuesi: Ralfina Tusha
+* Klasa: UserRepository
+* Arsyeja: Implementimi i metodave për menaxhimin e userave  
+* Pershkrimi: Kjo klase ofron funksionalitete per te shtuar, update dhe marre userat, si dhe per te  hashuar passwordet e tyre.
+* Interfaces: IUserRepository
+* Metodat: 
+  - AddUser(UserViewModel userViewModel): Regjistron nje përdorues te ri në db duke perdorur informacionin nga UserViewModel.
+  - UpdateUser(user user): update  te dhenat e nje user-it ne db.
+  - GetUserById(int id): Kthen nje user me id e dhene.
+  - GetUserByUsername(string username): Kthen nje user nga db duke kaluar si parameter username-in e userit.
+  - HashPassword(string password): Hashon  passwordin duke perdorur algoritmin SHA-256.
+  - GetPostsByUserId(int id): Kthen nje liste te postimeve te aprovuara per nje user te caktuar.
+*/
+using BlogMVC.Models;
 using BlogMVC.Models.ViewModels;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,15 @@
-﻿using System;
+﻿/**
+* Versioni:  V 1.0.0
+* Data: 25/06/2024
+* Programuesi: Ralfina Tusha
+* Klasa: AddBlogPostRequest
+* Arsyeja: Modeli i perdorur për kerkesen e shtimit te nje postimi te ri ne blog.
+* Pershkrimi: Kjo klase perfshin titullin, permbajtjen, user_id-ne e perdoruesit, imazhin kryesor,filet, si dhe listen e kategorive te zgjedhura per postimin e ri.
+*/
+
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -16,7 +27,6 @@ namespace BlogMVC.Models.ViewModels
          [AllowHtml]
         public string content { get; set; }
 
- 
         public int user_id { get; set; }
 
         public string main_image { get; set; }

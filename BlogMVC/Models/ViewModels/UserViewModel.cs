@@ -1,4 +1,16 @@
-﻿using System;
+﻿/**
+* Versioni: V 1.0.0
+* Data: 25/06/2024
+* Programuesi: Ralfina Tusha
+* Klasa: UserViewModel
+* Arsyeja: Modeli i perdorur per paraqitjen dhe validimin e te dhenave te perdoruesve ne forme te regjistrimit.
+* Pershkrimi: Kjo klase permban fushat e nevojshme per te paraqitur dhe validuar te dhenat e perdoruesit, duke perfshire id-ne, emrin e perdoruesit, password-in dhe konfirmimin e tij, email-in, rolin, emrin dhe mbiemrin, foton e profilit, bio, daten e krijimit dhe te update-imit te profilit, si dhe  kodin per verifikimin e email-it.
+*/
+
+
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -53,8 +65,6 @@ namespace BlogMVC.Models.ViewModels
         public Nullable<System.DateTime> created_at { get; set; }
 
         public Nullable<System.DateTime> updated_at { get; set; }
-
-        public bool IsEmailVerified { get; set; }
         public string VerificationCode { get; set; }
 
 

@@ -1,4 +1,23 @@
-﻿using BlogMVC.Models;
+﻿/**
+* Versioni:  V 1.0.0
+* Data: 25/06/2024
+* Programuesi: Ralfina Tusha
+* Klasa: CategoryRepository
+* Arsyeja: Implementimi i metodave për marrjen e  kategorive dhe subkategorive.
+* Pershkrimi: Kjo klasë ofron funksionalitete për të marrë të gjitha kategoritë, për të marrë një kategori specifike sipas ID-së, për të marrë postime në një kategori të caktuar dhe për të marrë nënkategoritë e një kategorie të caktuar.
+* Trashegon nga: Asnjë
+* Interfaces: ICategoryRepository
+* Constants: Asnjë
+* Metodat: 
+  - GetCategories(): Kthen nje liste te kategorive.
+  - GetCategoryById(int id): Kthen nje kategori me id e dhene.
+  - GetBlogPostsByCategoryId(int id): Kthen nje liste te postimeve per nje kategori te caktuar.
+  - GetSubcategoriesByCategoryId(int id): Kthen nje liste te nenkategorive per nje kategori te caktuar.
+*/
+
+
+
+using BlogMVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
