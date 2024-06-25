@@ -6935,6 +6935,7 @@
       "PagedList >= 1.17.0",
       "PagedList.Mvc >= 4.5.0",
       "RestSharp >= 111.3.0",
+      "System.Threading.Tasks.Extensions >= 4.5.4",
       "Unity >= 5.11.1",
       "Unity.Abstractions >= 5.11.1",
       "Unity.Container >= 5.11.1",
@@ -7035,6 +7036,10 @@
           "RestSharp": {
             "target": "Package",
             "version": "[111.3.0, )"
+          },
+          "System.Threading.Tasks.Extensions": {
+            "target": "Package",
+            "version": "[4.5.4, )"
           },
           "Unity": {
             "target": "Package",

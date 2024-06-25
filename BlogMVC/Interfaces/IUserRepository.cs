@@ -1,4 +1,14 @@
-﻿using BlogMVC.Models;
+﻿/**
+* Versioni:  
+* Data: 25/06/2024  
+* Programuesi: Ralfina Tusha
+* Pershkrimi: Interface qe permban metodat qe mund te perdoren nga UserRepository
+* Metodat: AddUser, GetUserByUsername, GetUserById, UpdateUser, HashPassword, GetPostsByUserId
+(c) Copyright by Soft & Solution 
+**/
+
+
+using BlogMVC.Models;
 using BlogMVC.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,24 +23,20 @@ namespace BlogMVC.Repositories
 
         void AddUser(UserViewModel user);
 
+
         user GetUserByUsername(string username);
+
 
         user GetUserById(int id);
 
+
         user UpdateUser(user user);
+
 
         string HashPassword(string password);
 
-         IEnumerable<post> GetPostsByUserId(int id);
 
- 
-
-
-
-
-
-
-
+        IEnumerable<post> GetPostsByUserId(int id);
 
     }
 }

@@ -1,16 +1,29 @@
-﻿using BlogMVC.Interfaces;
+﻿/**
+* Versioni: V 1.0.0
+* Data: 25/06/2024  
+* Programuesi: Ralfina Tusha
+* Pershkrimi: Repository qe permban metodat qe mund te perdoren nga AdminController 
+(c) Copyright by Soft & Solution 
+**/
+
+
+
+
+
+using BlogMVC.Interfaces;
 using BlogMVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Data.Entity;
-
+ 
 namespace BlogMVC.Repositories
 {
     public class AdminRepository : IAdminRepository
+
     {
-        public void AddCategory(category category)
+
+         public void AddCategory(category category)
         { 
              using (var db = new BlogEntities())
             {

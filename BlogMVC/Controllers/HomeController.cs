@@ -1,4 +1,20 @@
-﻿using System;
+﻿ /**
+* Versioni:  V 1.0.0
+* Data: 25/06/2024
+* Programuesi: Ralfina Tusha
+* Klasa: HomeController
+* Arsyeja: Kjo klasë menaxhon funksionalitetet e login & regjistrim te perdoruesve dhe faqet kryesore te aplikacionit.
+* * Pershkrimi: Controlleri per  login & regjistrim te perdoruesve, shfaqjen e faqes kryesore,
+* shfaqjen e profilit te perdoruesit, editimin e profilit 
+* shkarkimin e fileve,kategorite me postimet perkatese, shfaqjen e faqes about dhe logout
+ * Trashegon nga: Controller
+* Interfaces: Nuk ka
+* Constants: Nuk ka
+* Metodat:  SignUp, VerifyEmail, VerifyEmailWithAPI, SendVerificationEmail, GenerateVerificationCode, Login, Index, Profile, DownloadFile, EditProfile, About, Categories, CategoriesPartial
+*/
+
+
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -39,10 +55,7 @@ namespace BlogMVC.Controllers
             filesRepository = new FilesRepository();
             adminRepository = new AdminRepository();
         }
-
-
  
-
         public ActionResult SignUp()
         {
             return View();
@@ -52,8 +65,7 @@ namespace BlogMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SignUp(UserViewModel userViewModel)
         {
-            try
-            {
+             
                 if (!ModelState.IsValid)
                 {
                     return View(userViewModel);
@@ -66,8 +78,7 @@ namespace BlogMVC.Controllers
                     return View(userViewModel);
                 }
 
-                // Validate email using EmailListVerify API
-                bool isEmailValid = await VerifyEmailWithAPI(userViewModel.email);
+                 bool isEmailValid = await VerifyEmailWithAPI(userViewModel.email);
 
                 if (!isEmailValid)
                 {
@@ -85,12 +96,8 @@ namespace BlogMVC.Controllers
                 Session["TempUser"] = userViewModel;
 
                 return RedirectToAction("VerifyEmail");
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions appropriately
-                return View("Error");
-            }
+            
+            
         }
 
         private async Task<bool> VerifyEmailWithAPI(string email)
@@ -109,24 +116,21 @@ namespace BlogMVC.Controllers
                 {
                     string responseText = reader.ReadToEnd();
                     Console.WriteLine("API Response: " + responseText); // Debug output
-
-                    
-                     
+  
                     if (responseText=="ok")
                     {
-                        return true; // Email address is valid
+                        return true; 
                     }
                     else
                     {
-                        return false; // Email address is invalid
+                        return false;
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it as needed
                 Console.WriteLine("Error verifying email: " + ex.Message);
-                return false; // Return false on error
+                return false; 
             }
         }
 

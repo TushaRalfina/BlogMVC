@@ -1,4 +1,17 @@
-﻿using BlogMVC.Models.ViewModels;
+﻿/**
+* Versioni:  V 1.0.0
+* Data: 25/06/2024
+* Programuesi: Ralfina Tusha
+* Klasa: BlogPostController
+* Arsyeja: Kjo klasë menaxhon funksionalitetet e postimeve të blogut.
+* Pershkrimi: Implementon metodat për shtimin e postimeve nga useri, shikimin e nje posti specifik, shtimin/editimin e komenteve dhe reply.
+* Trashegon nga: Controller
+* Interfaces: Nuk ka
+* Constants: Nuk ka
+* Metodat: Add, Post, AddComment, AddReply, UserPosts, EditComment
+*/
+
+using BlogMVC.Models.ViewModels;
 using BlogMVC.Models;
 using BlogMVC.Repositories;
 using System;

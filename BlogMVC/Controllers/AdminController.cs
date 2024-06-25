@@ -1,4 +1,20 @@
-﻿using BlogMVC.Repositories;
+﻿/**
+* Versioni:  V 1.0.0
+* Data: 25/06/2024
+* Programuesi: Ralfina Tusha
+* Klasa: AdminController
+* Arsyeja: Kjo klasë menaxhon funksionalitetet e adminit për postimet, komentet, kategoritë dhe subkategoritë.
+* Pershkrimi: Implementon metodat për menaxhimin e përmbajtjes së blogut nga admini.
+* Trashegon nga: Controller
+* Interfaces: Nuk ka
+* Constants: Nuk ka
+* Metodat: ManagePosts,ApprovePost, SendApprovalEmail, DeletePost, ManageComments, ApproveComment, DeleteComment, FshiComment, FshiReply, AddCategory, ShowCategories, AddSubCategory
+**/
+
+ 
+
+ 
+using BlogMVC.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +45,18 @@ namespace BlogMVC.Controllers
         }
 
 
+        /**
+        * Data: 25/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: ManagePosts
+        * Arsyeja: Menaxhimi i postimeve të pa aprovuara nga admini.
+        * Pershkrimi: Kontrollon nëse përdoruesi është admin dhe kthen listën e postimeve të pa aprovuara.
+        * Para kushti: Përdoruesi duhet të jetë i identifikuar si admin.
+        * Post kushti: Kthen një pamje me listën e postimeve të pa aprovuara.
+        * Parametrat: Nuk ka
+        * Return: ActionResult - një pamje me postimet e pa aprovuara.
+        **/
+
         [HttpGet]
         public ActionResult ManagePosts()
         {
@@ -42,13 +70,10 @@ namespace BlogMVC.Controllers
              return View(posts);
         }
          
-                    
-        public ActionResult List()
-        {
-            return View();
-        }
+            
+        
+         
 
-        //ApprovePost
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ApprovePost(int id)
@@ -97,8 +122,7 @@ namespace BlogMVC.Controllers
         }
 
 
-        //DeletePost
-        public ActionResult DeletePost(int id)
+         public ActionResult DeletePost(int id)
         {
             var post = blogPostRepository.GetBlogPostById(id);
             {
@@ -108,8 +132,7 @@ namespace BlogMVC.Controllers
             return RedirectToAction("ManagePosts");
         }
 
-        //manageComments
-        [HttpGet]
+         [HttpGet]
         public ActionResult ManageComments()
         {
             if (Session["role"] == null || Session["role"].ToString() != "admin")
@@ -122,21 +145,18 @@ namespace BlogMVC.Controllers
             return View(comments);
         }
 
-        //ApproveComment
-        public ActionResult ApproveComment(int id)
+         public ActionResult ApproveComment(int id)
         {
             adminRepository.ApproveComment(id);
             return RedirectToAction("ManageComments");
         }
 
-        //DeleteComment
-        public ActionResult DeleteComment(int id)
+         public ActionResult DeleteComment(int id)
         {
             adminRepository.DeleteComment(id);
             return RedirectToAction("ManageComments");
         }
-        //fshi koment
-        public ActionResult FshiComment(int id)
+         public ActionResult FshiComment(int id)
         {
             int postId = adminRepository.GetPostIdByCommentId(id);
 
@@ -145,8 +165,7 @@ namespace BlogMVC.Controllers
 
         }
 
-        //fshi reply
-        public ActionResult FshiReply(int id)
+         public ActionResult FshiReply(int id)
         {
 
             int commentId = adminRepository.GetCommentIdByReplyId(id);
@@ -158,8 +177,7 @@ namespace BlogMVC.Controllers
         }
 
 
-        //add category
-        [HttpGet]
+         [HttpGet]
         public ActionResult AddCategory()
         {
             if (Session["role"] == null || Session["role"].ToString() != "admin")
@@ -171,8 +189,7 @@ namespace BlogMVC.Controllers
              return View( );  
         }
 
-        //add category
-         [HttpPost]
+          [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddCategory(category category)
         {
@@ -188,8 +205,7 @@ namespace BlogMVC.Controllers
               return View();  
         }
 
-        //show categories and subcategories
-        public ActionResult ShowCategories()
+         public ActionResult ShowCategories()
         {
             if (Session["role"] == null || Session["role"].ToString() != "admin")
             {
@@ -201,8 +217,7 @@ namespace BlogMVC.Controllers
             return View(categoriesandsubcategories);
         }
 
-        //add subcategory
-       [HttpPost]
+        [HttpPost]
         public JsonResult AddSubCategory(string name, int category_id)
         {
             if (string.IsNullOrWhiteSpace(name) || category_id <= 0)
