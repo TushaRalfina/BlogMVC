@@ -12,8 +12,7 @@ namespace BlogMVC.Repositories
     {
         public void AddCategory(category category)
         { 
-            //ADD CATEGORY
-            using (var db = new BlogEntities())
+             using (var db = new BlogEntities())
             {
                 db.categories.Add(category);
                 db.SaveChanges();
@@ -36,13 +35,8 @@ namespace BlogMVC.Repositories
 
                 };
                 db.categories.Add(subcategory);
-                db.SaveChanges();
-
-                 
+                db.SaveChanges();    
             }
-
-
-
         }
       
 
@@ -140,7 +134,6 @@ namespace BlogMVC.Repositories
                 return comment.post_id;
             }
         }
-
-   
+ 
     }
 }

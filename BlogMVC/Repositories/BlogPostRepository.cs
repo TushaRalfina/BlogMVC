@@ -42,8 +42,7 @@ namespace BlogMVC.Repositories
 
         public IEnumerable<post> GetBlogPosts()
         {
-            //fetch the posts join with the users and categories
-            var blogPosts = db.posts.Include("user").Include("PostCategories").ToList();
+             var blogPosts = db.posts.Include("user").Include("PostCategories").ToList();
 
 
             return blogPosts;
@@ -84,10 +83,8 @@ namespace BlogMVC.Repositories
 
         public void AddReply(reply reply)
         {
-
             db.replies.Add(reply);
             db.SaveChanges();
-            
         }
 
         public IEnumerable<post> GetBlogPostsByUserId(int user_id)
@@ -99,8 +96,7 @@ namespace BlogMVC.Repositories
         public comment GetCommentById(int id)
         {
             var comment = db.comments.FirstOrDefault(c => c.id == id);
-            return comment;
-             
+            return comment;   
         }
 
         public void UpdateComment(comment comment)
@@ -109,8 +105,7 @@ namespace BlogMVC.Repositories
             if (commentToUpdate != null)
             {
                 commentToUpdate.comment1 = comment.comment1;  
-                commentToUpdate.approved = comment.approved;
-                
+                commentToUpdate.approved = comment.approved;  
                 db.SaveChanges();
             }
         }

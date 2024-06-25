@@ -69,11 +69,9 @@ namespace BlogMVC.Controllers
                                 Directory.CreateDirectory(uploadsDir);
                             }
 
-                            // Save the file
-                            model.main_imagee.SaveAs(filePath);
+                             model.main_imagee.SaveAs(filePath);
 
-                            // Update the model with the saved file path
-                            model.main_image = "/Content/Uploads/" + fileName;
+                             model.main_image = "/Content/Uploads/" + fileName;
                         }
                         catch (Exception ex)
                         {
@@ -120,6 +118,7 @@ namespace BlogMVC.Controllers
 
                                         filesRepository.AddFiles(documentFile);
                                     }
+
                                     else
                                     {
                                         foreach (var bodyImage in body_images)
@@ -206,8 +205,7 @@ namespace BlogMVC.Controllers
                 };
 
                 blogPostRepository.AddComment(newComment);
-
-
+ 
                 newComment.user = user;
 
                 return Json(new
@@ -226,7 +224,6 @@ namespace BlogMVC.Controllers
 
  
         [HttpPost]
-
         public JsonResult AddReply(int comment_id, string reply_text)
         {
             if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))

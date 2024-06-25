@@ -25,9 +25,9 @@
                     <table class="table table-striped table-hover">
                         <thead class="thead-dark">
                             <tr>
-                                 <th>Author</th>
+                                <th>Author</th>
                                 <th>Comment</th>
-                                <th>Created :</th>
+                                 <th>Created :</th>
                                 <th>Approve/Reject</th>
                             </tr>
                         </thead>
@@ -35,7 +35,7 @@
                             @foreach (var comment in Model)
                             {
                                 <tr>
-                                     <td>@comment.user.username</td>
+                                    <td>@comment.user.username</td>
                                     <td>@comment.comment1</td>
                                     <td>@comment.created_at</td>
                                     <td class="text-center">
@@ -55,19 +55,21 @@
                                         </div>
                                         <style>
                                             .btn-container {
-                                                display: flex;  
-                                                gap: 10px;  
+                                                display: flex;
+                                                gap: 10px;
                                             }
 
                                             .inline-form {
-                                                display: inline; 
-                                                margin: 0;  
+                                                display: inline;
+                                                margin: 0;
                                             }
-                                            .btn-success{
+
+                                            .btn-success {
                                                 background-color: forestgreen;
                                             }
-                                            .btn-danger{
-                                                background-color:darkred;
+
+                                            .btn-danger {
+                                                background-color: darkred;
                                             }
                                         </style>
                                     </td>
@@ -76,14 +78,10 @@
                         </tbody>
                     </table>
                 </div>
-
-
-
+ 
             </article> <!-- end entry -->
 
         </div>
-    </div> <!-- end entry-wrap -->
-
-
+    
 </div> <!-- end content -->
-    </div> <!-- end page -->
+</div> <!-- end page -->

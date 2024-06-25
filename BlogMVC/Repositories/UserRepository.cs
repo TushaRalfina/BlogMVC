@@ -89,10 +89,7 @@ namespace BlogMVC.Repositories
 
         public user GetUserByUsername(string username)
         {
-            // Fetch the user by  username
-               return db.users.FirstOrDefault(u => u.username == username );
-           
- 
+                return db.users.FirstOrDefault(u => u.username == username );
         }
          public string HashPassword(string password)
         {
@@ -111,16 +108,10 @@ namespace BlogMVC.Repositories
 
         public IEnumerable<post> GetPostsByUserId(int id)
         {
-            return db.posts.Where(p => p.user_id == id).ToList();
-            
+            return db.posts.Where(p => p.user_id == id).ToList();   
         }
 
-        public user GetUserByVerificationToken(string token)
-        {
-            throw new NotImplementedException();
- 
-
-        }
+       
     }
 }
 

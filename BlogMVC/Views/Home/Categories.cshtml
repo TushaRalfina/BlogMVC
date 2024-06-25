@@ -23,37 +23,50 @@
             <div class="categories" style="display:flex;align-items:center;justify-content:center; gap:20px">
                 <div class="row">
                     <div class="column large-12">
-                        <div class="categories" style="display: flex; align-items: center; justify-content: center;right  gap: 10px; position:relative;right:300px; font-weight:bold">
-
+                        <div class="categories" style="display: flex; align-items: center; justify-content: center;  position:relative;right:300px; font-weight:bold">
+                            <div style="position: relative;">
+                               
+                            </div>
                             @if (Model.category.parent_id == null)
                             {
                                 <div style="position: relative; padding: 20px;">
                                     <span class="breadcrumb-item">
+                                        <a href="@Url.Action("Index", "Home")">
+                                            HOME
+                                        </a>
+                                    </span>
+                                    <span class="breadcrumb-item">
                                         <a href="@Url.Action("Categories", "Home", new { category_id = Model.category.id })">
-                                            @Model.category.name /
+                                            /@Model.category.name/
                                         </a>
                                     </span>
                                 </div>
                             }
                             else
                             {
-                                 var parentCategory = Model.categories.FirstOrDefault(c => c.id == Model.category.parent_id);
+                                var parentCategory = Model.categories.FirstOrDefault(c => c.id == Model.category.parent_id);
+
 
                                 if (parentCategory != null)
                                 {
-                                    <div style="position: relative;">
-                                        <span class="breadcrumb-item">
-                                            <a href="@Url.Action("Categories", "Home", new { category_id = parentCategory.id })">
-                                                @parentCategory.name /
-                                            </a>
-                                        </span>
-                                    </div>
+                        <div style="position: relative;">
+                            <span class="breadcrumb-item">
+                                <a href="@Url.Action("Index", "Home")">
+                                    HOME
+                                </a>
+                            </span>
+                            <span class="breadcrumb-item">
+                                <a href="@Url.Action("Categories", "Home", new { category_id = parentCategory.id })">
+                                    /@parentCategory.name/
+                                </a>
+                            </span>
+                        </div>
                                 }
 
                                 <div style="position: relative;">
                                     <span class="breadcrumb-item">
                                         <a href="@Url.Action("Categories", "Home", new { category_id = Model.category.id })">
-                                            @Model.category.name/
+                                             @Model.category.name 
                                         </a>
                                     </span>
                                 </div>
@@ -63,16 +76,29 @@
                 </div>
 
                 <div style="position: relative; left: 300px; padding: 20px; gap:10px">
-                    <h7 class="page-title">Subcategories of @Model.category.name:</h7>
+                    <h7 class="page-title">Subcategories of @Model.category.name : </h7>
 
-                    @foreach (var subcategory in Model.subcategories.Where(sub => sub.parent_id == Model.category.id))
-                    {
-                        <h7 class="page-title">
-                            <span class="page-title__small-type" style="font-weight:bold">
-                                <a href="@Url.Action("Categories", "Home", new { category_id = subcategory.id })">@subcategory.name</a>
-                            </span>
-                        </h7>
-                    }
+                    @if (Model.subcategories.Any()) 
+                        {
+                            foreach (var subcategory in Model.subcategories.Where(sub => sub.parent_id == Model.category.id))
+                            {
+                                <h7 class="page-title" style="margin-right:15px;">
+                                    <span class="page-title__small-type" style="font-weight:bold">
+                                        <a href="@Url.Action("Categories", "Home", new { category_id = subcategory.id })"> @subcategory.name</a>
+                                    </span>
+                                </h7>
+                            }
+                        }
+                    else
+                        {
+                            <h7 class="page-title">
+                                <span class="page-title__small-type" style="font-weight:bold;color:darkred">
+                                    <a href="">None</a>
+                                </span>
+                            </h7>
+                        }
+                                 
+                                      
                  </div>
              </div>
          </div>

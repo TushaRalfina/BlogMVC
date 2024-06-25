@@ -9,11 +9,8 @@ namespace BlogMVC.Repositories
 {
     internal interface IFilesRepository
     {
-
- 
         IEnumerable<file> GetFiles();
         void AddFiles(file file);
-
         file GetFileById(int id);
     }
 }

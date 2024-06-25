@@ -144,15 +144,15 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            alert('Reply added successfully!');
+                            alert('Subcategory  added successfully!');
                             closeEditForm();
-                            location.reload();  // Reload to reflect changes
+                            location.reload();   
                         } else {
-                            alert('Error adding reply.');
+                            alert('Error adding subcategory.');
                         }
                     },
                     error: function() {
-                        alert('Error adding reply.');
+                        alert('Error adding subcategory.');
                     }
                 });
             });

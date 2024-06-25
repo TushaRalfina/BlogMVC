@@ -38,7 +38,7 @@
                             <div class="breadcrumbs">
                                 @foreach (var postCategory in Model.Post.PostCategories)
                                 {
-                                    <span class="cat-links">
+                                    <span class="cat-links" style="margin-right:15px">
                                         <a href="@Url.Action("Categories", "Home", new { category_id = postCategory.category.id })">@postCategory.category.name</a>
                                     </span>
 
@@ -304,6 +304,7 @@
                    if (response.success) {
 
                        alert('Comment added successfully!');
+                       location.reload();
 
                    } else {
                        alert('Error adding comment.');
@@ -347,6 +348,8 @@
            if (response.success) {
                alert('Reply added successfully!');
                closeReplyForm();
+               location.reload();   
+
            } else {
                alert('Error adding reply.');
            }

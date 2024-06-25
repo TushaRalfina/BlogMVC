@@ -226,13 +226,8 @@ namespace BlogMVC.Controllers
             ViewBag.SortBy = sortBy;
             ViewBag.Categories = categories;
 
-             return View(posts.ToPagedList(pageNumber, pageSize));
+            return View(posts.ToPagedList(pageNumber, pageSize));
         }
-
-
-
-
-
 
 
 
@@ -286,8 +281,7 @@ namespace BlogMVC.Controllers
             return HttpNotFound();
         }
 
-        //GET:EDIT PROFILE
-        public ActionResult EditProfile(int id)
+         public ActionResult EditProfile(int id)
         {
             if (Session["id"] == null)
             {
@@ -355,15 +349,7 @@ namespace BlogMVC.Controllers
             return View();
         }
 
-        public ActionResult Contact()
-        {
-            if (Session["id"] == null)
-            {
-                return RedirectToAction("Login", "Home");
-            }
-            return View();
-        }
-
+     
 
         public ActionResult Categories(int category_id)
         {
@@ -389,6 +375,7 @@ namespace BlogMVC.Controllers
 
             return View(viewModel);
         }
+
         [ChildActionOnly]
         public ActionResult CategoriesPartial()
         {
