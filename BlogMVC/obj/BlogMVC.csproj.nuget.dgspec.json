@@ -91,6 +91,10 @@
               "target": "Package",
               "version": "[4.5.0, )"
             },
+            "RestSharp": {
+              "target": "Package",
+              "version": "[111.3.0, )"
+            },
             "Unity": {
               "target": "Package",
               "version": "[5.11.1, )"

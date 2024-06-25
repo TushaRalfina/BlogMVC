@@ -11,7 +11,12 @@ using BlogMVC.Models.ViewModels;
 using BlogMVC.Repositories;
 using PagedList;
 using System.Web.Configuration;
- 
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using Newtonsoft.Json.Linq;
+
 
 
 namespace BlogMVC.Controllers
@@ -36,6 +41,8 @@ namespace BlogMVC.Controllers
         }
 
 
+ 
+
         public ActionResult SignUp()
         {
             return View();
@@ -43,7 +50,7 @@ namespace BlogMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignUp(UserViewModel userViewModel)
+        public async Task<ActionResult> SignUp(UserViewModel userViewModel)
         {
             try
             {
@@ -52,33 +59,87 @@ namespace BlogMVC.Controllers
                     return View(userViewModel);
                 }
 
+                // Check if username is taken
                 if (userRepository.GetUserByUsername(userViewModel.username) != null)
                 {
                     ViewBag.Notification = "This username is already taken";
                     return View(userViewModel);
                 }
 
-                 
+                // Validate email using EmailListVerify API
+                bool isEmailValid = await VerifyEmailWithAPI(userViewModel.email);
 
-                // gjeneroj verification code
-                 userViewModel.VerificationCode = GenerateVerificationCode();
+                if (!isEmailValid)
+                {
+                    ViewBag.Notification = "Invalid email address";
+                    return View(userViewModel);
+                }
 
-                 SendVerificationEmail(userViewModel.email, userViewModel.VerificationCode);
+                // Generate verification code
+                userViewModel.VerificationCode = GenerateVerificationCode();
 
-                // Store user in session temporarily
+                // Send verification email
+                SendVerificationEmail(userViewModel.email, userViewModel.VerificationCode);
+
+                // Store user in session temporarily (not recommended for production)
                 Session["TempUser"] = userViewModel;
 
                 return RedirectToAction("VerifyEmail");
             }
             catch (Exception ex)
             {
+                // Handle exceptions appropriately
                 return View("Error");
             }
         }
+
+        private async Task<bool> VerifyEmailWithAPI(string email)
+        {
+            try
+            {
+                string apiKey = "jhIvFUjmlgX3E8LdaQFHX";
+                string apiUrl = $"https://apps.emaillistverify.com/api/verifyEmail?secret={apiKey}&email={email}";
+
+                WebRequest request = WebRequest.Create(apiUrl);
+                request.Method = "GET";
+
+                using (WebResponse response = await request.GetResponseAsync())
+                using (Stream responseStream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8))
+                {
+                    string responseText = reader.ReadToEnd();
+                    Console.WriteLine("API Response: " + responseText); // Debug output
+
+                    
+                     
+                    if (responseText=="ok")
+                    {
+                        return true; // Email address is valid
+                    }
+                    else
+                    {
+                        return false; // Email address is invalid
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                Console.WriteLine("Error verifying email: " + ex.Message);
+                return false; // Return false on error
+            }
+        }
+
+
+
+
+
         public ActionResult VerifyEmail()
         {
             return View();
         }
+
+       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -104,6 +165,7 @@ namespace BlogMVC.Controllers
             ViewBag.Notification = "Invalid verification code";
             return View();
         }
+
         private void SendVerificationEmail(string email, string verificationCode)
         {
             try

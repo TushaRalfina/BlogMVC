@@ -17,8 +17,6 @@ namespace BlogMVC.Repositories
 
         IEnumerable<post> GetBlogPostsByCategoryId(int id);
 
-        //GetSubcategoriesByCategoryId
-
         IEnumerable<category> GetSubcategoriesByCategoryId(int id);
 
 
