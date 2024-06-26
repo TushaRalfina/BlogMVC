@@ -13,11 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="~/Content/images/avatars/logo1.jpg" type="image/jpg" sizes="16x16">
-
 </head>
 <body>
     <div class="container">
-        <input type="checkbox" id="flip">
+        <input type="checkbox" id="flip" @(ViewBag.SignupNotification != null ? "checked" : "")>
         <div class="cover">
             <div class="front">
                 <img src="~/Content/images/thumbs/masonry/statue-1200.jpg" alt="">
@@ -35,7 +34,6 @@
         </div>
         <div class="forms">
             <div class="form-content">
-
                 <div class="login-form">
                     <h2 class="P-2">RADIANCE.</h2>
                     <div class="title">Login</div>
@@ -58,12 +56,11 @@
                             </div>
                             <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
                         </div>
-
-                        <!-- Display notifications if any -->
-                        if (ViewBag.Notification != null)
+                        <!-- Display login notifications if any -->
+                        if (ViewBag.LoginNotification != null)
                         {
                             <div class="notification" style="color: red; font-weight: bold;">
-                                @ViewBag.Notification
+                                @ViewBag.LoginNotification
                             </div>
                         }
                     }
@@ -99,10 +96,11 @@
                             </div>
                             <div class="text sign-up-text">Already have an account?<label for="flip">Login now</label></div>
                         </div>
-                        if (ViewBag.Notification != null)
+                        <!-- Display signup notifications if any -->
+                        if (ViewBag.SignupNotification != null)
                         {
                             <div class="notification" style="color: red; font-weight: bold;">
-                                @ViewBag.Notification
+                                @ViewBag.SignupNotification
                             </div>
                         }
                     }

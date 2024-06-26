@@ -49,12 +49,12 @@ namespace BlogMVC.Controllers
         * Data: 25/06/2024
         * Programuesi: Ralfina Tusha
         * Metoda: ManagePosts
-        * Arsyeja: Menaxhimi i postimeve të pa aprovuara nga admini.
-        * Pershkrimi: Kontrollon nëse përdoruesi është admin dhe kthen listën e postimeve të pa aprovuara.
-        * Para kushti: Përdoruesi duhet të jetë i identifikuar si admin.
-        * Post kushti: Kthen një pamje me listën e postimeve të pa aprovuara.
+        * Arsyeja: Menaxhimi i postimeve te pa aprovuara nga admini.
+        * Pershkrimi: Kontrollon nese useri eshte admin dhe kthen listen e postimeve te pa aprovuara.
+        * Para kushti: Useri duhet te jete i loguar si admin.
+        * Post kushti: Kthen  view me listen e postimeve te pa aprovuara.
         * Parametrat: Nuk ka
-        * Return: ActionResult - një pamje me postimet e pa aprovuara.
+        * Return: ActionResult - VIEW  me postimet e pa aprovuara.
         **/
 
         [HttpGet]
@@ -69,10 +69,17 @@ namespace BlogMVC.Controllers
 
              return View(posts);
         }
-         
-            
-        
-         
+
+
+
+        /**
+         * 
+         * Metoda: ApprovePost
+         * Arsyeja: Aprovim i një postimi të blogut nga admini.
+         * Pershkrimi: Aprovon postimin e specifikuar nga ID-ja, ndryshon statusin në "approved", dhe dergon email njoftimi.
+         * Parametrat: id - ID e postimit për tu aprovuar.
+         * Return: ActionResult - Kthen ne ManagePosts pas aprovimit.
+         **/
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -121,8 +128,15 @@ namespace BlogMVC.Controllers
             }
         }
 
+        /**
+         * Metoda: DeletePost
+         * Arsyeja: Refuzimi(fshirja nga db) e nje posti te blogut nga admini.
+         * Pershkrimi: Fshin postimin e specifikuar nga ID-ja dhe dergon email njoftimi per refuzimin.
+         * Parametrat: id - ID e postimit.
+         * Return: ActionResult - Kthen ne ManagePosts pas fshirjes.
+         **/
 
-         public ActionResult DeletePost(int id)
+        public ActionResult DeletePost(int id)
         {
             var post = blogPostRepository.GetBlogPostById(id);
             {
@@ -132,7 +146,17 @@ namespace BlogMVC.Controllers
             return RedirectToAction("ManagePosts");
         }
 
-         [HttpGet]
+        /**
+         * Metoda: ManageComments
+         * Arsyeja: Menaxhimi i komenteve te pa aprovuara nga admini.
+         * Pershkrimi: Kontrollon nëse useri eshte i loguar si admin dhe kthen listen e komenteve te pa aprovuara.
+         * Para kushti: Useri duhet te jetë i loguar si admin.
+         * Post kushti: Kthen view me listen e komenteve te pa aprovuara.
+         * Parametrat: Nuk ka
+         * Return: ActionResult - VIEW me komentet e pa aprovuara.
+         **/
+
+        [HttpGet]
         public ActionResult ManageComments()
         {
             if (Session["role"] == null || Session["role"].ToString() != "admin")
@@ -145,18 +169,44 @@ namespace BlogMVC.Controllers
             return View(comments);
         }
 
-         public ActionResult ApproveComment(int id)
+
+        /**
+         * Metoda: ApproveComment
+         * Arsyeja: Aprovim i nje komenti nga admini.
+         * Pershkrimi: Aprovon komentin e specifikuar nga ID-ja dhe kthen ne ManageComments.
+         * Parametrat: id - ID e komentit.
+         * Return: ActionResult - Kthen ne ManageComments pas aprovimit.
+         **/
+
+        public ActionResult ApproveComment(int id)
         {
             adminRepository.ApproveComment(id);
             return RedirectToAction("ManageComments");
         }
 
-         public ActionResult DeleteComment(int id)
+        /**
+         * Metoda: DeleteComment
+         * Arsyeja: Refuzimi e nje komenti nga admini.
+         * Pershkrimi: Fshin komentin e specifikuar nga ID-ja dhe kthen ne ManageComments.
+         * Parametrat: id - ID e komentit për tu fshirë.
+         * Return: ActionResult - Kthen ne ManageComments pas refuzimit.
+         **/
+
+        public ActionResult DeleteComment(int id)
         {
             adminRepository.DeleteComment(id);
             return RedirectToAction("ManageComments");
         }
-         public ActionResult FshiComment(int id)
+
+
+        /**
+         * Metoda: FshiComment
+         * Arsyeja: Fshirja e nje komenti  dhe kthimi ne postin ku ndodhej komenti.
+         * Pershkrimi: Fshin komentin e specifikuar dhe kthen ne postin ku ndodhej komenti.
+         * Parametrat: id - ID e komentit.
+         * Return: ActionResult - Kthen ne postimin e blogut pas fshirjes se komentit.
+         **/
+        public ActionResult FshiComment(int id)
         {
             int postId = adminRepository.GetPostIdByCommentId(id);
 
@@ -165,7 +215,15 @@ namespace BlogMVC.Controllers
 
         }
 
-         public ActionResult FshiReply(int id)
+        /**
+         * Metoda: FshiReply
+         * Arsyeja: Fshirja e një përgjigjeje në një koment të përshtatur.
+         * Pershkrimi: Fshin përgjigjen e specifikuar në komentin e përshtatur dhe kthen në postimin e blogut përkatës.
+         * Parametrat: id - ID e përgjigjes për tu fshirë.
+         * Return: ActionResult - Kthen në postimin e blogut pas fshirjes së përgjigjes.
+         **/
+
+        public ActionResult FshiReply(int id)
         {
 
             int commentId = adminRepository.GetCommentIdByReplyId(id);
@@ -176,8 +234,17 @@ namespace BlogMVC.Controllers
 
         }
 
+        /**
+         * Metoda: AddCategory
+         * Arsyeja: Shtimi i nje kategori te re nga admini.
+         * Pershkrimi: Kthen view ne  formen e shtimit te nje kategorie te re nese useri eshte i loguar si admin.
+         * Para kushti: Userr duhet te jeet i loguar si admin.
+         * Parametrat: Nuk ka
+         * Return: ActionResult - VIEW te forma e shtimit te kategorive.
+         **/
 
-         [HttpGet]
+
+        [HttpGet]
         public ActionResult AddCategory()
         {
             if (Session["role"] == null || Session["role"].ToString() != "admin")
@@ -189,7 +256,15 @@ namespace BlogMVC.Controllers
              return View( );  
         }
 
-          [HttpPost]
+        /**
+         * Metoda: AddCategory (Post)
+         * Arsyeja: Shtimi i nje kategorie te re nga admini.
+         * Pershkrimi: Shton kategorine e re nese te dhenat jane valide dhe kthen ne formen per shtimin e kategorive.
+         * Parametrat: category - Objekti i kategorise per tu shtuar.
+         * Return: ActionResult - Kthen ne AddCategory pas shtimit te kategorise.
+         **/
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddCategory(category category)
         {
@@ -205,7 +280,15 @@ namespace BlogMVC.Controllers
               return View();  
         }
 
-         public ActionResult ShowCategories()
+        /**
+         * Metoda: ShowCategories
+         * Arsyeja: Shfaqja e kategorive te krijuara nga admini.
+         * Pershkrimi: Kontrollon nese useri eshte i loguar si admin dhe kthen listen e kategorive dhe subkategorive perkatese.
+         * Para kushti: useri duhet te jete i loguar si admin.
+         * Return: ActionResult - VIEW me kategorite dhe subkategorite perkatese.
+         **/
+
+        public ActionResult ShowCategories()
         {
             if (Session["role"] == null || Session["role"].ToString() != "admin")
             {
@@ -216,6 +299,15 @@ namespace BlogMVC.Controllers
              
             return View(categoriesandsubcategories);
         }
+
+
+        /**
+         * Metoda: AddSubCategory
+         * Arsyeja: Shtimi i n je sub-kategori nga admini.
+         * Pershkrimi: Shton nje nsub-kategori nese te dhenat(ermi i subkategorise dhe id e kategorise) jane valide dhe kthen nje response JSON  sukses ose fail.
+         * Parametrat: name - Emri i sub-kategorise  , category_id - ID e kategorise qe do jete parent category e kesaj subkategorie qe po shtoj.
+         * Return: JsonResult - responce JSON per sukses ose fail.
+         **/
 
         [HttpPost]
         public JsonResult AddSubCategory(string name, int category_id)

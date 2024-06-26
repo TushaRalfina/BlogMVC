@@ -74,7 +74,7 @@ namespace BlogMVC.Controllers
                 // Check if username is taken
                 if (userRepository.GetUserByUsername(userViewModel.username) != null)
                 {
-                    ViewBag.Notification = "This username is already taken";
+                    ViewBag.SignupNotification = "This username is already taken";
                     return View(userViewModel);
                 }
 
@@ -82,7 +82,7 @@ namespace BlogMVC.Controllers
 
                 if (!isEmailValid)
                 {
-                    ViewBag.Notification = "Invalid email address";
+                    ViewBag.SignupNotification = "Invalid email address";
                     return View(userViewModel);
                 }
 
@@ -236,7 +236,7 @@ namespace BlogMVC.Controllers
             }
             else
             {
-                ViewBag.Notification = "Invalid username or password";
+                ViewBag.LoginNotification = "Invalid username or password";
                 return View("SignUp");
             }
         }

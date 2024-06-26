@@ -2,8 +2,13 @@
 @{
     ViewBag.Title = "Post";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var allowedFileTypes = new List<string> { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
+    var imageExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
     var groupedFiles = Model.Post.files.GroupBy(f => f.file_name);
-    var groupedImages = Model.Post.files.GroupBy(f => f.body_images);
+    var groupedImages = Model.Post.files.Where(f => imageExtensions.Contains(Path.GetExtension(f.body_images)?.ToLower())).GroupBy(f => f.body_images);
+
+
 }
 <!-- # site-content
    ================================================== -->
@@ -71,22 +76,27 @@
                         <p class="lead">
                             @Html.Raw(Model.Post.content)
                         </p>
-                        
-                             @foreach (var group in groupedImages)
+
+                        @foreach (var group in groupedImages)
+                        {
+                            var file = group.First();
+                            <img src="@file.body_images" alt="">
+                        }
+                        <h4>Additional Files:</h4>
+                        @foreach (var group in groupedFiles)
+                        {
+                            var file = group.First();
+                            var fileExtension = Path.GetExtension(file.file_name)?.ToLower();
+                            if (!imageExtensions.Contains(fileExtension))
                             {
-                                var file = group.First();
-                                <img src="@file.body_images" alt="">
-                            }
-                            <h4>Additional Files:</h4>
-                            @foreach (var group in groupedFiles)
-                            {
-                                var file = group.First();
                                 <span class="file-link">
                                     <a href="@Url.Action("DownloadFile", "Home", new { fileId = file.id })">
                                         <i class="fas fa-file-alt"></i> @file.file_name
                                     </a>
                                 </span>
+                            }
                         }
+
                         <div class="entry__author-box">
                             <figure class="entry__author-avatar">
                                 <img alt="" src="/Content/images/avatars/default.png" class="avatar">
@@ -348,7 +358,7 @@
            if (response.success) {
                alert('Reply added successfully!');
                closeReplyForm();
-               location.reload();   
+               location.reload();
 
            } else {
                alert('Error adding reply.');

@@ -82,9 +82,9 @@ namespace BlogMVC.Controllers
                                 Directory.CreateDirectory(uploadsDir);
                             }
 
-                             model.main_imagee.SaveAs(filePath);
+                            model.main_imagee.SaveAs(filePath);
 
-                             model.main_image = "/Content/Uploads/" + fileName;
+                            model.main_image = "/Content/Uploads/" + fileName;
                         }
                         catch (Exception ex)
                         {
@@ -96,7 +96,7 @@ namespace BlogMVC.Controllers
                         model.main_image = "/Content/images/thumbs/masonry/statue-1200.jpg";
                     }
 
-                     var post = new post
+                    var post = new post
                     {
                         title = model.title,
                         content = model.content,
@@ -105,7 +105,7 @@ namespace BlogMVC.Controllers
                         main_image = model.main_image
                     };
 
-                     blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
+                    blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
 
                     if (model.files != null && model.files.Any())
                     {
@@ -118,64 +118,72 @@ namespace BlogMVC.Controllers
                                     file.InputStream.CopyTo(memoryStream);
                                     var fileBytes = memoryStream.ToArray();
 
-                                     if (body_images == null || !body_images.Any())
+                                    var documentFile = new file
                                     {
-                                        var documentFile = new file
-                                        {
-                                            post_id = post.id,
-                                            file_type = Path.GetExtension(file.FileName),
-                                            file_name = Path.GetFileName(file.FileName),
-                                            file_content = Convert.ToBase64String(fileBytes),
-                                            body_images = ""
-                                        };
+                                        post_id = post.id,
+                                        file_type = Path.GetExtension(file.FileName),
+                                        file_name = Path.GetFileName(file.FileName),
+                                        file_content = Convert.ToBase64String(fileBytes),
+                                        body_images = ""
+                                    };
 
-                                        filesRepository.AddFiles(documentFile);
-                                    }
-
-                                    else
-                                    {
-                                        foreach (var bodyImage in body_images)
-                                        {
-                                            var documentFile = new file
-                                            {
-                                                post_id = post.id,
-                                                file_type = Path.GetExtension(file.FileName),
-                                                file_name = Path.GetFileName(file.FileName),
-                                                file_content = Convert.ToBase64String(fileBytes),
-                                                body_images = ""
-                                            };
-                                            documentFile.body_images += $"/Content/Uploads/{bodyImage.FileName};";
-                                            if (!string.IsNullOrEmpty(documentFile.body_images))
-                                            {
-                                                documentFile.body_images = documentFile.body_images.TrimEnd(';');
-                                            }
-
-                                            filesRepository.AddFiles(documentFile);
-                                        }
-                                    }
+                                    filesRepository.AddFiles(documentFile);
                                 }
                             }
                             catch (Exception ex)
                             {
-                                ModelState.AddModelError("", $"An error occurred while saving a document: {ex.Message}");
+                                ModelState.AddModelError("", $"An error occurred while saving a file: {ex.Message}");
                             }
                         }
                     }
 
+                    if (body_images != null && body_images.Any())
+                    {
+                        foreach (var bodyImage in body_images.Where(bi => bi != null && bi.ContentLength > 0))
+                        {
+                            try
+                            {
+                                string fileName = Path.GetFileName(bodyImage.FileName);
+                                string uploadsDir = Server.MapPath("~/Content/Uploads");
+                                string filePath = Path.Combine(uploadsDir, fileName);
+
+                                if (!Directory.Exists(uploadsDir))
+                                {
+                                    Directory.CreateDirectory(uploadsDir);
+                                }
+
+                                bodyImage.SaveAs(filePath);
+
+                                var documentFile = new file
+                                {
+                                    post_id = post.id,
+                                    file_type = Path.GetExtension(bodyImage.FileName),
+                                    file_name = fileName,
+                                    file_content = "",
+                                    body_images = "/Content/Uploads/" + fileName
+                                };
+
+                                filesRepository.AddFiles(documentFile);
+                            }
+                            catch (Exception ex)
+                            {
+                                ModelState.AddModelError("", $"An error occurred while saving a body image: {ex.Message}");
+                            }
+                        }
+                    }
 
                     var categories = categoryRepository.GetCategories();
                     model.categoriess = categories;
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    return RedirectToAction("Login","Home");
+                    return RedirectToAction("Login", "Home");
                 }
             }
 
             return View(model);
         }
-
 
 
 
