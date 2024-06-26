@@ -3,8 +3,8 @@
 * Data: 25/06/2024
 * Programuesi: Ralfina Tusha
 * Klasa: BlogPostController
-* Arsyeja: Kjo klasë menaxhon funksionalitetet e postimeve të blogut.
-* Pershkrimi: Implementon metodat për shtimin e postimeve nga useri, shikimin e nje posti specifik, shtimin/editimin e komenteve dhe reply.
+* Arsyeja: Kjo klase menaxhon funksionalitetet e postimeve te blogut.
+* Pershkrimi: Implementon metodat per shtimin e postimeve nga useri, shikimin e nje posti specifik, shtimin/editimin e komenteve dhe reply.
 * Trashegon nga: Controller
 * Interfaces: Nuk ka
 * Constants: Nuk ka
@@ -38,6 +38,18 @@ namespace BlogMVC.Controllers
             filesRepository = new FilesRepository();
         }
 
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: Add (GET)
+         * Arsyeja: Shfaq VIEW per shtimin e nje  postimi te ri ne  blog nga useri.
+         * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar. Nese jo, e ridrejton ne faqen e login-it. Nese eshte i loguar, merr kategorite ne nje instance te AddBlogPostRequest dhe i kalon ato ne VIEW.
+         * Para kushti: Perdoruesi duhet te jete i loguar.
+         * Post kushti: Kthen nje View me modelin e formes per shtimin e postimit te ri.
+         * Parametrat: Nuk ka.
+         * Return: ActionResult - VIEW me modelin e formes per shtimin e postimit te ri.
+         **/
+
 
         [HttpGet]
         public ActionResult Add()
@@ -55,7 +67,17 @@ namespace BlogMVC.Controllers
             return View(model);
         }
 
-
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: Add (POST)
+         * Arsyeja: Ruajtja e nje postimi te ri ne blog.
+         * Pershkrimi: Kontrollon vlefshmerine e modelit. Nese perdoruesi eshte i loguar, krijon dhe ruan postimin e ri se bashku me imazhet dhe filet e bashkangjitur.
+         * Para kushti: Perdoruesi duhet te jete i loguar dhe model duhet te jete valid.
+         * Post kushti: Ruhet postimi i ri dhe ridrejtohet ne faqen kryesore.
+         * Parametrat: model - Modeli i kerkeses per shtimin e postimit; body_images - Lista e imazheve.
+         * Return: ActionResult - Ridrejtohet ne faqen kryesore ose rikthen View me gabimet.
+         **/
         [HttpPost]
         public ActionResult Add(AddBlogPostRequest model, IEnumerable<HttpPostedFileBase> body_images)
         {
@@ -188,6 +210,20 @@ namespace BlogMVC.Controllers
 
 
 
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: Post
+         * Arsyeja: Shfaqja e nje posti te vetem.
+         * Pershkrimi: Shfaq postimin e caktuar me te gjitha komentet e aprovuara.
+         * Para kushti: Nuk ka.
+         * Post kushti: Kthen nje View me modelin e postimit dhe komenteve te aprovuara.
+         * Parametrat: id - id e postit.
+         * Return: ActionResult - VIEW me modelin e postimit dhe komenteve te aprovuara.
+         **/
+
+
+
         public ActionResult Post(int id)
         {
             var post = blogPostRepository.GetBlogPostById(id);
@@ -206,6 +242,19 @@ namespace BlogMVC.Controllers
 
             return HttpNotFound("Post not found.");
         }
+
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: AddComment
+         * Arsyeja: Shtimi i nje komenti ne nje postim.
+         * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar. Nese eshte i loguar, shton komentin e ri ne databaze dhe kthen nje pergjigje JSON me sukses dhe komentin e shtuar.
+         * Para kushti: Perdoruesi duhet te jete i loguar.
+         * Post kushti: Kthen nje pergjigje JSON me sukses dhe komentin e shtuar.
+         * Parametrat: post_id - id e postit; comment - teksti i komentit.
+         * Return: JsonResult - Pergjigje JSON me sukses dhe komentin e shtuar.
+         **/
 
 
 
@@ -243,7 +292,19 @@ namespace BlogMVC.Controllers
             return Json(new { success = false, message = "User not authenticated." });
         }
 
- 
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: AddReply
+         * Arsyeja: Shtimi i nje pergjigje te re ne nje koment te blogut.
+         * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar dhe krijon nje pergjigje te re per nje koment.
+         * Para kushti: Perdoruesi duhet te jete i loguar.
+         * Post kushti: Pergjigja e re ruhet dhe kthehet si rezultat JSON.
+         * Parametrat: comment_id - id e komentit per t'u pergjigjur; reply_text - Teksti i pergjigjes.
+         * Return: JsonResult - Rezultati JSON me detajet e pergjigjes se re ose nje mesazh fail.
+         **/
+
         [HttpPost]
         public JsonResult AddReply(int comment_id, string reply_text)
         {
@@ -280,7 +341,20 @@ namespace BlogMVC.Controllers
          }
 
 
-         public ActionResult UserPosts(int id)
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: UserPosts
+         * Arsyeja: Shfaq te gjitha postimet e blogut te krijuara nga nje perdorues specifik.
+         * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar dhe merr te gjitha postimet e krijuara nga perdoruesi specifik me ID-ne e dhene.
+         * Para kushti: Perdoruesi duhet te jete i loguar.
+         * Post kushti: Kthen nje View me listen e postimeve te krijuara nga perdoruesi specifik.
+         * Parametrat: id - ID e perdoruesit per te marre postimet.
+         * Return: ActionResult - VIEW me listen e postimeve te krijuara nga perdoruesi specifik.
+         **/
+
+        public ActionResult UserPosts(int id)
         {
             if (Session["id"] == null)
             {
@@ -289,6 +363,19 @@ namespace BlogMVC.Controllers
             var posts = blogPostRepository.GetBlogPostsByUserId(id).ToList();
             return View(posts);
         }
+
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: EditComment
+         * Arsyeja: Editimi i nje komenti ekzistues ne nje postim te blogut.
+         * Pershkrimi: Merr komentit nga ID-ja, editon tekstin e komentit dhe ruan ndryshimet.
+         * Para kushti: Komenti duhet te ekzistoje.
+         * Post kushti: Komenti update-ohet dhe kthehet si rezultat JSON.
+         * Parametrat: comment_id - ID e komentit per te redaktuar; comment_text - Teksti i ri i komentit.
+         * Return: JsonResult - Rezultati JSON me statusin e suksesit ose nje mesazh fail.
+         **/
 
 
         [HttpPost]

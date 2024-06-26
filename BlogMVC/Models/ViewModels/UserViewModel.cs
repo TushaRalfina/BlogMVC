@@ -3,7 +3,7 @@
 * Data: 25/06/2024
 * Programuesi: Ralfina Tusha
 * Klasa: UserViewModel
-* Arsyeja: Modeli i perdorur per paraqitjen dhe validimin e te dhenave te perdoruesve ne forme te regjistrimit.
+* Arsyeja: Modeli i perdorur per paraqitjen dhe validimin e te dhenave te perdoruesve ne formen te regjistrimit.
 * Pershkrimi: Kjo klase permban fushat e nevojshme per te paraqitur dhe validuar te dhenat e perdoruesit, duke perfshire id-ne, emrin e perdoruesit, password-in dhe konfirmimin e tij, email-in, rolin, emrin dhe mbiemrin, foton e profilit, bio, daten e krijimit dhe te update-imit te profilit, si dhe  kodin per verifikimin e email-it.
 */
 

@@ -3,7 +3,7 @@
 * Data: 25/06/2024
 * Programuesi: Ralfina Tusha
 * Klasa: HomeController
-* Arsyeja: Kjo klasë menaxhon funksionalitetet e login & regjistrim te perdoruesve dhe faqet kryesore te aplikacionit.
+* Arsyeja: Kjo klase menaxhon funksionalitetet e login & regjistrim te perdoruesve dhe faqet kryesore te aplikacionit.
 * * Pershkrimi: Controlleri per  login & regjistrim te perdoruesve, shfaqjen e faqes kryesore,
 * shfaqjen e profilit te perdoruesit, editimin e profilit 
 * shkarkimin e fileve,kategorite me postimet perkatese, shfaqjen e faqes about dhe logout
@@ -55,11 +55,31 @@ namespace BlogMVC.Controllers
             filesRepository = new FilesRepository();
             adminRepository = new AdminRepository();
         }
- 
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: SignUp (GET)
+         * Pershkrimi: Kthen nje View qe permban formen per regjistrimin e nje perdoruesi te ri.
+         * Return: ActionResult - VIEW me formen e regjistrimit.
+         **/
+
         public ActionResult SignUp()
         {
             return View();
         }
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: SignUp (POST)
+         * Arsyeja: Ruajtja e te dhenave te nje perdoruesi te ri.
+         * Pershkrimi: Kontrollon vlefshmerine e modelit. Verifikon nese username i perdoruesit eshte i zene dhe nese emaili eshte valid. Gjeneron kodin e verifikimit dhe dergon emailin e verifikimit.
+         * Para kushti: Modeli duhet te jete valid.
+         * Post kushti: Ruhet perdoruesi i perkohshem ne sesion dhe dergohet emaili i verifikimit.
+         * Parametrat: userViewModel - Modeli i perdoruesit per regjistrim.
+         * Return: ActionResult - Ridrejtohet ne faqen e verifikimit te emailit ose rikthen pamjen e formes me gabimet perkatese.
+         **/
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -71,8 +91,7 @@ namespace BlogMVC.Controllers
                     return View(userViewModel);
                 }
 
-                // Check if username is taken
-                if (userRepository.GetUserByUsername(userViewModel.username) != null)
+                 if (userRepository.GetUserByUsername(userViewModel.username) != null)
                 {
                     ViewBag.SignupNotification = "This username is already taken";
                     return View(userViewModel);
@@ -86,19 +105,28 @@ namespace BlogMVC.Controllers
                     return View(userViewModel);
                 }
 
-                // Generate verification code
-                userViewModel.VerificationCode = GenerateVerificationCode();
+                 userViewModel.VerificationCode = GenerateVerificationCode();
 
-                // Send verification email
-                SendVerificationEmail(userViewModel.email, userViewModel.VerificationCode);
+                 SendVerificationEmail(userViewModel.email, userViewModel.VerificationCode);
 
-                // Store user in session temporarily (not recommended for production)
-                Session["TempUser"] = userViewModel;
+                 Session["TempUser"] = userViewModel;
 
                 return RedirectToAction("VerifyEmail");
             
             
         }
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi:Ralfina Tusha
+         * Metoda: VerifyEmailWithAPI
+         * Arsyeja: Verifikimi i vlefshmerise se nje adrese emaili duke perdorur API (EMAILLISTVERIFY).
+         * Pershkrimi: Ben nje kerkese HTTP GET ne nje API e per te verifikuar vlefshmerine e emailit.
+         * Para kushti: Nuk ka.
+         * Post kushti: Kthen nje rezultat boolean qe tregon nese emaili eshte valid( api kthen statusin si ok ose fail) .
+         * Parametrat: email - Adresa e emailit per t'u verifikuar.
+         * Return: Task<bool> - Rezultati i vlefshmerise se emailit.
+         **/
 
         private async Task<bool> VerifyEmailWithAPI(string email)
         {
@@ -115,7 +143,7 @@ namespace BlogMVC.Controllers
                 using (StreamReader reader = new StreamReader(responseStream, Encoding.UTF8))
                 {
                     string responseText = reader.ReadToEnd();
-                    Console.WriteLine("API Response: " + responseText); // Debug output
+                    Console.WriteLine("API Response: " + responseText);  
   
                     if (responseText=="ok")
                     {
@@ -136,14 +164,31 @@ namespace BlogMVC.Controllers
 
 
 
-
+        /**
+             * Data: 26/06/2024
+             * Programuesi:Ralifna Tusha
+             * Metoda: VerifyEmail (GET)
+             * Pershkrimi: Kthen nje View qe permban formen per verifikimin e emailit.
+             * Return: ActionResult - VIEW me formen e verifikimit te emailit.
+             **/
 
         public ActionResult VerifyEmail()
         {
             return View();
         }
 
-       
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: VerifyEmail (POST)
+         * Arsyeja: Validimi i kodit te verifikimit te derguar me email.
+         * Pershkrimi: Kontrollon vlefshmerine e kodit te verifikimit. Nese kodi eshte i sakte, shton perdoruesin e ri ne bazen e te dhenave dhe e logon ate.
+         * Para kushti: Modeli duhet te jete valid dhe kodi i verifikimit duhet te jete i sakte.
+         * Post kushti: Perdoruesi i ri shtohet ne bazen e te dhenave dhe e logon ate.
+         * Parametrat: verificationCode - Kodi i verifikimit i vendosur nga perdoruesi.
+         * Return: ActionResult - Ridrejtohet ne faqen kryesore ose rikthen pamjen e formes me mesazhin "Invalid verification code" .
+         **/
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -169,6 +214,16 @@ namespace BlogMVC.Controllers
             ViewBag.Notification = "Invalid verification code";
             return View();
         }
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: SendVerificationEmail
+         * Arsyeja: Dergimi i nje emaili verifikimi me kodin e verifikimit.
+         * Para kushti: Nuk ka.
+         * Post kushti: Emaili i verifikimit dergohet.
+         * Parametrat: email - Adresa e emailit te marresit; verificationCode - Kodi i verifikimit.
+         * Return: void
+         **/
 
         private void SendVerificationEmail(string email, string verificationCode)
         {
@@ -198,6 +253,14 @@ namespace BlogMVC.Controllers
             }
 
         }
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: GenerateVerificationCode
+         * Pershkrimi: Gjeneron nje kod verifikimi te rastesishem me 6 shifra.
+         * Return: string - Kodi i verifikimit.
+         **/
+
 
         private string GenerateVerificationCode()
         {
@@ -205,7 +268,16 @@ namespace BlogMVC.Controllers
             return random.Next(100000, 999999).ToString();
         }
 
-
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: Logout
+          * Pershkrimi: Fshin te gjitha te dhenat e sesionit dhe ridrejton perdoruesin ne faqen kryesore.
+         * Para kushti: Perdoruesi duhet te jete i loguar.
+         * Post kushti: Perdoruesi del nga accounti dhe ridrejtohet ne faqen kryesore.
+         * Parametrat: Nuk ka.
+         * Return: ActionResult - Ridrejtim ne faqen kryesore.
+         **/
 
 
         public ActionResult Logout()
@@ -214,10 +286,29 @@ namespace BlogMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: Login (GET)
+          * Pershkrimi: Kthen nje View qe permban formen per logimin e perdoruesit.
+         * Return: ActionResult - VIEW me formen e logimit.
+         **/
         public ActionResult Login()
         {
             return View("SignUp");
         }
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: Login (POST)
+         * Arsyeja: Autentifikimi i userit.
+         * Pershkrimi: Verifikon kredencialet e perdoruesit dhe e logon ate nese kredencialet jane te sakta.
+         * Para kushti: Modeli duhet te jete valid.
+         * Post kushti: Perdoruesi logon dhe ridrejtohet ne faqen kryesore ose rikthen pamjen e formes me nje mesazh qe te dhenat nuk jane te sakta.
+         * Parametrat: user - Modeli i perdoruesit qe permban kredencialet.
+         * Return: ActionResult - Ridrejtim ne faqen kryesore .
+         **/
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -240,6 +331,17 @@ namespace BlogMVC.Controllers
                 return View("SignUp");
             }
         }
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: Index
+         * Arsyeja: Shfaq te gjitha postimet e miratuara te blogut, me mundesi filtrimi.
+         * Pershkrimi: Merr dhe shfaq te gjitha postimet e miratuara te blogut. Mund te filtroje sipas kategorive, datave dhe mund te rendite postimet sipas dates se postuar.
+         * Para kushti: Perdoruesi duhet te jete i loguar.
+         * Post kushti: Kthen nje View me listen e postimeve te miratuara.
+         * Parametrat: page - Numri i faqes per paginim; category - Filtrimi sipas kategorise; sortBy - Renditja e postimeve; fromDate - Filtrimi sipas dates fillimit; toDate - Filtrimi sipas dates mbarimit.
+         * Return: ActionResult - VIEW me listen e postimeve te miratuara.
+         **/
         public ActionResult Index(int? page, string category, string sortBy, DateTime? fromDate, DateTime? toDate)
         {
             if (Session["id"] == null)
@@ -296,7 +398,16 @@ namespace BlogMVC.Controllers
         }
 
 
-
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: Profile
+         * Arsyeja: Shfaq profilin e perdoruesit te loguar.
+         * Pershkrimi: Merr dhe shfaq te dhenat e profilit te perdoruesit te loguar.
+         * Para kushti: Perdoruesi duhet te jete i loguar.
+         * Post kushti: Kthen nje View me te dhenat e profilit te perdoruesit te loguar.
+          * Return: ActionResult - VIEW me te dhenat e profilit te perdoruesit te loguar.
+         **/
         public ActionResult Profile()
         {
             if (Session["id"] == null)
@@ -333,7 +444,16 @@ namespace BlogMVC.Controllers
                 return View(userProfileViewModel);
             }
         }
-
+        /**
+         * Data: 26/06/2024
+         * Programuesi:Ralfina Tusha
+         * Metoda: DownloadFile
+         * Arsyeja: Shkarkimi i fileve qe ndodhen te bashkangjituara postit.
+          * Para kushti: Skedari duhet te ekzistoje ne bazen e te dhenave.
+         * Post kushti: Skedari shkarkohet nga perdoruesi.
+         * Parametrat: fileId - ID e skedarit per t'u shkarkuar.
+         * Return: ActionResult - FileResult qe permban skedarin per t'u shkarkuar ose HttpNotFound nese skedari nuk ekziston.
+         **/
         public ActionResult DownloadFile(int fileId)
         {
             var file = filesRepository.GetFileById(fileId);
@@ -347,7 +467,19 @@ namespace BlogMVC.Controllers
             return HttpNotFound();
         }
 
-         public ActionResult EditProfile(int id)
+
+        /**
+            * Data: 26/06/2024
+            * Programuesi: Ralfina Tusha
+            * Metoda: EditProfile (GET)
+            * Arsyeja: Shfaq view per editimin e profilit te perdoruesit.
+            * Para kushti: Perdoruesi duhet te jete i loguar.
+            * Post kushti: Kthen nje View me formen per editimin e profilit te perdoruesit.
+            * Parametrat: id - ID e perdoruesit.
+            * Return: ActionResult - VIEW me formen per editimin e profilit te perdoruesit.
+            **/
+
+        public ActionResult EditProfile(int id)
         {
             if (Session["id"] == null)
             {
@@ -368,6 +500,16 @@ namespace BlogMVC.Controllers
                 return View(usermodel);
             }
         }
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: EditProfile (POST)
+         * Arsyeja: Ruajtja e te dhenave te edituara te profilit te perdoruesit.
+          * Para kushti: Modeli duhet te jete valid.
+         * Post kushti: Te dhenat e profilit te perdoruesit perditesohen ne db dhe ridrejtohet ne profilin e perdoruesit.
+         * Parametrat: editProfileRequest - Modeli qe permban te dhenat qe mund te editohen.
+         * Return: ActionResult - Ridrejtim ne profilin e perdoruesit ose rikthen pamjen e formes me nje mesazh gabimi.
+         **/
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -406,6 +548,15 @@ namespace BlogMVC.Controllers
                 return View(editProfileRequest);
             }
         }
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: About
+         * Arsyeja: Shfaq faqen "About".
+          * Para kushti: Perdoruesi duhet te jete i loguar.
+          * Return: ActionResult - VIEW me informacionin "Rreth Nesh".
+         **/
         public ActionResult About()
         {
             if (Session["id"] == null)
@@ -415,7 +566,17 @@ namespace BlogMVC.Controllers
             return View();
         }
 
-     
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: Categories
+        * Arsyeja: Shfaq postimet e blogut sipas kategorise.
+        * Pershkrimi: Merr dhe shfaq postimet e blogut sipas kategorise dhe subkategorive te tyre.
+        * Para kushti: Perdoruesi duhet te jete i loguar.
+        * Post kushti: Kthen nje View me listen e postimeve sipas kategorise te caktuar.
+        * Parametrat: category_id - ID e kategorise per te shfaqur postimet.
+        * Return: ActionResult - VIEW me listen e postimeve sipas kategorise.
+        **/
 
         public ActionResult Categories(int category_id)
         {
@@ -441,6 +602,14 @@ namespace BlogMVC.Controllers
 
             return View(viewModel);
         }
+
+        /**
+         * Data: 26/06/2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: CategoriesPartial
+         * Arsyeja: Kthen kategorite si PartialView per ti perfshire ne layout.
+         * Return: ActionResult - PartialView me listen e kategorive.
+         **/
 
         [ChildActionOnly]
         public ActionResult CategoriesPartial()

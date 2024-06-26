@@ -31,6 +31,19 @@ namespace BlogMVC.Repositories
 
         BlogEntities db = new BlogEntities();
 
+
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: AddUser
+        * Arsyeja: Shtimi i nje useri te ri
+        * Pershkrimi: Kjo metode shton nje suer te ri ne db duke marre informacionin nga UserViewModel.
+        * Para kushti: UserViewModel duhet te permbaje te gjitha fushat e nevojshme te plotesuara dhe password-i duhet te jete i papergatitur.
+        * Post kushti: useri i ri do te jete i ruajtur ne db dhe password-i do te jete i hashuar.
+        * Parametrat: 
+        *   - userViewModel: UserViewModel objekti qe permban te dhenat e userit te ri.
+        * Return: Nuk kthen ndonje vlere.
+        */
         public void AddUser(UserViewModel userViewModel)
         {
 
@@ -52,6 +65,19 @@ namespace BlogMVC.Repositories
             });
             db.SaveChanges();
         }
+
+        /**
+        * Data: 26/06/2024
+        * Programuesi:Ralfina Tusha
+        * Metoda: UpdateUser
+        * Arsyeja: Per te perditesuar te dhenat e nje useri ekzistues
+        * Pershkrimi: Kjo metode perditeson te dhenat e nje useri ekzistues ne db duke marre informacionin nga objekti user.
+        * Para kushti: Perdoruesi duhet te ekzistoje ne db dhe objekti user duhet te permbaje id-ne e sakte.
+        * Post kushti: Perdoruesi do te jete i perditesuar me te dhenat e reja.
+        * Parametrat: 
+        *   - user: objekti user qe permban te dhenat e perditesuara te perdoruesit.
+        * Return: Kthen objektin user te perditesuar nese perditesimi eshte i suksesshem, perndryshe shfaq nje Exception nese ndodh ndonje gabim.
+        */
 
         public user UpdateUser(user user)
         {
@@ -97,17 +123,44 @@ namespace BlogMVC.Repositories
                 throw;
             }
         }
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: GetUserById
+        * Pershkrimi: Kjo metode kthen nje user me id e dhene.
+        * Parametrat: int id: ID-ja e userit qe do te merret.
+        * Return: user: Objekti i userit qe korrespondon me id-ne.
+        **/
 
         public user GetUserById(int id)
         {
             return db.users.FirstOrDefault(u => u.id == id);
         }
 
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: GetUserByUsername
+        * Pershkrimi: Kjo metode kthen nje user nga db duke kaluar si parameter username-in e userit.
+        * Parametrat: string username: Username i userit qe do te merret.
+        * Return: user: Objekti i userit qe korrespondon me username-in.
+        **/
+
         public user GetUserByUsername(string username)
         {
                 return db.users.FirstOrDefault(u => u.username == username );
         }
-         public string HashPassword(string password)
+
+
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: HashPassword
+        * Pershkrimi: Kjo metode hashon passwordin duke perdorur algoritmin SHA-256.
+        * Parametrat: string password: Passwordi qe do te hashohet.
+        * Return: string: Passwordi i hashuar.
+        **/
+        public string HashPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
@@ -121,6 +174,17 @@ namespace BlogMVC.Repositories
                 return builder.ToString();
             }
         }
+
+
+
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: GetPostsByUserId
+        * Pershkrimi:Kjo metode kthen nje liste te postimeve per nje user te caktuar.
+        * Paramentrat: int id: ID-ja e userit per te cilin do te merren postimet.
+        * Return: IEnumerable<post>: Nje liste e postimeve  per nje user te caktuar.
+        **/
 
         public IEnumerable<post> GetPostsByUserId(int id)
         {

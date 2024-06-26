@@ -25,16 +25,42 @@ namespace BlogMVC.Repositories
     public class FilesRepository : IFilesRepository
     {
         BlogEntities db = new BlogEntities();
+
+        /**
+          * Data: 26/06/2024
+          * Programuesi: Ralfina Tusha
+          * Metoda: GetFiles
+          * Pershkrimi: Kjo metode kthen nje liste te te gjitha fileve ne db.
+          * Return: IEnumerable<file>: Nje liste e te gjitha fileve
+          **/
         public IEnumerable<file> GetFiles()
         {
            return db.files.ToList();
         }
 
-          public void AddFiles(file file)
+
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: AddFiles
+        * Pershkrimi: Kjo metode shton nje file te ri ne db.
+        * Parametrat: file file: Objekti i file qe do te shtohet.
+        * Return:void
+        **/
+        public void AddFiles(file file)
             {
                 db.files.Add(file);
                 db.SaveChanges();
             }
+
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: GetFileById
+        * Pershkrimi: Kjo metode kthen nje file bazuar ne ID-ne e tij.
+        * Parametrat:int id: ID-ja e file qe do te merret.
+        * Return: file: Objekti i file qe korrespondon me ID-ne.
+        **/
 
         public file GetFileById(int id)
             {

@@ -3,7 +3,7 @@
 * Data: 25/06/2024
 * Programuesi: Ralfina Tusha
 * Klasa: EditProfileRequest
-* Arsyeja: Kerkese per ndryshimin e informacionit te profili i userit.
+* Arsyeja: Kerkese per ndryshimin e te dhenave te profili i userit.
 * Pershkrimi: Kjo klase permban informacionin qe nevojitet per ndryshimin e profilin, duke perfshire id-ne e perdoruesit, email-in, emrin, mbiemrin dhe bio.
 */
 
@@ -19,7 +19,6 @@ namespace BlogMVC.Models.ViewModels
     {
 
         public int id { get; set; }  
-      
 
         public string email { get; set; }
 

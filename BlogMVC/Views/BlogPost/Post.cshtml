@@ -297,124 +297,193 @@
     @section Scripts {
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-   $(document).ready(function() {
-       $('#commentForm').on('submit', function(event) {
-           event.preventDefault();
-           var postId = $('#post_id').val();
-           var comment = $('#comment').val();
 
-           $.ajax({
-               url: '@Url.Action("AddComment", "BlogPost")',
-               type: 'POST',
-               data: {
-                   post_id: postId,
-                   comment: comment
-               },
-               success: function(response) {
-                   if (response.success) {
+            /**
+         * Data: 26-06-2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: $(document).ready
+         * Pershkrimi: Ky event listener inicializon funksionalitetin per te shtuar komente ne post duke perdorur AJAX.
+         * Para kushti: Ekzistimi i formes me ID "commentForm" dhe elementeve me ID-te "post_id" dhe "comment".
+         * Post kushti: Nese shtimi i komentit behet me sukses, faqja rifreskohet per te reflektuar ndryshimet. Ne rast te deshtimit, shfaqet nje mesazh gabimi.
+         */
+           $(document).ready(function() {
+               $('#commentForm').on('submit', function(event) {
+                   event.preventDefault();
+                   var postId = $('#post_id').val();
+                   var comment = $('#comment').val();
 
-                       alert('Comment added successfully!');
-                       location.reload();
+                   $.ajax({
+                       url: '@Url.Action("AddComment", "BlogPost")',
+                       type: 'POST',
+                       data: {
+                           post_id: postId,
+                           comment: comment
+                       },
+                       success: function(response) {
+                           if (response.success) {
 
-                   } else {
-                       alert('Error adding comment.');
-                   }
-               }
+                               alert('Comment added successfully!');
+                               location.reload();
+
+                           } else {
+                               alert('Error adding comment.');
+                           }
+                       }
+                   });
+               });
            });
-       });
-   });
-
-       function openReplyForm(comment_id) {
-           document.getElementById('comment_id').value = comment_id;
-           document.getElementById("replyFormPopup").style.display = "block";
-       }
 
 
-       function closeReplyForm() {
-           document.getElementById("replyFormPopup").style.display = "none";
-       }
+            /**
+             * Data: 26-06-2024
+             * Programuesi: Ralfina Tusha
+             * Metoda: openReplyForm
+             * Arsyeja: Per te hapur formen e reply te komentit
+             * Parametrat:
+             *   - comment_id: ID-ja e komentit qe po shtohet reply.
+             */
 
-        window.onclick = function (event) {
-           var popup = document.getElementById("replyFormPopup");
-           if (event.target == popup) {
-               popup.style.display = "none";
+           function openReplyForm(comment_id) {
+               document.getElementById('comment_id').value = comment_id;
+               document.getElementById("replyFormPopup").style.display = "block";
            }
-       }
-
-   $(document).ready(function() {
-   $('#replyForm').on('submit', function(event) {
-   event.preventDefault();
-   var comment_id = $('#comment_id').val();
-   var replyText = $('#reply').val();
-
-   $.ajax({
-       url: '@Url.Action("AddReply", "BlogPost")',
-       type: 'POST',
-       data: {
-           comment_id: comment_id,
-           reply_text: replyText
-       },
-       success: function(response) {
-           if (response.success) {
-               alert('Reply added successfully!');
-               closeReplyForm();
-               location.reload();
-
-           } else {
-               alert('Error adding reply.');
-           }
-       },
-       error: function() {
-           alert('Error adding reply.');
-       }
-   });
-   });
-   });
 
 
+            /**
+             * Data: 26-06-2024
+             * Programuesi: Ralfina Tusha
+             * Metoda: closeReplyForm
+             * Arsyeja: Per te mbyllur formen e reply te komentit
+             */
 
-   $(document).ready(function() {
-   $('#editForm').on('submit', function(event) {
-   event.preventDefault();
-   var comment_id = $('#comment_id').val();
-   var commentText = $('#comment1').val();
-
-   $.ajax({
-       url: '@Url.Action("EditComment", "BlogPost")',
-       type: 'POST',
-       data: {
-           comment_id: comment_id,
-           comment_text: commentText
-       },
-       success: function(response) {
-           if (response.success) {
-               alert('Comment edited successfully!');
-               closeEditForm();
-               location.reload();
-           }
-           else {
-               alert('Error editing comment.');
-           }
-       },
-       error: function() {
-           alert('Error editing comment.');
-       }
+           function closeReplyForm() {
+               document.getElementById("replyFormPopup").style.display = "none";
+            }
 
 
+            //nese klikon jashte formes forma iken
+            window.onclick = function (event) {
+               var popup = document.getElementById("replyFormPopup");
+               if (event.target == popup) {
+                   popup.style.display = "none";
+               }
+            }
 
-   });
-   });
-   });
 
-   function openEditForm(comment_id, comment_text) {
-   document.getElementById('comment_id').value = comment_id;
-   document.getElementById('comment1').value = comment_text;
-   document.getElementById("editFormPopup").style.display = "block";
-   }
+            /**
+             * Data: 26-06-2024
+             * Programuesi: Ralfina Tusha
+             * Metoda: $(document).ready
+             * Pershkrimi: Ky event listener inicializon funksionalitetin per te shtuar reply ne komente duke perdorur AJAX.
+             * Para kushti: Ekzistimi i formes me ID "replyForm" dhe elementeve me ID-te "comment_id" dhe "reply".
+             * Post kushti: Nese shtimi i reply behet me sukses, faqja rifreskohet per te reflektuar ndryshimet. Ne rast te deshtimit, shfaqet nje mesazh gabimi.
+             * Parametrat: Nuk ka parametra.
+             * Return: Nuk kthen ndonje vlere.
+             */
 
-   function closeEditForm() {
-   document.getElementById("editFormPopup").style.display = "none";
-   }
+               $(document).ready(function() {
+               $('#replyForm').on('submit', function(event) {
+                   event.preventDefault();
+                   var comment_id = $('#comment_id').val();
+                   var replyText = $('#reply').val();
+
+                       $.ajax({
+                           url: '@Url.Action("AddReply", "BlogPost")',
+                           type: 'POST',
+                           data: {
+                               comment_id: comment_id,
+                               reply_text: replyText
+                           },
+                           success: function(response) {
+                               if (response.success) {
+                                   alert('Reply added successfully!');
+                                   closeReplyForm();
+                                   location.reload();
+
+                               } else {
+                                   alert('Error adding reply.');
+                               }
+                           },
+                           error: function() {
+                               alert('Error adding reply.');
+                           }
+                        });
+                    });
+               });
+
+            /**
+            * Data: 26-06-2024
+            * Programuesi: Ralfina Tusha
+            * Metoda: $(document).ready
+            * Pershkrimi: Ky event listener inicializon funksionalitetin per te update komente ne postime duke perdorur AJAX.
+            * Para kushti: Ekzistimi i formes me ID "editForm" dhe elementeve me ID-te "comment_id" dhe "comment1".
+            * Post kushti: Nese redaktimi i komentit behet me sukses, faqja rifreskohet per te reflektuar ndryshimet. Ne rast te deshtimit, shfaqet nje mesazh gabimi.
+            * Parametrat: Nuk ka parametra.
+            * Return: Nuk kthen ndonje vlere.
+            */
+
+               $(document).ready(function() {
+               $('#editForm').on('submit', function(event) {
+                   event.preventDefault();
+                   var comment_id = $('#comment_id').val();
+                   var commentText = $('#comment1').val();
+
+                       $.ajax({
+                           url: '@Url.Action("EditComment", "BlogPost")',
+                           type: 'POST',
+                           data: {
+                               comment_id: comment_id,
+                               comment_text: commentText
+                           },
+                           success: function(response) {
+                               if (response.success) {
+                                   alert('Comment edited successfully!');
+                                   closeEditForm();
+                                   location.reload();
+                               }
+                               else {
+                                   alert('Error editing comment.');
+                               }
+                           },
+                           error: function() {
+                               alert('Error editing comment.');
+                           }
+
+
+
+                       });
+                   });
+               });
+
+
+
+            /**
+             * Data: 26-06-2024
+             * Programuesi: Ralfina Tusha
+             * Metoda: openEditForm
+             * Arsyeja: Per te hapur formen e editimit te komentit
+             * Pershkrimi: Kjo metode vendos vleren e comment_id dhe comment_text ne formen e editimit dhe e shfaq formen.
+              * Parametrat:
+             *   - comment_id: ID-ja e komentit qe po editohet.
+             *   - comment_text: Teksti aktual i komentit qe po editohet.
+             * Return: Nuk kthen ndonje vlere.
+             */
+               function openEditForm(comment_id, comment_text) {
+               document.getElementById('comment_id').value = comment_id;
+               document.getElementById('comment1').value = comment_text;
+               document.getElementById("editFormPopup").style.display = "block";
+            }
+
+            /**
+             * Data: 26-06-2024
+             * Programuesi: Ralfina Tusha
+             * Metoda: closeEditForm
+             * Arsyeja: Per te mbyllur formen e editimit te komentit
+             */
+
+               function closeEditForm() {
+               document.getElementById("editFormPopup").style.display = "none";
+               }
 
 
 

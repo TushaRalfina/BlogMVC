@@ -155,17 +155,23 @@
 
 
 
+        /**
+         * Data: 26-06-2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: DOMContentLoaded listener
+          * Pershkrimi: Ky event listener inicializon funksionalitetin per te menaxhuar ndryshimet ne checkbox-et e nenkategorive.
+         * Para kushti: Ekzistimi i checkbox-eve te nenkategorive ne dokument.
+         * Post kushti: Kur nje checkbox ndryshon gjendjen, te gjitha checkbox-et tjera me te njejtin category ID do te zevendesohen ne gjendjen unchecked.
+         */
         document.addEventListener("DOMContentLoaded", function () {
-            // Get all subcategory checkboxes
+          
             const subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
 
             subcategoryCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     if (this.checked) {
-                        // Get the category ID of the changed checkbox
-                        const categoryId = this.getAttribute('data-category-id');
-                        // Uncheck all other subcategory checkboxes with the same category ID
-                        subcategoryCheckboxes.forEach(subCheckbox => {
+                         const categoryId = this.getAttribute('data-category-id');
+                         subcategoryCheckboxes.forEach(subCheckbox => {
                             if (subCheckbox !== this && subCheckbox.getAttribute('data-category-id') === categoryId) {
                                 subCheckbox.checked = false;
                             }
@@ -174,9 +180,18 @@
                 });
             });
         });
+
+        /**
+         * Data: 26-06-2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: $(document).ready
+         * Pershkrimi: Ky event listener inicializon funksionalitetinper te afishuar subkategorite e nje kategorie kur kjo e fundit behet check.
+         * Post kushti: Kur nje checkbox ndryshon gjendjen, lista e nenkategorive te lidhura me ate kategori do te shfaqet ose te fshehet  
+         * Parametrat: Nuk ka parametra.
+         * Return: Nuk kthen ndonje vlere.
+         */
         $(document).ready(function () {
-            // Handle change event for category checkboxes
-            $('.category-checkbox').change(function () {
+             $('.category-checkbox').change(function () {
                 var subcategoryList = $(this).siblings('.subcategory-list');
                 if ($(this).is(':checked')) {
                     subcategoryList.slideDown();
@@ -185,6 +200,7 @@
                 }
             });
         });
+
 
 
 

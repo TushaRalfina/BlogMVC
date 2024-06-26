@@ -73,7 +73,8 @@ namespace BlogMVC.Controllers
 
 
         /**
-         * 
+         * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: ApprovePost
          * Arsyeja: Aprovim i një postimi të blogut nga admini.
          * Pershkrimi: Aprovon postimin e specifikuar nga ID-ja, ndryshon statusin në "approved", dhe dergon email njoftimi.
@@ -129,6 +130,8 @@ namespace BlogMVC.Controllers
         }
 
         /**
+         * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: DeletePost
          * Arsyeja: Refuzimi(fshirja nga db) e nje posti te blogut nga admini.
          * Pershkrimi: Fshin postimin e specifikuar nga ID-ja dhe dergon email njoftimi per refuzimin.
@@ -147,6 +150,8 @@ namespace BlogMVC.Controllers
         }
 
         /**
+         * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: ManageComments
          * Arsyeja: Menaxhimi i komenteve te pa aprovuara nga admini.
          * Pershkrimi: Kontrollon nëse useri eshte i loguar si admin dhe kthen listen e komenteve te pa aprovuara.
@@ -171,6 +176,8 @@ namespace BlogMVC.Controllers
 
 
         /**
+         * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: ApproveComment
          * Arsyeja: Aprovim i nje komenti nga admini.
          * Pershkrimi: Aprovon komentin e specifikuar nga ID-ja dhe kthen ne ManageComments.
@@ -185,6 +192,8 @@ namespace BlogMVC.Controllers
         }
 
         /**
+          * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: DeleteComment
          * Arsyeja: Refuzimi e nje komenti nga admini.
          * Pershkrimi: Fshin komentin e specifikuar nga ID-ja dhe kthen ne ManageComments.
@@ -200,6 +209,8 @@ namespace BlogMVC.Controllers
 
 
         /**
+          * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: FshiComment
          * Arsyeja: Fshirja e nje komenti  dhe kthimi ne postin ku ndodhej komenti.
          * Pershkrimi: Fshin komentin e specifikuar dhe kthen ne postin ku ndodhej komenti.
@@ -216,6 +227,8 @@ namespace BlogMVC.Controllers
         }
 
         /**
+          * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: FshiReply
          * Arsyeja: Fshirja e një përgjigjeje në një koment të përshtatur.
          * Pershkrimi: Fshin përgjigjen e specifikuar në komentin e përshtatur dhe kthen në postimin e blogut përkatës.
@@ -235,6 +248,8 @@ namespace BlogMVC.Controllers
         }
 
         /**
+          * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: AddCategory
          * Arsyeja: Shtimi i nje kategori te re nga admini.
          * Pershkrimi: Kthen view ne  formen e shtimit te nje kategorie te re nese useri eshte i loguar si admin.
@@ -257,6 +272,8 @@ namespace BlogMVC.Controllers
         }
 
         /**
+          * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: AddCategory (Post)
          * Arsyeja: Shtimi i nje kategorie te re nga admini.
          * Pershkrimi: Shton kategorine e re nese te dhenat jane valide dhe kthen ne formen per shtimin e kategorive.
@@ -281,6 +298,8 @@ namespace BlogMVC.Controllers
         }
 
         /**
+         * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: ShowCategories
          * Arsyeja: Shfaqja e kategorive te krijuara nga admini.
          * Pershkrimi: Kontrollon nese useri eshte i loguar si admin dhe kthen listen e kategorive dhe subkategorive perkatese.
@@ -302,6 +321,8 @@ namespace BlogMVC.Controllers
 
 
         /**
+         * Data: 25/06/2024
+         * Programuesi: Ralfina Tusha
          * Metoda: AddSubCategory
          * Arsyeja: Shtimi i n je sub-kategori nga admini.
          * Pershkrimi: Shton nje nsub-kategori nese te dhenat(ermi i subkategorise dhe id e kategorise) jane valide dhe kthen nje response JSON  sukses ose fail.
@@ -323,9 +344,3 @@ namespace BlogMVC.Controllers
     }
 
 }
-
-
-
-
-
-
