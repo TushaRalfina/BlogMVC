@@ -27,5 +27,8 @@ namespace BlogMVC.Repositories
 
 
         file GetFileById(int id);
+
+ 
+        IEnumerable<file> GetFilesByPostId(int id);
     }
 }

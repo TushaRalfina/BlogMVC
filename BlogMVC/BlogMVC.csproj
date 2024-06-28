@@ -400,7 +400,11 @@
     <Content Include="Content\images\android-chrome-192x192.png" />
     <Content Include="Content\images\android-chrome-512x512.png" />
     <Content Include="Content\images\apple-touch-icon.png" />
-    <Content Include="Content\images\avatars\user-01.jpg" />
+    <Content Include="Content\images\avatars\logo.jpg" />
+    <Content Include="Content\images\avatars\logo1.jpg" />
+    <Content Include="Content\images\avatars\profile.jpg" />
+    <Content Include="Content\images\avatars\default.png" />
+    <Content Include="Content\images\avatars\user-01.png" />
     <Content Include="Content\images\avatars\user-02.jpg" />
     <Content Include="Content\images\avatars\user-03.jpg" />
     <Content Include="Content\images\avatars\user-04.jpg" />
@@ -412,7 +416,6 @@
     <Content Include="Content\images\favicon-32x32.png" />
     <Content Include="Content\images\favicon.ico" />
     <Content Include="Content\images\icons\icon-quote.svg" />
-    <Content Include="Content\Uploads\sample-1200.jpg" />
     <Content Include="Content\images\sample-2400.jpg" />
     <Content Include="Content\images\sample-600.jpg" />
     <Content Include="Content\images\sample-image.jpg" />
@@ -455,6 +458,8 @@
     <Content Include="Content\images\wheel-1000.jpg" />
     <Content Include="Content\images\wheel-2000.jpg" />
     <Content Include="Content\images\wheel-500.jpg" />
+    <Content Include="Content\Uploads\Archives-12-500x332.jpg" />
+    <Content Include="Content\Uploads\download.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

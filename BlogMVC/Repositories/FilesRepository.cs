@@ -17,6 +17,7 @@
 using BlogMVC.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -26,7 +27,7 @@ namespace BlogMVC.Repositories
     {
         BlogEntities db = new BlogEntities();
 
-        /**
+            /**
           * Data: 26/06/2024
           * Programuesi: Ralfina Tusha
           * Metoda: GetFiles
@@ -66,5 +67,23 @@ namespace BlogMVC.Repositories
             {
             return db.files.FirstOrDefault(f => f.id == id);
             }
+
+
+        /**
+       * Data: 27/06/2024
+       * Programuesi: Ralfina Tusha
+       * Metoda: GetFilesById
+       * Pershkrimi: Kjo metode kthen filet(non-image) e nje posti bazuar ne ID-ne e postit.
+       * Parametrat:int id: ID-ja e postit per te cilin do te merren filet.
+       * Return: IEnumerable<file>: Nje liste e fileve qe i perket postit me ID te dhene.
+       **/
+        public IEnumerable<file> GetFilesByPostId(int id)
+        {
+            var imageExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
+
+            return db.files
+                     .Where(f => f.post_id == id && !imageExtensions.Any(ext => f.file_name.EndsWith(ext)))
+                     .ToList();
         }
     }
+}

@@ -1,0 +1,182 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model IPagedList<BlogMVC.Models.post>
+
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- # site-content
+================================================== -->
+<section id="content" class="s-content">
+
+
+    <!-- hero -->
+    <div class="hero">
+
+        <div class="hero__slider swiper-container">
+
+            <div class="swiper-wrapper">
+                <article class="hero__slide swiper-slide">
+                    <div class="hero__entry-image" style="background-image: url('/Content/images/thumbs/featured/featured-01_2000.jpg');"></div>
+                    <div class="hero__entry-text">
+                        <div class="hero__entry-text-inner">
+                            <div class="hero__entry-meta">
+                                <span class="cat-links">
+                                    RADIANCE
+                                </span>
+                            </div>
+                            <h2 class="hero__entry-title">
+                                <a href="@Url.Action("Post", "Home")">
+                                    Understanding and Using Negative Space.
+                                </a>
+                            </h2>
+                            <p class="hero__entry-desc">
+                                At Radiance, we believe in the transformative power of inspiration and wellness. Our blog is dedicated to guiding you on a journey towards a more radiant life.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+            </div> <!-- swiper-wrapper -->
+
+            <div class="swiper-pagination"></div>
+
+        </div> <!-- end hero slider -->
+
+        <a href="#bricks" class="hero__scroll-down smoothscroll">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.25 6.75L4.75 12L10.25 17.25"></path>
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.25 12H5"></path>
+            </svg>
+            <span>Scroll</span>
+        </a>
+
+    </div> <!-- end hero -->
+    <div style="display:flex;align-items:center;justify-content:center">
+        <a style="color: black; font-weight:800; cursor: pointer;" onclick="openFilterForm()"><i class="fas fa-filter iconfilter"></i>FILTER THE BLOG POSTS</a>
+    </div>
+
+
+
+    <!-- Popup filter form -->
+    <div id="filterFormPopup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closeFilterForm()">&times;</span>
+            <h2>Filter Options</h2>
+            @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { id = "filterForm", style = "display: flex; flex-direction: column; align-items: center;" }))
+            {
+                <div class="dropdown-container">
+                    @Html.DropDownList("category", new SelectList(ViewBag.Categories, "Value", "Text", ViewBag.Category as string), new { @class = "dropdown-item" })
+
+                    @Html.DropDownList("sortBy", new SelectList(new[]
+                        {
+                            new SelectListItem { Text = "Newest First", Value = "date_desc" },
+                            new SelectListItem { Text = "Oldest First", Value = "date_asc" },
+                        }, "Value", "Text", ViewBag.SortBy as string), new { @class = "dropdown-item" })
+                </div>
+
+                <label style="margin-bottom: 10px;">From Date:</label>
+                @Html.TextBox("fromDate", ViewBag.FromDate as string, new { @type = "date", style = "margin-bottom: 10px;" })
+
+                <label style="margin-bottom: 10px;">To Date:</label>
+                @Html.TextBox("toDate", ViewBag.ToDate as string, new { @type = "date", style = "margin-bottom: 10px;" })
+
+                <button type="button" onclick="submitFilterForm()" style="margin-bottom: 10px;">Filter</button>
+            }
+        </div>
+    </div>
+
+     @if (ViewBag.FromDate != null && ViewBag.ToDate != null)
+    {
+        <div style="text-align:center; margin: 20px 0;">
+            <strong style="color:forestgreen;">Shown @ViewBag.category Posts From: </strong> @((DateTime)ViewBag.FromDate) 
+            <strong style="color:forestgreen;"> To: </strong> @((DateTime)ViewBag.ToDate) 
+        </div>
+    }
+
+
+
+
+
+
+    <!--  masonry -->
+    <div id="bricks" class="bricks">
+
+        <div class="masonry">
+
+            <div class="bricks-wrapper" data-animate-block>
+
+                <div class="grid-sizer"></div>
+
+
+                @foreach (var post in Model)
+                {
+                    <article class="brick entry" data-animate-el>
+                        <div class="entry__thumb">
+                            <a href="@Url.Action("Post", "BlogPost", new { id = post.id })" class="thumb-link">
+                                <img src="data:image/png;base64,@post.main_image" alt="">
+                            </a>
+                        </div>
+
+                        <div class="entry__text">
+                            <div class="entry__header">
+                                <div class="entry__meta">
+                                    @foreach (var postCategory in post.PostCategories)
+                                    {
+                                        <span class="cat-links">
+                                            <a href="@Url.Action("Categories", "Home", new { category_id = postCategory.category.id })">@postCategory.category.name</a>
+                                        </span>
+                                    }
+
+                                    <span class="byline">
+                                        By:
+                                        <a href="#0">@post.user.username</a>
+                                    </span>
+                                </div>
+                                <h1 class="entry__title"><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">@post.title</a></h1>
+                            </div>
+
+
+
+                            <a class="entry__more-link" href="@Url.Action("Post", "BlogPost", new { id = post.id })">Read More</a>
+                        </div>
+                    </article>
+                }
+            </div> <!-- end bricks-wrapper -->
+
+        </div> <!-- end masonry-->
+        <!-- Pagination -->
+        <div class="pagination-container">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, category = ViewBag.Category, sortBy = ViewBag.SortBy }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+        </div>
+    </div> <!-- end bricks -->
+
+</section> <!-- end s-content -->
+
+@section scripts
+{
+    <script>
+        // Funksion per te haupur formen e filtrimit
+        function openFilterForm() {
+            var filterFormPopup = document.getElementById('filterFormPopup');
+            filterFormPopup.style.display = 'block';
+        }
+
+        // Funksion per te mbyllur formen e filtrimit
+        function closeFilterForm() {
+            var filterFormPopup = document.getElementById('filterFormPopup');
+            filterFormPopup.style.display = 'none';
+        }
+
+        // Funkson per te beer submit formen 
+        function submitFilterForm() {
+            document.getElementById('filterForm').submit();
+        }
+    </script>
+    }
+
+

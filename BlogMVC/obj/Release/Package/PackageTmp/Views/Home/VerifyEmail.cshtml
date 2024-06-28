@@ -1,0 +1,107 @@
+﻿@model BlogMVC.Models.ViewModels.UserViewModel
+
+@{
+    ViewBag.Title = "Verify Email";
+    Layout = null;
+}
+
+
+<!-- # site-content
+================================================== -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Radiance</title>
+
+    <script src="~/Scripts/js/main.js"></script>
+    <script src="~/Scripts/js/plugins.js"></script>
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+    <link href="~/Content/css/vendor.css" rel="stylesheet" />
+
+    <script>
+    document.documentElement.classList.remove('no-js');
+        document.documentElement.classList.add('js');</script>
+    <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" href="~/Content/images/avatars/logo1.jpg" type="image/jpg" sizes="16x16">
+
+
+</head>
+<body id="top">
+
+    <!-- page wrap
+    ================================================== -->
+    <div id="page" class="s-pagewrap">
+        <div id="content" class=" ">
+
+            <div class="row entry-wrap " style="padding:40px 40px">
+                <div class="column lg-12">
+
+                    <article class="entry">
+
+                        <header class="entry__header entry__header--narrow">
+
+                            <h1 class="">
+                                Verify Email
+                            </h1>
+
+                        </header>
+
+
+                        <div class="content-primary">
+
+                            <div class="entry__content">
+                                @using (Html.BeginForm())
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="form-horizontal">
+                                        <hr />
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-2">Verification Code</label>
+                                            <div class="col-md-10">
+                                                <input type="text" name="verificationCode" class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-offset-2 col-md-10">
+                                                <input type="submit" value="Verify" class="btn btn-default" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+
+                        </div> <!-- end content-primary -->
+
+                </div> <!-- end entry__content -->
+                </article> <!-- end entry -->
+
+            </div>
+        </div> <!-- end entry-wrap -->
+    </div> <!-- end content -->
+    </div> <!-- end page -->
+
+
+
+    
+    
+ 
+
+
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,112 @@
+﻿@model BlogMVC.Models.ViewModels.UserViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>Login and Registration</title>
+    <link href="~/Content/css/signup.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="~/Content/images/avatars/logo1.jpg" type="image/jpg" sizes="16x16">
+</head>
+<body>
+    <div class="container">
+        <input type="checkbox" id="flip" @(ViewBag.SignupNotification != null ? "checked" : "")>
+        <div class="cover">
+            <div class="front">
+                <img src="~/Content/images/thumbs/masonry/statue-1200.jpg" alt="">
+                <div class="text">
+                    <span class="text-1">Welcome to your<br> favourite blog</span>
+                    <span class="text-2">RADIANCE.</span>
+                </div>
+            </div>
+            <div class="back">
+                <div class="text">
+                    <span class="text-1">Join with our <br> Community</span>
+                    <span class="text-2">Let's get started</span>
+                </div>
+            </div>
+        </div>
+        <div class="forms">
+            <div class="form-content">
+                <div class="login-form">
+                    <h2 class="P-2">RADIANCE.</h2>
+                    <div class="title">Login</div>
+                    @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-user"></i>
+                                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your username", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your password", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="button input-box">
+                                <input type="submit" value="Submit">
+                            </div>
+                            <div class="text sign-up-text">Don't have an account? <label for="flip">Signup now</label></div>
+                        </div>
+                        <!-- Display login notifications if any -->
+                        if (ViewBag.LoginNotification != null)
+                        {
+                            <div class="notification" style="color: red; font-weight: bold;">
+                                @ViewBag.LoginNotification
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="signup-form">
+                    <div class="title">Signup</div>
+                    @using (Html.BeginForm("SignUp", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-user"></i>
+                                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your username", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-envelope"></i>
+                                @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your email", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter your password", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                @Html.EditorFor(model => model.confirm_password, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirm your password", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.confirm_password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="button input-box">
+                                <input type="submit" value="Submit">
+                            </div>
+                            <div class="text sign-up-text">Already have an account?<label for="flip">Login now</label></div>
+                        </div>
+                        <!-- Display signup notifications if any -->
+                        if (ViewBag.SignupNotification != null)
+                        {
+                            <div class="notification" style="color: red; font-weight: bold;">
+                                @ViewBag.SignupNotification
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

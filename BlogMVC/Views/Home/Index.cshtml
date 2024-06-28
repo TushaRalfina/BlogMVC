@@ -26,7 +26,7 @@
                         <div class="hero__entry-text-inner">
                             <div class="hero__entry-meta">
                                 <span class="cat-links">
-                                     RADIANCE
+                                    RADIANCE
                                 </span>
                             </div>
                             <h2 class="hero__entry-title">
@@ -90,7 +90,15 @@
         </div>
     </div>
 
+     @if (ViewBag.FromDate != null && ViewBag.ToDate != null)
+    {
+        <div style="text-align:center; margin: 20px 0;">
+            <strong style="color:forestgreen;">Shown @ViewBag.category Posts From: </strong> @((DateTime)ViewBag.FromDate) 
+            <strong style="color:forestgreen;"> To: </strong> @((DateTime)ViewBag.ToDate) 
+        </div>
+    }
 
+ 
 
     <!--  masonry -->
     <div id="bricks" class="bricks">
@@ -107,7 +115,7 @@
                     <article class="brick entry" data-animate-el>
                         <div class="entry__thumb">
                             <a href="@Url.Action("Post", "BlogPost", new { id = post.id })" class="thumb-link">
-                                <img src="@post.main_image" alt="">
+                                <img src="data:image/png;base64,@post.main_image" alt="">
                             </a>
                         </div>
 
@@ -117,7 +125,7 @@
                                     @foreach (var postCategory in post.PostCategories)
                                     {
                                         <span class="cat-links">
-                                            <a href="#">@postCategory.category.name</a>
+                                            <a href="@Url.Action("Categories", "Home", new { category_id = postCategory.category.id })">@postCategory.category.name</a>
                                         </span>
                                     }
 
@@ -161,10 +169,28 @@
             filterFormPopup.style.display = 'none';
         }
 
-        // Funkson per te beer submit formen 
+        // Funkson per te bere submit formen 
         function submitFilterForm() {
             document.getElementById('filterForm').submit();
         }
+
+
+        // Kontrolloj nese data e fillimit eshte me e vogel se data e mbarimit
+        var fromDate = document.getElementById('fromDate');
+        var toDate = document.getElementById('toDate');
+
+
+         toDate.addEventListener('change', function () {
+             if (toDate.value < fromDate.value)
+             {
+
+                 alert('To Date should be greater than From Date');
+                    toDate.value = '';
+             }
+        });
+        
+
+
     </script>
     }
 

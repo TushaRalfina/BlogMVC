@@ -191,7 +191,12 @@ namespace BlogMVC.Repositories
             return db.posts.Where(p => p.user_id == id).ToList();   
         }
 
-       
+        //ndryshim i shtuar
+
+        public user GetUserByEmail(string email)
+        {
+            return db.users.FirstOrDefault(u => u.email == email);
+         }
     }
 }
 

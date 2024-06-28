@@ -3,7 +3,7 @@
 * Data: 25/06/2024  
 * Programuesi: Ralfina Tusha
 * Pershkrimi: Interface qe permban metodat qe mund te perdoren nga UserRepository
-* Metodat: AddUser, GetUserByUsername, GetUserById, UpdateUser, HashPassword, GetPostsByUserId
+* Metodat: AddUser, GetUserByUsername, GetUserById, UpdateUser, HashPassword, GetPostsByUserId, GetUserByEmail
 (c) Copyright by Soft & Solution 
 **/
 
@@ -37,6 +37,8 @@ namespace BlogMVC.Repositories
 
 
         IEnumerable<post> GetPostsByUserId(int id);
+
+         user GetUserByEmail(string email);
 
     }
 }

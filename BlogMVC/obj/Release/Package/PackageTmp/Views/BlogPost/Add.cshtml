@@ -1,0 +1,211 @@
+﻿@model BlogMVC.Models.ViewModels.AddBlogPostRequest
+
+@{
+    ViewBag.Title = "Add Post";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- # site-content
+================================================== -->
+<div id="body" class="s-content s-content--page">
+    <div class="row entry-wrap">
+        <div class="column lg-12">
+            <article class="entry">
+                <header class="entry__header entry__header--narrow">
+                    <h1 class="entry__title">
+                        Add a Blog Post.
+                    </h1>
+                </header>
+                <h4>Be your own writer</h4>
+
+                @using (Html.BeginForm("Add", "BlogPost", FormMethod.Post, new { id = "addForm", @class = "entry__form", enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <fieldset class="row">
+                        <div class="column lg-6 tab-12 form-field">
+                            <input name="username" id="username" class="u-fullwidth" placeholder="Your Username" value="@Session["username"]" type="text" readonly>
+                        </div>
+
+                        <div class="column lg-6 tab-12 form-field">
+                            <input name="email" id="email" class="u-fullwidth" placeholder="Your Email" value="@Session["email"]" type="text" readonly>
+                        </div>
+
+                        <div class="column lg-12 form-field">
+                            @Html.LabelFor(model => model.title, "Title")
+                            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "u-fullwidth", placeholder = "Title" } })
+                            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="column lg-12 message form-field mt-2 mb-2">
+                            @Html.LabelFor(model => model.content, "Content")
+                            @Html.TextAreaFor(model => model.content, new { @class = "u-fullwidth", placeholder = "Content" })
+                            @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
+                        </div>
+                        <!-- Body Images -->
+                        <div class="column lg-12 form-field">
+                            <label>Body Images</label>
+                            <input type="file" name="body_images" id="body_images" class="u-fullwidth" accept=".png, .jpg, .jpeg" multiple />
+                        </div>
+
+                        <div class="column lg-12 form-field">
+                            <label>Additional Files</label>
+                            <input type="file" name="files" id="files" class="u-fullwidth" accept=".pdf, .docx, .xlsx" multiple />
+                        </div>
+                        <style>
+                            .checkbox-inline {
+                                display: inline-block;
+                                margin-right: 10px;
+                            }
+
+                                .checkbox-inline label {
+                                    display: inline-block;
+                                    vertical-align: middle;
+                                    margin-left: 5px;
+                                }
+                        </style>
+
+                        <div class="form-group">
+                            <h3>Categories</h3>
+                            @foreach (var category in Model.categoriess)
+                            {
+                                if (category.parent_id == null)
+                                {
+                                    <div class="category-item">
+                                        <input type="checkbox" id="category_@category.id" name="SelectedCategoryIds" value="@category.id" class="category-checkbox form-check" />
+                                        <label for="category_@category.id" class="form-check-label">@category.name</label>
+
+                                        <div class="subcategory-list" style="display:none;">
+                                            @foreach (var subcategory in Model.categoriess.Where(sub => sub.parent_id == category.id))
+                                            {
+                                                <div class="checkbox-inline subcategory-item" >
+                                                    <input type="checkbox" id="category_@subcategory.id" name="SelectedCategoryIds" value="@subcategory.id" class="subcategory-checkbox form-check" data-category-id="@category.id" />
+                                                    <label for="category_@subcategory.id" class=" ">@subcategory.name</label>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+
+                        <style>
+                            .category-item {
+                                display: flex;
+                                align-items: center;
+                            }
+
+                                .category-item h4 {
+                                    margin-right: 10px;
+                                    font-size: 1em;
+                                }
+
+                            .checkbox-inline {
+                                margin-right: 10px;
+                                vertical-align: middle;
+                            }
+                        </style>
+
+
+                        <div class="column lg-12 form-field">
+                            <label for="main_imagee">Main Picture</label>
+                            <input type="file" name="main_imagee" id="main_imagee" class="u-fullwidth" />
+                        </div>
+                        <div class="column lg-12">
+                            <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Post" type="submit">
+                        </div>
+                    </fieldset>
+                }
+            </article> <!-- end entry -->
+        </div>
+    </div> <!-- end entry-wrap -->
+</div> <!-- end site-content -->
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        new FroalaEditor('#content', {
+            toolbarButtons: {
+                moreText: {
+                    buttons: [
+                        'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting'
+                    ]
+                },
+                moreParagraph: {
+                    buttons: [
+                        'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'
+                    ]
+                },
+                moreRich: {
+                    buttons: [
+                        'insertLink', 'emoticons', 'specialCharacters'
+                    ]
+                },
+                moreMisc: {
+                    buttons: [
+                        'undo', 'redo', 'fullscreen'
+                    ],
+                    align: 'right',
+                    buttonsVisible: 2
+                }
+            }
+        });
+
+
+
+        /**
+         * Data: 26-06-2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: DOMContentLoaded listener
+          * Pershkrimi: Ky event listener inicializon funksionalitetin per te menaxhuar ndryshimet ne checkbox-et e nenkategorive.
+         * Para kushti: Ekzistimi i checkbox-eve te nenkategorive ne dokument.
+         * Post kushti: Kur nje checkbox ndryshon gjendjen, te gjitha checkbox-et tjera me te njejtin category ID do te zevendesohen ne gjendjen unchecked.
+         */
+        document.addEventListener("DOMContentLoaded", function () {
+          
+            const subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
+
+            subcategoryCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                         const categoryId = this.getAttribute('data-category-id');
+                         subcategoryCheckboxes.forEach(subCheckbox => {
+                            if (subCheckbox !== this && subCheckbox.getAttribute('data-category-id') === categoryId) {
+                                subCheckbox.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+        /**
+         * Data: 26-06-2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: $(document).ready
+         * Pershkrimi: Ky event listener inicializon funksionalitetinper te afishuar subkategorite e nje kategorie kur kjo e fundit behet check.
+         * Post kushti: Kur nje checkbox ndryshon gjendjen, lista e nenkategorive te lidhura me ate kategori do te shfaqet ose te fshehet  
+         * Parametrat: Nuk ka parametra.
+         * Return: Nuk kthen ndonje vlere.
+         */
+        $(document).ready(function () {
+             $('.category-checkbox').change(function () {
+                var subcategoryList = $(this).siblings('.subcategory-list');
+                if ($(this).is(':checked')) {
+                    subcategoryList.slideDown();
+                } else {
+                    subcategoryList.slideUp();
+                }
+            });
+        });
+
+
+
+
+
+
+
+    </script>
+}

@@ -1,18 +1,22 @@
-﻿ /**
+﻿/**
 * Versioni:  V 1.0.0
 * Data: 25/06/2024
 * Programuesi: Ralfina Tusha
 * Klasa: HomeController
 * Arsyeja: Kjo klase menaxhon funksionalitetet e login & regjistrim te perdoruesve dhe faqet kryesore te aplikacionit.
-* * Pershkrimi: Controlleri per  login & regjistrim te perdoruesve, shfaqjen e faqes kryesore,
+* Pershkrimi: Controlleri per  login & regjistrim te perdoruesve, shfaqjen e faqes kryesore,
 * shfaqjen e profilit te perdoruesit, editimin e profilit 
 * shkarkimin e fileve,kategorite me postimet perkatese, shfaqjen e faqes about dhe logout
- * Trashegon nga: Controller
+* Trashegon nga: Controller
 * Interfaces: Nuk ka
 * Constants: Nuk ka
-* Metodat:  SignUp, VerifyEmail, VerifyEmailWithAPI, SendVerificationEmail, GenerateVerificationCode, Login, Index, Profile, DownloadFile, EditProfile, About, Categories, CategoriesPartial
+* Metodat:  SignUp, VerifyEmail, VerifyEmailWithAPI, SendVerificationEmail, GenerateVerificationCode, Login, Index, Profile, DownloadFile, EditProfile, About, Categories, CategoriesPartial, Logout
 */
 
+/**
+*Historiku i ndryshimeve
+*Versioni:V.1.0.0  Data:26/06/2024  Programuesi:Ralfina Tusha Arsyeja:shtimi i metodes ValidateUser duke kaluar cdo validim qe behej ne controller ne nje metode me vete  Metoda:ValidateUser
+**/
 
 using System;
 using System.Collections.Generic;
@@ -32,7 +36,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json.Linq;
-
+using Microsoft.Ajax.Utilities;
 
 
 namespace BlogMVC.Controllers
@@ -45,7 +49,7 @@ namespace BlogMVC.Controllers
         private readonly IFilesRepository filesRepository;
         private readonly IAdminRepository adminRepository;
         private readonly BlogEntities db = new BlogEntities();
-
+         
 
         public HomeController()
         {
@@ -56,6 +60,8 @@ namespace BlogMVC.Controllers
             adminRepository = new AdminRepository();
         }
 
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -63,11 +69,12 @@ namespace BlogMVC.Controllers
          * Pershkrimi: Kthen nje View qe permban formen per regjistrimin e nje perdoruesi te ri.
          * Return: ActionResult - VIEW me formen e regjistrimit.
          **/
-
         public ActionResult SignUp()
         {
             return View();
         }
+
+
 
         /**
          * Data: 26/06/2024
@@ -80,41 +87,73 @@ namespace BlogMVC.Controllers
          * Parametrat: userViewModel - Modeli i perdoruesit per regjistrim.
          * Return: ActionResult - Ridrejtohet ne faqen e verifikimit te emailit ose rikthen pamjen e formes me gabimet perkatese.
          **/
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SignUp(UserViewModel userViewModel)
         {
-             
-                if (!ModelState.IsValid)
-                {
-                    return View(userViewModel);
-                }
+            if (!ModelState.IsValid)
+            {
+                return View(userViewModel);
+            }
 
-                 if (userRepository.GetUserByUsername(userViewModel.username) != null)
-                {
-                    ViewBag.SignupNotification = "This username is already taken";
-                    return View(userViewModel);
-                }
+            var validationResult = await ValidateUser(userViewModel);
+            if (!string.IsNullOrEmpty(validationResult))
+            {
+                ViewBag.SignupNotification = validationResult;
+                return View(userViewModel);
+            }
 
-                 bool isEmailValid = await VerifyEmailWithAPI(userViewModel.email);
+            userViewModel.VerificationCode = GenerateVerificationCode();
 
-                if (!isEmailValid)
-                {
-                    ViewBag.SignupNotification = "Invalid email address";
-                    return View(userViewModel);
-                }
+            SendVerificationEmail(userViewModel.email,userViewModel.VerificationCode);
 
-                 userViewModel.VerificationCode = GenerateVerificationCode();
+            Session["TempUser"] = userViewModel;
 
-                 SendVerificationEmail(userViewModel.email, userViewModel.VerificationCode);
-
-                 Session["TempUser"] = userViewModel;
-
-                return RedirectToAction("VerifyEmail");
-            
-            
+            return RedirectToAction("VerifyEmail");
         }
+
+
+
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: ValidateUser
+        * Arsyeja: Validimi i te dhenave te perdoruesit.
+        * Pershkrimi: Ka disa if conditions qe bejne kontrolle per validimin e te dhenave te perdoruesit.
+        * Parametrat: userViewModel - Modeli i perdoruesit per regjistrim.
+         **/
+        private async Task<string> ValidateUser(UserViewModel userViewModel)
+        {
+            if (userRepository.GetUserByUsername(userViewModel.username) != null)
+            {
+                return "This username is already taken";
+            }
+
+            if (userRepository.GetUserByEmail(userViewModel.email) != null)
+            {
+                return "This email is already taken";
+            }
+
+            if (userViewModel.username.Length < 3 || userViewModel.username.Length > 16)
+            {
+                return "Username must be between 3 and 16 characters";
+            }
+
+            if (userViewModel.password.Length < 6)
+            {
+                return "Password must be at least 6 characters";
+            }
+
+            bool isemailvalid = await VerifyEmailWithAPI(userViewModel.email);
+            if (!isemailvalid)
+            {
+                return "invalid email address";
+            }
+
+            return null;
+        }
+
+
 
         /**
          * Data: 26/06/2024
@@ -127,7 +166,6 @@ namespace BlogMVC.Controllers
          * Parametrat: email - Adresa e emailit per t'u verifikuar.
          * Return: Task<bool> - Rezultati i vlefshmerise se emailit.
          **/
-
         private async Task<bool> VerifyEmailWithAPI(string email)
         {
             try
@@ -149,6 +187,7 @@ namespace BlogMVC.Controllers
                     {
                         return true; 
                     }
+                   
                     else
                     {
                         return false;
@@ -171,11 +210,11 @@ namespace BlogMVC.Controllers
              * Pershkrimi: Kthen nje View qe permban formen per verifikimin e emailit.
              * Return: ActionResult - VIEW me formen e verifikimit te emailit.
              **/
-
         public ActionResult VerifyEmail()
         {
             return View();
         }
+
 
         /**
          * Data: 26/06/2024
@@ -188,8 +227,6 @@ namespace BlogMVC.Controllers
          * Parametrat: verificationCode - Kodi i verifikimit i vendosur nga perdoruesi.
          * Return: ActionResult - Ridrejtohet ne faqen kryesore ose rikthen pamjen e formes me mesazhin "Invalid verification code" .
          **/
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult VerifyEmail(string verificationCode)
@@ -205,6 +242,8 @@ namespace BlogMVC.Controllers
                 Session["id"] = user.id.ToString();
                 Session["username"] = user.username;
                 Session["role"] = user.role;
+                Session["password"] = user.password;
+                Session["email"]= user.email;
 
                 Session.Remove("TempUser");
 
@@ -214,6 +253,8 @@ namespace BlogMVC.Controllers
             ViewBag.Notification = "Invalid verification code";
             return View();
         }
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -224,7 +265,6 @@ namespace BlogMVC.Controllers
          * Parametrat: email - Adresa e emailit te marresit; verificationCode - Kodi i verifikimit.
          * Return: void
          **/
-
         private void SendVerificationEmail(string email, string verificationCode)
         {
             try
@@ -253,6 +293,8 @@ namespace BlogMVC.Controllers
             }
 
         }
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -260,13 +302,13 @@ namespace BlogMVC.Controllers
          * Pershkrimi: Gjeneron nje kod verifikimi te rastesishem me 6 shifra.
          * Return: string - Kodi i verifikimit.
          **/
-
-
         private string GenerateVerificationCode()
         {
             var random = new Random();
             return random.Next(100000, 999999).ToString();
         }
+
+
 
         /**
          * Data: 26/06/2024
@@ -279,12 +321,13 @@ namespace BlogMVC.Controllers
          * Return: ActionResult - Ridrejtim ne faqen kryesore.
          **/
 
-
         public ActionResult Logout()
         {
             Session.Clear();
             return RedirectToAction("Index", "Home");
         }
+
+
 
         /**
          * Data: 26/06/2024
@@ -298,6 +341,8 @@ namespace BlogMVC.Controllers
             return View("SignUp");
         }
 
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -309,7 +354,6 @@ namespace BlogMVC.Controllers
          * Parametrat: user - Modeli i perdoruesit qe permban kredencialet.
          * Return: ActionResult - Ridrejtim ne faqen kryesore .
          **/
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Login(user user)
@@ -331,6 +375,9 @@ namespace BlogMVC.Controllers
                 return View("SignUp");
             }
         }
+
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -356,12 +403,14 @@ namespace BlogMVC.Controllers
                 posts = blogPostRepository.GetBlogPostsByCategory(category);
             }
 
-             if (fromDate != null && toDate != null)
+            if (fromDate != null && toDate != null)
             {
-                posts = blogPostRepository.GetBlogPostsByDate(fromDate, toDate);
+                DateTime endOfToDate = toDate.Value.Date.AddDays(1).AddTicks(-1);
+                posts = posts.Where(p => p.created_at >= fromDate && p.created_at <= endOfToDate);
             }
 
-             switch (sortBy)
+
+            switch (sortBy)
             {
                 case "date_asc":
                     posts = posts.OrderBy(p => p.created_at);
@@ -396,6 +445,7 @@ namespace BlogMVC.Controllers
 
             return View(posts.ToPagedList(pageNumber, pageSize));
         }
+
 
 
         /**
@@ -444,6 +494,9 @@ namespace BlogMVC.Controllers
                 return View(userProfileViewModel);
             }
         }
+
+
+
         /**
          * Data: 26/06/2024
          * Programuesi:Ralfina Tusha
@@ -468,6 +521,7 @@ namespace BlogMVC.Controllers
         }
 
 
+
         /**
             * Data: 26/06/2024
             * Programuesi: Ralfina Tusha
@@ -478,7 +532,6 @@ namespace BlogMVC.Controllers
             * Parametrat: id - ID e perdoruesit.
             * Return: ActionResult - VIEW me formen per editimin e profilit te perdoruesit.
             **/
-
         public ActionResult EditProfile(int id)
         {
             if (Session["id"] == null)
@@ -500,6 +553,9 @@ namespace BlogMVC.Controllers
                 return View(usermodel);
             }
         }
+
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -510,7 +566,6 @@ namespace BlogMVC.Controllers
          * Parametrat: editProfileRequest - Modeli qe permban te dhenat qe mund te editohen.
          * Return: ActionResult - Ridrejtim ne profilin e perdoruesit ose rikthen pamjen e formes me nje mesazh gabimi.
          **/
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditProfile(EditProfileRequest editProfileRequest)
@@ -549,6 +604,8 @@ namespace BlogMVC.Controllers
             }
         }
 
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -566,6 +623,8 @@ namespace BlogMVC.Controllers
             return View();
         }
 
+
+
         /**
         * Data: 26/06/2024
         * Programuesi: Ralfina Tusha
@@ -577,7 +636,6 @@ namespace BlogMVC.Controllers
         * Parametrat: category_id - ID e kategorise per te shfaqur postimet.
         * Return: ActionResult - VIEW me listen e postimeve sipas kategorise.
         **/
-
         public ActionResult Categories(int category_id)
         {
             if (Session["id"] == null)
@@ -603,6 +661,8 @@ namespace BlogMVC.Controllers
             return View(viewModel);
         }
 
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -610,7 +670,6 @@ namespace BlogMVC.Controllers
          * Arsyeja: Kthen kategorite si PartialView per ti perfshire ne layout.
          * Return: ActionResult - PartialView me listen e kategorive.
          **/
-
         [ChildActionOnly]
         public ActionResult CategoriesPartial()
         {

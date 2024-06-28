@@ -30,7 +30,6 @@ namespace BlogMVC.Models.ViewModels
         public int id { get; set; }
 
         [Required(ErrorMessage = "Username is required")]
-        [StringLength(16, MinimumLength = 4, ErrorMessage = "Username must be at least 4 characters")]
         public string username { get; set; }
 
         [Required(ErrorMessage = "Password is required")]

@@ -11,6 +11,7 @@
 * Metodat: Add, Post, AddComment, AddReply, UserPosts, EditComment
 */
 
+
 using BlogMVC.Models.ViewModels;
 using BlogMVC.Models;
 using BlogMVC.Repositories;
@@ -38,6 +39,8 @@ namespace BlogMVC.Controllers
             filesRepository = new FilesRepository();
         }
 
+
+
         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
@@ -49,8 +52,6 @@ namespace BlogMVC.Controllers
          * Parametrat: Nuk ka.
          * Return: ActionResult - VIEW me modelin e formes per shtimin e postimit te ri.
          **/
-
-
         [HttpGet]
         public ActionResult Add()
         {
@@ -66,6 +67,8 @@ namespace BlogMVC.Controllers
             };
             return View(model);
         }
+
+
 
         /**
          * Data: 26/06/2024
@@ -95,18 +98,12 @@ namespace BlogMVC.Controllers
                     {
                         try
                         {
-                            string fileName = Path.GetFileName(model.main_imagee.FileName);
-                            string uploadsDir = Server.MapPath("~/Content/Uploads");
-                            string filePath = Path.Combine(uploadsDir, fileName);
-
-                            if (!Directory.Exists(uploadsDir))
+                            using (var memoryStream = new MemoryStream())
                             {
-                                Directory.CreateDirectory(uploadsDir);
+                                model.main_imagee.InputStream.CopyTo(memoryStream);
+                                var fileBytes = memoryStream.ToArray();
+                                model.main_image = Convert.ToBase64String(fileBytes);
                             }
-
-                            model.main_imagee.SaveAs(filePath);
-
-                            model.main_image = "/Content/Uploads/" + fileName;
                         }
                         catch (Exception ex)
                         {
@@ -115,7 +112,7 @@ namespace BlogMVC.Controllers
                     }
                     else
                     {
-                        model.main_image = "/Content/images/thumbs/masonry/statue-1200.jpg";
+                        model.main_image = Convert.ToBase64String(System.IO.File.ReadAllBytes(Server.MapPath("~/Content/images/thumbs/masonry/statue-1200.jpg")));
                     }
 
                     var post = new post
@@ -124,7 +121,8 @@ namespace BlogMVC.Controllers
                         content = model.content,
                         created_at = DateTime.Now,
                         user_id = user_id,
-                        main_image = model.main_image
+                        main_image = model.main_image,
+                        approved = user.role == "admin" ? "yes" : "no"
                     };
 
                     blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
@@ -165,27 +163,22 @@ namespace BlogMVC.Controllers
                         {
                             try
                             {
-                                string fileName = Path.GetFileName(bodyImage.FileName);
-                                string uploadsDir = Server.MapPath("~/Content/Uploads");
-                                string filePath = Path.Combine(uploadsDir, fileName);
-
-                                if (!Directory.Exists(uploadsDir))
+                                using (var memoryStream = new MemoryStream())
                                 {
-                                    Directory.CreateDirectory(uploadsDir);
+                                    bodyImage.InputStream.CopyTo(memoryStream);
+                                    var fileBytes = memoryStream.ToArray();
+
+                                    var documentFile = new file
+                                    {
+                                        post_id = post.id,
+                                        file_type = Path.GetExtension(bodyImage.FileName),
+                                        file_name = Path.GetFileName(bodyImage.FileName),
+                                        file_content = "",
+                                        body_images = Convert.ToBase64String(fileBytes),
+                                    };
+
+                                    filesRepository.AddFiles(documentFile);
                                 }
-
-                                bodyImage.SaveAs(filePath);
-
-                                var documentFile = new file
-                                {
-                                    post_id = post.id,
-                                    file_type = Path.GetExtension(bodyImage.FileName),
-                                    file_name = fileName,
-                                    file_content = "",
-                                    body_images = "/Content/Uploads/" + fileName
-                                };
-
-                                filesRepository.AddFiles(documentFile);
                             }
                             catch (Exception ex)
                             {
@@ -221,21 +214,24 @@ namespace BlogMVC.Controllers
          * Parametrat: id - id e postit.
          * Return: ActionResult - VIEW me modelin e postimit dhe komenteve te aprovuara.
          **/
-
-
-
         public ActionResult Post(int id)
         {
             var post = blogPostRepository.GetBlogPostById(id);
             if (post != null)
             {
                 var approvedComments = blogPostRepository.GetCommentsByPostId(id).ToList();
+                var files = filesRepository.GetFilesByPostId(id).ToList();
 
                 var viewModel = new PostViewModel
                 {
                     Post = post,
-                    ApprovedComments = approvedComments
+                    ApprovedComments = approvedComments,
+                    Files = files
                 };
+
+                var allowedFileTypes = new List<string> { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
+                var imageExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
+             
 
                 return View(viewModel);
             }
@@ -255,9 +251,6 @@ namespace BlogMVC.Controllers
          * Parametrat: post_id - id e postit; comment - teksti i komentit.
          * Return: JsonResult - Pergjigje JSON me sukses dhe komentin e shtuar.
          **/
-
-
-
         [HttpPost]
         public JsonResult AddComment(int post_id, string comment)
         {
@@ -271,7 +264,7 @@ namespace BlogMVC.Controllers
                     user_id = user_id,
                     comment1 = comment,
                     created_at = DateTime.Now,
-                    approved = "no"
+                    approved = user.role == "admin" ? "yes" : "no"
                 };
 
                 blogPostRepository.AddComment(newComment);
@@ -304,7 +297,6 @@ namespace BlogMVC.Controllers
          * Parametrat: comment_id - id e komentit per t'u pergjigjur; reply_text - Teksti i pergjigjes.
          * Return: JsonResult - Rezultati JSON me detajet e pergjigjes se re ose nje mesazh fail.
          **/
-
         [HttpPost]
         public JsonResult AddReply(int comment_id, string reply_text)
         {
@@ -353,7 +345,6 @@ namespace BlogMVC.Controllers
          * Parametrat: id - ID e perdoruesit per te marre postimet.
          * Return: ActionResult - VIEW me listen e postimeve te krijuara nga perdoruesi specifik.
          **/
-
         public ActionResult UserPosts(int id)
         {
             if (Session["id"] == null)
@@ -376,8 +367,6 @@ namespace BlogMVC.Controllers
          * Parametrat: comment_id - ID e komentit per te redaktuar; comment_text - Teksti i ri i komentit.
          * Return: JsonResult - Rezultati JSON me statusin e suksesit ose nje mesazh fail.
          **/
-
-
         [HttpPost]
         public JsonResult EditComment(int comment_id, string comment_text)
         {
@@ -390,10 +379,6 @@ namespace BlogMVC.Controllers
             blogPostRepository.UpdateComment(comment);
             return Json(new { success = true });
         }
-
-
-
-
     }
 }
 
@@ -426,40 +411,6 @@ namespace BlogMVC.Controllers
 
 
 
-
-        // Add Comment with AJAX
-        /*[HttpPost]
-        public ActionResult AddComment(int post_id, string comment1)
-        {
-            if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
-            {
-                var user = userRepository.GetUserById(user_id);
-                if (user == null)
-                {
-                    return Json(new { success = false, message = "User not found." });
-                }
-
-                var newComment = new comment
-                {
-                    post_id = post_id,
-                    user_id = user_id,
-                    comment1 = comment1,
-                    created_at = DateTime.Now,
-                    approved = "no"
-                };
-
-                blogPostRepository.AddComment(newComment);
-
-                // Assuming GetCommentsByPostId returns the updated list of comments
-                var comments = blogPostRepository.GetCommentsByPostId(post_id);
-
-                // Return JSON response with success flag and updated comments
-                return Json(new { success = true, comments = comments });
-            }
-            else
-            {
-                return Json(new { success = false, message = "User not logged in." });
-            }
-        }*/
+ 
 
     

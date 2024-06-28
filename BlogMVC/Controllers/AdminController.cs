@@ -10,9 +10,6 @@
 * Constants: Nuk ka
 * Metodat: ManagePosts,ApprovePost, SendApprovalEmail, DeletePost, ManageComments, ApproveComment, DeleteComment, FshiComment, FshiReply, AddCategory, ShowCategories, AddSubCategory
 **/
-
- 
-
  
 using BlogMVC.Repositories;
 using System;

@@ -1,0 +1,190 @@
+﻿@model IEnumerable<BlogMVC.Models.category>
+@{
+    ViewBag.Title = "Categories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- # site-content
+================================================== -->
+<div id="content" class="s-content s-content--page">
+
+    <div class="row entry-wrap">
+        <div class="column lg-12">
+
+            <article class="entry">
+
+                <header class="entry__header entry__header--narrow">
+
+                    <h1 class="">
+                        Click on the category to add subcategories.
+                    </h1>
+
+                </header>
+
+
+                <div class="content-primary">
+
+                    <div class="entry__content">
+                        <style>
+                            /* Pop-up form styles */
+                            .popup {
+                                display: none;
+                                position: fixed;
+                                z-index: 9;
+                                left: 0;
+                                top: 0;
+                                width: 100%;
+                                height: 100%;
+                                overflow: auto;
+                                background-color: rgba(0, 0, 0, 0.5);
+                            }
+
+                            .popup-content {
+                                background-color: #fff;
+                                margin: 15% auto;
+                                padding: 20px;
+                                border: 1px solid #888;
+                                width: 80%;
+                                max-width: 500px;
+                                border-radius: 5px;
+                    *          *                  }
+
+                            .close {
+                                color: #aaa;
+                                float: right;
+                                font-size: 28px;
+                                font-weight: bold;
+                            }
+
+                                .close:hover,
+                                .close:focus {
+                                    color: #000;
+                                    text-decoration: none;
+                                    cursor: pointer;
+                                }
+                        </style>
+
+                        <ul>
+                            @foreach (var category in Model)
+                            {
+                                if (category.parent_id == null || category.parent_id == 0)
+                                {
+                                    <li>
+                                         <a href="#" onclick="openReplyForm(@category.id); return false;"><strong>CATEGORY: @category.name</strong></a>
+                                        @foreach(var category2 in Model)
+                                         {
+
+                                          if (category2.parent_id == category.id)
+                                            {
+                                                <ul style="list-style:none">
+                                                    <li>
+                                                        <a href="#"><span style="color:green">SUBCATEGORY: @category2.name </span> </a>
+                                                    </li>
+                                                </ul>
+                                            }
+                                          } 
+
+                                    </li> 
+                                }
+                                
+                                
+                            }
+                        </ul>
+
+                        <!-- Popup edit form -->
+                        <div id="subFormPopup" class="popup">
+                            <div class="popup-content">
+                                <span class="close" onclick="closeEditForm()">&times;</span>
+                                <h2>ADD SUBCATEGORY</h2>
+                                <form id="subForm">
+                                    <input type="hidden" name="category_id" id="category_id" value="">
+                                    <textarea name="name" id="name" rows="4" cols="50" placeholder="Enter your subcategory..."></textarea><br>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+                </div> <!-- end content-primary -->
+
+        </div> <!-- end entry__content -->
+        </article> <!-- end entry -->
+
+    </div>
+</div> <!-- end entry-wrap -->
+</div> <!-- end content -->
+    </div> <!-- end page -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+        /**
+        * Data: 26-06-2024
+        * Programuesi:Ralfina Tusha
+        * Metoda: openReplyForm
+        * Arsyeja: Per te hapur formen e subkategorive
+         * Parametrat:
+        *   - category_id: ID-ja e kategorise parent.
+        * Return: Nuk kthen ndonje vlere.
+        */
+        function openReplyForm(category_id) {
+            document.getElementById("category_id").value = category_id;
+            document.getElementById("subFormPopup").style.display = "block";
+        }
+
+        /**
+         * Data: 26-06-2024
+         * Programuesi: Rafina Tusha
+         * Metoda: closeEditForm
+         * Arsyeja: Per te mbyllur formen  
+         * Pershkrimi: Kjo metode e fsheh formen e subkategorive.
+         */
+        function closeEditForm() {
+            document.getElementById("subFormPopup").style.display = "none";
+        }
+
+
+
+         /**
+         * Data: 26-06-2024
+         * Programuesi: Ralfina Tusha
+         * Metoda: $(document).ready
+         * Pershkrimi: Kjo metode inicializon ngjarjen e submit-it per formen subForm  dhe ben kerkesen AJAX per te shtuar nje nenkategori te re.
+         * Para kushti: JQuery duhet te jete e perfshire ne projekt dhe elementi me ID "subForm" duhet te ekzistoje ne dokument.
+         * Post kushti: Nese kerkesa AJAX eshte e suksesshme, nenkategoria do te shtohet dhe faqja do te rifreskohet. Ne rast te deshtimit, do te shfaqet nje mesazh gabimi.
+         *data: category_id: ID-ja e kategorise parent.
+         *data: name: Emri i nenkategorise.  
+         */
+        $(document).ready(function() {
+            $('#subForm').on('submit', function(event) {
+                event.preventDefault();
+                var category_id = $('#category_id').val();
+                var name = $('#name').val();
+
+                $.ajax({
+                    url: '@Url.Action("AddSubCategory", "Admin")',
+                    type: 'POST',
+                    data: {
+                        category_id: category_id,
+                        name: name
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Subcategory  added successfully!');
+                            closeEditForm();
+                            location.reload();   
+                        } else {
+                            alert('Error adding subcategory.');
+                        }
+                    },
+                    error: function() {
+                        alert('Error adding subcategory.');
+                    }
+                });
+            });
+        });
+</script>

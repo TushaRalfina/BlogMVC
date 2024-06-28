@@ -58,31 +58,40 @@
                         <h3 class="s-header__nav-heading">Navigate to</h3>
 
                         <ul class="s-header__nav">
-                            <li><a href="@Url.Action("Index", "Home")">Home</a></li>
-                            <li class="has-children">
-                                <a href="#0" title="" class="">Categories</a>
-                                <ul id="subMenuCategories" class="sub-menu">
-                                    @Html.Action("CategoriesPartial", "Home")
-                                </ul>
-                            </li>
+
 
 
                             @if (Session["username"] != null)
                             {
                                 if (Session["role"] != null && Session["role"].ToString() == "admin")
                                 {
-                                    <li><a href="@Url.Action("ManagePosts", "Admin")">ManagePosts</a></li>
-                                    <li><a href="@Url.Action("ManageComments", "Admin")">ManageComments</a></li>
+                                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                                    <li class="has-children">
+                                        <a href="#0" title="" class="">Categories</a>
+                                        <ul id="subMenuCategories" class="sub-menu">
+                                            @Html.Action("CategoriesPartial", "Home")
+                                        </ul>
+                                    </li>
+                                    <li><a href="@Url.Action("Add", "BlogPost")">Add</a></li>
+                                    <li><a href="@Url.Action("ManagePosts", "Admin")">Posts</a></li>
+                                    <li><a href="@Url.Action("ManageComments", "Admin")">Comments</a></li>
                                     <li><a href="@Url.Action("AddCategory", "Admin")">AddCategory</a></li>
                                     <li><a href="@Url.Action("Logout", "Home")">Logout</a></li>
 
                                 }
                                 else
                                 {
+                                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                                    <li class="has-children">
+                                        <a href="#0" title="" class="">Categories</a>
+                                        <ul id="subMenuCategories" class="sub-menu">
+                                            @Html.Action("CategoriesPartial", "Home")
+                                        </ul>
+                                    </li>
                                     <li><a href="@Url.Action("About", "Home")">About</a></li>
-                                    <li><a href="@Url.Action("Add", "BlogPost")">Add BlogPost</a></li>
-                                    <li><a href="@Url.Action("Logout", "Home")">Logout</a></li>
+                                    <li><a href="@Url.Action("Add", "BlogPost")">AddPost</a></li>
                                     <li><a href="@Url.Action("Profile", "Home")">Profile</a></li>
+                                    <li><a href="@Url.Action("Logout", "Home")">Logout</a></li>
                                 }
 
                             }
