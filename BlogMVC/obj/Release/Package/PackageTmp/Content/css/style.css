@@ -699,11 +699,21 @@ p {
 a {
     text-decoration: none;
 }
+.featured-image{
+    width: 50%;
+    height: auto;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
+
+    align-content: center;
+
+}
 
 svg,
 img,
 video {
-    max-width: 100%;
+    max-width: 50%;
     height: auto;
 }
 

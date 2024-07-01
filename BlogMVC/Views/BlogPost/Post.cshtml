@@ -65,13 +65,11 @@
                         </div>
                     </div>
                 </header>
-                <div class="entry__media">
-                    <figure class="featured-image">
-                        <img src="data:image/png;base64,@Model.Post.main_image"
-                             style="vertical-align: bottom; margin-bottom: 0; position: relative; width: 100%;"
+                <div class="entry__media" style=" display: flex; justify-content: center;">
+                         <img class="featured-image" src="data:image/png;base64,@Model.Post.main_image"
+                             style=" vertical-align: bottom; margin-bottom: 0; position: relative; width: 75%; height: auto; object-fit: cover;"
                              sizes="(max-width: 2400px) 100vw, 2400px" alt="Main Image">
-                    </figure>
-                </div>
+                 </div>
 
                 <!-- end content-primary -->
                 <div class="content-primary">

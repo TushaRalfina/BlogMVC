@@ -121,7 +121,7 @@ namespace BlogMVC.Controllers
         * Arsyeja: Validimi i te dhenave te perdoruesit.
         * Pershkrimi: Ka disa if conditions qe bejne kontrolle per validimin e te dhenave te perdoruesit.
         * Parametrat: userViewModel - Modeli i perdoruesit per regjistrim.
-         **/
+        **/
         private async Task<string> ValidateUser(UserViewModel userViewModel)
         {
             if (userRepository.GetUserByUsername(userViewModel.username) != null)
@@ -405,7 +405,7 @@ namespace BlogMVC.Controllers
 
             if (fromDate != null && toDate != null)
             {
-                DateTime endOfToDate = toDate.Value.Date.AddDays(1).AddTicks(-1);
+                DateTime endOfToDate = toDate.Value.Date.AddDays(1);
                 posts = posts.Where(p => p.created_at >= fromDate && p.created_at <= endOfToDate);
             }
 

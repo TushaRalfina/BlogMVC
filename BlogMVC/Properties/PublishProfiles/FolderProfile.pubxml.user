@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\User\Desktop\Ralfina_Blog_Publish</_PublishTargetUrl>
-    <History>True|2024-06-28T07:37:08.4401684Z||;True|2024-06-28T09:37:01.0754620+02:00||;True|2024-06-27T09:34:16.2963956+02:00||;</History>
+    <History>True|2024-07-01T06:59:03.5047949Z||;True|2024-06-28T09:37:08.4401684+02:00||;True|2024-06-28T09:37:01.0754620+02:00||;True|2024-06-27T09:34:16.2963956+02:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -19,10 +19,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>05/04/2011 20:49:00</publishTime>
     </File>
     <File Include="bin/BlogMVC.dll">
-      <publishTime>06/28/2024 09:37:08</publishTime>
+      <publishTime>07/01/2024 14:29:31</publishTime>
     </File>
     <File Include="bin/BlogMVC.pdb">
-      <publishTime>06/28/2024 09:37:08</publishTime>
+      <publishTime>07/01/2024 14:29:31</publishTime>
     </File>
     <File Include="bin/de/Microsoft.Data.SqlClient.resources.dll">
       <publishTime>05/16/2020 01:07:28</publishTime>
@@ -562,7 +562,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/11/2024 08:26:21</publishTime>
     </File>
     <File Include="Content/css/style.css">
-      <publishTime>06/25/2024 08:43:14</publishTime>
+      <publishTime>07/01/2024 11:16:13</publishTime>
     </File>
     <File Include="Content/css/vendor.css">
       <publishTime>06/24/2024 15:00:42</publishTime>
@@ -574,6 +574,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/07/2024 11:00:22</publishTime>
     </File>
     <File Include="Content/images/apple-touch-icon.png">
+      <publishTime>06/07/2024 11:00:22</publishTime>
+    </File>
+    <File Include="Content/images/avatars/default.png">
       <publishTime>06/07/2024 11:00:22</publishTime>
     </File>
     <File Include="Content/images/avatars/logo.jpg">
@@ -865,7 +868,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/26/2024 10:41:59</publishTime>
     </File>
     <File Include="Views/BlogPost/Post.cshtml">
-      <publishTime>06/27/2024 15:29:42</publishTime>
+      <publishTime>07/01/2024 14:12:33</publishTime>
     </File>
     <File Include="Views/BlogPost/UserPosts.cshtml">
       <publishTime>06/27/2024 17:00:48</publishTime>
@@ -880,7 +883,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/25/2024 15:08:24</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>06/28/2024 08:58:08</publishTime>
+      <publishTime>07/01/2024 13:55:36</publishTime>
     </File>
     <File Include="Views/Home/Profile.cshtml">
       <publishTime>06/27/2024 17:06:45</publishTime>
@@ -898,7 +901,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/24/2024 14:05:10</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>06/27/2024 14:49:12</publishTime>
+      <publishTime>06/28/2024 13:52:21</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>06/07/2024 10:58:20</publishTime>

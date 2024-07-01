@@ -12,8 +12,6 @@
 <!-- # site-content
 ================================================== -->
 <section id="content" class="s-content">
-
-
     <!-- hero -->
     <div class="hero">
 
@@ -31,7 +29,7 @@
                             </div>
                             <h2 class="hero__entry-title">
                                 <a href="@Url.Action("Post", "Home")">
-                                    Understanding and Using Negative Space.
+                                    Understanding and Using Positive Space.
                                 </a>
                             </h2>
                             <p class="hero__entry-desc">
@@ -54,7 +52,6 @@
             </svg>
             <span>Scroll</span>
         </a>
-
     </div> <!-- end hero -->
     <div style="display:flex;align-items:center;justify-content:center">
         <a style="color: black; font-weight:800; cursor: pointer;" onclick="openFilterForm()"><i class="fas fa-filter iconfilter"></i>FILTER THE BLOG POSTS</a>
@@ -112,12 +109,13 @@
 
                 @foreach (var post in Model)
                 {
-                    <article class="brick entry" data-animate-el>
+                    <article class="brick entry" data-animate-el style="height:623px">
                         <div class="entry__thumb">
                             <a href="@Url.Action("Post", "BlogPost", new { id = post.id })" class="thumb-link">
-                                <img src="data:image/png;base64,@post.main_image" alt="">
+                                <img src="data:image/png;base64,@post.main_image" alt="" style="width: 300px; height: 350px; object-fit: cover;">
                             </a>
                         </div>
+
 
                         <div class="entry__text">
                             <div class="entry__header">
@@ -131,7 +129,11 @@
 
                                     <span class="byline">
                                         By:
-                                        <a href="#0">@post.user.username</a>
+                                        <a href="@Url.Action("UserPosts", "BlogPost", new { id = post.user.id})">@post.user.username</a>
+                                    </span>
+                                    <span class="byline">
+                                        CREATED :
+                                        <a href="">@post.created_at</a>
                                     </span>
                                 </div>
                                 <h1 class="entry__title"><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">@post.title</a></h1>
@@ -180,7 +182,7 @@
         var toDate = document.getElementById('toDate');
 
 
-         toDate.addEventListener('change', function () {
+        toDate.addEventListener('change', function () {
              if (toDate.value < fromDate.value)
              {
 
@@ -188,9 +190,6 @@
                     toDate.value = '';
              }
         });
-        
-
-
     </script>
     }
 
