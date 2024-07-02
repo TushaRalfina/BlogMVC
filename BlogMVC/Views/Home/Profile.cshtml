@@ -23,174 +23,173 @@
                         <br />
                         <br />
                         <br /><br /><br />
-                        <div class="d-flex flex-column align-items-center text-center">
-                            <img src="~/Content/images/avatars/profile.jpg" alt="default" class="rounded-circle" width="150">
-                            <div>
-                                <h4>@Model.username</h4>
-                                <p class="text-secondary mb-1">@Model.email</p>
-                                <p class="text-muted font-size-sm">@Model.updated_at</p>
-                                <button class="btn btn-primary"><a class="edit" href="@Url.Action("EditProfile", new { id = Model.id })">Edit your profile</a></button>
-                                <button class="btn btn-outline-primary"><a href="@Url.Action("Add", "BlogPost")">Add Post</a></button>
+                                    <div class="d-flex flex-column align-items-center text-center">
+                                        <img src="~/Content/images/avatars/profile.jpg" alt="default" class="rounded-circle" style="max-width:150px"> 
+                                        <div>
+                                            <h4>@Model.username</h4>
+                                            <p class="text-secondary mb-1">@Model.email</p>
+                                            <p class="text-muted font-size-sm">@Model.updated_at</p>
+                                            <button class="btn btn-primary"><a class="edit" href="@Url.Action("EditProfile", new { id = Model.id })">Edit your profile</a></button>
+                                            <button class="btn btn-outline-primary"><a href="@Url.Action("Add", "BlogPost")">Add Post</a></button>
+                                        </div>
+                                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="column lg-6">
+                <article class="entry">
+                    <div class="entry__content">
+                        <div class="entry__header">
+                            <br />
+                            <br />
+                            <br /><br /><br />  <br /> <br />
+                            <div class="entry__header-meta">
+                                <h1 class="entry__title">
+                                    Your Profile, @Model.username
+                                    </h1>
+                                <p><strong>Email:</strong> <a href="mailto:@Model.email">@Model.email</a></p>
+                                <p><strong>First Name:</strong> @Model.FirstName</p>
+                                <p><strong>Last Name:</strong> @Model.LastName</p>
+                                <p><strong>Your bio:</strong> @Model.bio</p>
+
                             </div>
                         </div>
                     </div>
-                </div>
+
+                </article>
+
+
+
 
             </div>
+
         </div>
 
-        <div class="column lg-6">
-            <article class="entry">
-                <div class="entry__content">
-                    <div class="entry__header">
-                        <br />
-                        <br />
-                        <br /><br /><br />  <br /> <br />
-                        <div class="entry__header-meta">
-                            <h1 class="entry__title">
-                                Your Profile, @Model.username
-                                </h1>
-                            <p><strong>Email:</strong> <a href="mailto:@Model.email">@Model.email</a></p>
-                            <p><strong>First Name:</strong> @Model.FirstName</p>
-                            <p><strong>Last Name:</strong> @Model.LastName</p>
-                            <p><strong>Your bio:</strong> @Model.bio</p>
+        <h1 class="entry__title">
+            Your Posts are shown here.
+        </h1>
+        <div class="card-container">
+            @foreach (var post in Model.posts)
+            {
+                <div class="card">
+                    <img src="data:image/png;base64,@post.main_image" alt="Image 1">
+                    <div class="card-context">
+                        <h3>@post.title</h3>
+                        @if (post.approved == "yes")
+                        {
+                            <p style="color:green">Approved by admin</p>
+                        }
+                        else
+                        {
+                            <p style="color:red">Not Approved by admin yet</p>
+                        }
 
-                        </div>
+                    </div>
+                    <div class="card-hidden">
+                        <button class=" "><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">Open Post</a></button>
                     </div>
                 </div>
-
-            </article>
-
-
+            }
 
 
         </div>
-
-    </div>
-
-    <h1 class="entry__title">
-        Your Posts are shown here.
-    </h1>
-    <div class="card-container">
-        @foreach (var post in Model.posts)
-        {
-            <div class="card">
-                <img src="data:image/png;base64,@post.main_image" alt="Image 1">
-                <div class="card-context">
-                    <h3>@post.title</h3>
-                    @if (post.approved == "yes")
-                    {
-                        <p style="color:green">Approved by admin</p>
-                    }
-                    else
-                    {
-                        <p style="color:red">Not Approved by admin yet</p>
-                    }   
-                     
-                </div>
-                <div class="card-hidden">
-                    <button class=" "><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">Open Post</a></button>
-                </div>
-            </div>
-        }
- 
-
-    </div>
-    <style>
-        .card-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            max-width: 1200px;
-            margin: 20px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            max-width: 300px;
-            margin: 10px;
-            position: relative;
-        }
-
-            .card:hover {
-                transform: translateY(-10px);
-                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        <style>
+            .card-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: center;
+                max-width: 1200px;
+                margin: 20px;
             }
 
-        .card-image {
-            overflow: hidden;
-        }
+            .card {
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                max-width: 300px;
+                margin: 10px;
+                position: relative;
+            }
 
-            .card-image img {
+                .card:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+                }
+
+            .card-image {
+                overflow: hidden;
+            }
+
+                .card-image img {
+                    width: 100%;
+                    height: auto;
+                    transition: transform 0.3s ease;
+                }
+
+            .card:hover .card-image img {
+                transform: scale(1.1);
+            }
+
+            .card-hidden {
+                padding: 0px 20px 15px;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
+
+            .card-context {
+                padding: 10px 20px 0px;
+            }
+
+            .card:hover .card-hidden {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .card h3 {
+                margin-top: 0;
+                font-size: 1.5em;
+            }
+
+            .card p {
+                color: #666;
+                line-height: 1.5;
+            }
+
+            .card-button {
+                display: block;
                 width: 100%;
-                height: auto;
-                transition: transform 0.3s ease;
+                padding: 10px;
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                text-align: center;
+                font-size: 1em;
+                margin-top: 10px;
+                transition: background-color 0.3s ease;
             }
 
-        .card:hover .card-image img {
-            transform: scale(1.1);
-        }
+                .card-button:hover {
+                    background-color: #2980b9;
+                }
 
-        .card-hidden {
-            padding: 0px 20px 15px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
+            .entry__title{
+                text-align: center;
+                font-size: 58px;
 
-        .card-context {
-            padding: 10px 20px 0px;
-        }
 
-        .card:hover .card-hidden {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .card h3 {
-            margin-top: 0;
-            font-size: 1.5em;
-        }
-
-        .card p {
-            color: #666;
-            line-height: 1.5;
-        }
-
-        .card-button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 1em;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-            .card-button:hover {
-                background-color: #2980b9;
             }
-
-        .entry__title{
-            text-align: center;
-            font-size: 58px;
-
-
-        }
-    </style>
+        </style>
 
 
 
-</section>
+    </section>
 
-<!-- end s-content -->
+    <!-- end s-content -->

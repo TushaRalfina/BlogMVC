@@ -15,9 +15,10 @@ namespace BlogMVC.Models
     public partial class reply
     {
         public int id { get; set; }
-        public  int comment_id { get; set; }
+        public int comment_id { get; set; }
         public Nullable<int> user_id { get; set; }
         public string reply_text { get; set; }
+        public int invalidate { get; set; }
     
         public virtual comment comment { get; set; }
         public virtual user user { get; set; }

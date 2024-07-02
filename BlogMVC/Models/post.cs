@@ -20,7 +20,6 @@ namespace BlogMVC.Models
             this.comments = new HashSet<comment>();
             this.files = new HashSet<file>();
             this.PostCategories = new HashSet<PostCategory>();
-            this.approved = "no";
         }
     
         public int id { get; set; }
@@ -31,6 +30,7 @@ namespace BlogMVC.Models
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> updated_at { get; set; }
         public string main_image { get; set; }
+        public int invalidate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<comment> comments { get; set; }

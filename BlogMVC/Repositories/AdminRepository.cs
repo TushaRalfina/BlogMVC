@@ -126,30 +126,43 @@ namespace BlogMVC.Repositories
             }
 
         }
-         /**
-        * Data: 26/06/2024
-        * Programuesi: Ralfina Tusha
-        * Metoda: DeleteBlogPosts
-         * Pershkrimi: Kjo metode fshin nje postim blogu dhe te gjitha lidhjet  tij.
-        * Para kushti: Postimi duhet te ekzistoje.
-        * Post kushti: Postimi dhe te gjitha lidhjet e tij jane fshire nga db.
-        * Parametrat:
-        * - int id: ID-ja e postimit qe do te fshihet.
-        * Return: Nuk ka.
-        **/
+        /**
+       * Data: 26/06/2024
+       * Programuesi: Ralfina Tusha
+       * Metoda: DeleteBlogPosts
+        * Pershkrimi: Kjo metode fshin nje postim blogu dhe te gjitha lidhjet  tij.
+       * Para kushti: Postimi duhet te ekzistoje.
+       * Post kushti: Postimi dhe te gjitha lidhjet e tij jane fshire nga db.
+       * Parametrat:
+       * - int id: ID-ja e postimit qe do te fshihet.
+       * Return: Nuk ka.
+       **/
 
         public void DeleteBlogPosts(int id)
         {
             using (var db = new BlogEntities())
             {
-                var post = db.posts.Find(id);
-                db.PostCategories.RemoveRange(post.PostCategories);
-                db.files.RemoveRange(post.files);
-                db.posts.Remove(post);
-                db.SaveChanges();
-            }
+                 var post = db.posts.Find(id);
 
+                if (post != null)
+                {
+                     post.invalidate = 20;
+
+                     foreach (var postCategory in post.PostCategories)
+                    {
+                        postCategory.invalidate = 20;
+                    }
+
+                     foreach (var file in post.files)
+                    {
+                        file.invalidate = 20;
+                    }
+
+                     db.SaveChanges();
+                }
+            }
         }
+
         /**
         * Data: 26/06/2024
         * Programuesi: Rafina Tusha
@@ -168,8 +181,11 @@ namespace BlogMVC.Repositories
             using (var db = new BlogEntities())
             {
                 var comment = db.comments.Find(id);
-                db.replies.RemoveRange(comment.replies);
-                db.comments.Remove(comment);
+                comment.invalidate = 20;
+                for (int i = 0; i < comment.replies.Count; i++)
+                {
+                    comment.replies.ElementAt(i).invalidate = 20;
+                }   
                 db.SaveChanges();
             }
         }
@@ -188,7 +204,8 @@ namespace BlogMVC.Repositories
             using (var db = new BlogEntities())
             {
                 var reply = db.replies.Find(id);
-                db.replies.Remove(reply);
+                reply.invalidate = 20;
+                 
                 db.SaveChanges();
             }
 
@@ -207,7 +224,7 @@ namespace BlogMVC.Repositories
 
             using (var db = new BlogEntities())
             {
-                return db.posts.Include(p => p.user).Where(x => x.approved == "no").ToList();
+                return db.posts.Include(p => p.user).Where(x => x.approved == "no" & x.invalidate==10).OrderByDescending(p => p.created_at).ToList();
             }
 
         }

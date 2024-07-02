@@ -713,7 +713,6 @@ a {
 svg,
 img,
 video {
-    max-width: 50%;
     height: auto;
 }
 

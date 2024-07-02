@@ -69,7 +69,7 @@ namespace BlogMVC.Controllers
 
 
 
-        /**
+         /**
          * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: ApprovePost
@@ -126,7 +126,7 @@ namespace BlogMVC.Controllers
             }
         }
 
-        /**
+         /**
          * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: DeletePost
@@ -146,7 +146,7 @@ namespace BlogMVC.Controllers
             return RedirectToAction("ManagePosts");
         }
 
-        /**
+         /**
          * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: ManageComments
@@ -172,7 +172,7 @@ namespace BlogMVC.Controllers
         }
 
 
-        /**
+         /**
          * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: ApproveComment
@@ -188,8 +188,8 @@ namespace BlogMVC.Controllers
             return RedirectToAction("ManageComments");
         }
 
-        /**
-          * Data: 25/06/2024
+         /**
+         * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: DeleteComment
          * Arsyeja: Refuzimi e nje komenti nga admini.
@@ -205,8 +205,8 @@ namespace BlogMVC.Controllers
         }
 
 
-        /**
-          * Data: 25/06/2024
+         /**
+         * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: FshiComment
          * Arsyeja: Fshirja e nje komenti  dhe kthimi ne postin ku ndodhej komenti.
@@ -223,8 +223,8 @@ namespace BlogMVC.Controllers
 
         }
 
-        /**
-          * Data: 25/06/2024
+         /**
+         * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: FshiReply
          * Arsyeja: Fshirja e një përgjigjeje në një koment të përshtatur.
@@ -244,8 +244,8 @@ namespace BlogMVC.Controllers
 
         }
 
-        /**
-          * Data: 25/06/2024
+         /**
+         * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: AddCategory
          * Arsyeja: Shtimi i nje kategori te re nga admini.
@@ -268,8 +268,8 @@ namespace BlogMVC.Controllers
              return View( );  
         }
 
-        /**
-          * Data: 25/06/2024
+         /**
+         * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: AddCategory (Post)
          * Arsyeja: Shtimi i nje kategorie te re nga admini.
@@ -294,7 +294,7 @@ namespace BlogMVC.Controllers
               return View();  
         }
 
-        /**
+         /**
          * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: ShowCategories
@@ -317,7 +317,7 @@ namespace BlogMVC.Controllers
         }
 
 
-        /**
+         /**
          * Data: 25/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: AddSubCategory

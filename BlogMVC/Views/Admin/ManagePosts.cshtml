@@ -37,6 +37,8 @@
                         <tbody>
                             @foreach (var post in Model)
                             {
+                                if (post.invalidate == 10)
+                                {
                                 <tr>
                                     <td><a href="@Url.Action("Post", "BlogPost", new { id = post.id })">@post.title</a></td>
                                     <td>@post.user.username</td>
@@ -87,6 +89,7 @@
                                         </style>
                                     </td>
                                 </tr>
+                                }
                             }
                         </tbody>
                     </table>

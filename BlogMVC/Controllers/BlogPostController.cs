@@ -121,7 +121,8 @@ namespace BlogMVC.Controllers
                         created_at = DateTime.Now,
                         user_id = user_id,
                         main_image = model.main_image,
-                        approved = user.role == "admin" ? "yes" : "no"
+                        approved = user.role == "admin" ? "yes" : "no",
+                        invalidate = 10
                     };
 
                     blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
@@ -202,17 +203,19 @@ namespace BlogMVC.Controllers
 
 
 
+
+
         /**
-         * Data: 26/06/2024
-         * Programuesi: Ralfina Tusha
-         * Metoda: Post
-         * Arsyeja: Shfaqja e nje posti te vetem.
-         * Pershkrimi: Shfaq postimin e caktuar me te gjitha komentet e aprovuara.
-         * Para kushti: Nuk ka.
-         * Post kushti: Kthen nje View me modelin e postimit dhe komenteve te aprovuara.
-         * Parametrat: id - id e postit.
-         * Return: ActionResult - VIEW me modelin e postimit dhe komenteve te aprovuara.
-         **/
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: Post
+        * Arsyeja: Shfaqja e nje posti te vetem.
+        * Pershkrimi: Shfaq postimin e caktuar me te gjitha komentet e aprovuara.
+        * Para kushti: Nuk ka.
+        * Post kushti: Kthen nje View me modelin e postimit dhe komenteve te aprovuara.
+        * Parametrat: id - id e postit.
+        * Return: ActionResult - VIEW me modelin e postimit dhe komenteve te aprovuara.
+        **/
         public ActionResult Post(int id)
         {
             var post = blogPostRepository.GetBlogPostById(id);
@@ -239,7 +242,7 @@ namespace BlogMVC.Controllers
         }
 
 
-        /**
+         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: AddComment
@@ -257,13 +260,24 @@ namespace BlogMVC.Controllers
             {
                 var user = userRepository.GetUserById(user_id);
 
+                if (user == null)
+                {
+                    return Json(new { success = false, message = "User not found." });
+                }
+
+                if (string.IsNullOrWhiteSpace(comment))
+                {
+                    return Json(new { success = false, message = "Comment text is required." });
+                }
+
                 var newComment = new comment
                 {
                     post_id = post_id,
                     user_id = user_id,
                     comment1 = comment,
                     created_at = DateTime.Now,
-                    approved = user.role == "admin" ? "yes" : "no"
+                    approved = user.role == "admin" ? "yes" : "no",
+                    invalidate = 10
                 };
 
                 blogPostRepository.AddComment(newComment);
@@ -285,7 +299,7 @@ namespace BlogMVC.Controllers
         }
 
 
-        /**
+         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: AddReply
@@ -302,16 +316,23 @@ namespace BlogMVC.Controllers
             if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
             {
                 var user = userRepository.GetUserById(user_id);
+
                 if (user == null)
                 {
                     return Json(new { success = false, message = "User not found." });
+                }
+
+                if (string.IsNullOrWhiteSpace(reply_text))
+                {
+                    return Json(new { success = false, message = "Reply text is required." });
                 }
 
                 var newReply = new reply
                 {
                     comment_id = comment_id,
                     user_id = user_id,
-                    reply_text = reply_text
+                    reply_text = reply_text,
+                    invalidate = 10
                 };
 
                 blogPostRepository.AddReply(newReply);
@@ -333,7 +354,9 @@ namespace BlogMVC.Controllers
 
 
 
-        /**
+
+
+         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: UserPosts
@@ -355,7 +378,7 @@ namespace BlogMVC.Controllers
         }
 
 
-        /**
+         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: EditComment

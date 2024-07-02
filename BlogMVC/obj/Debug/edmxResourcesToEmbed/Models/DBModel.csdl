@@ -12,6 +12,7 @@
     <Property Name="parent_id" Type="Int32" />
     <NavigationProperty Name="categories1" Relationship="BlogModel.FK_categories_parent" FromRole="category" ToRole="category1" />
     <NavigationProperty Name="category1" Relationship="BlogModel.FK_categories_parent" FromRole="category1" ToRole="category" />
+    <Property Name="invalidate" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="comment">
     <Key>
@@ -27,6 +28,7 @@
     <NavigationProperty Name="user" Relationship="Self.FK__comments__user_i__398D8EEE" FromRole="comments" ToRole="users" />
     <Property Name="approved" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="replies" Relationship="BlogModel.FK__replies__comment__6FE99F9F" FromRole="comment" ToRole="reply" />
+    <Property Name="invalidate" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="file">
     <Key>
@@ -39,6 +41,7 @@
     <Property Name="file_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="post" Relationship="Self.FK__files__post_id__3E52440B" FromRole="files" ToRole="posts" />
     <Property Name="body_images" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="invalidate" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="PostCategory">
     <Key>
@@ -49,6 +52,7 @@
     <Property Name="category_id" Type="Int32" Nullable="false" />
     <NavigationProperty Name="category" Relationship="Self.FK__PostCateg__categ__35BCFE0A" FromRole="PostCategories" ToRole="categories" />
     <NavigationProperty Name="post" Relationship="Self.FK__PostCateg__post___34C8D9D1" FromRole="PostCategories" ToRole="posts" />
+    <Property Name="invalidate" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="post">
     <Key>
@@ -66,6 +70,7 @@
     <NavigationProperty Name="PostCategories" Relationship="Self.FK__PostCateg__post___34C8D9D1" FromRole="posts" ToRole="PostCategories" />
     <NavigationProperty Name="user" Relationship="Self.FK__posts__user_id__300424B4" FromRole="posts" ToRole="users" />
     <Property Name="main_image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="invalidate" Type="Int32" Nullable="false" />
   </EntityType>
   <EntityType Name="sysdiagram">
     <Key>
@@ -95,6 +100,7 @@
     <NavigationProperty Name="comments" Relationship="Self.FK__comments__user_i__398D8EEE" FromRole="users" ToRole="comments" />
     <NavigationProperty Name="posts" Relationship="Self.FK__posts__user_id__300424B4" FromRole="users" ToRole="posts" />
     <NavigationProperty Name="replies" Relationship="BlogModel.FK__replies__user_id__70DDC3D8" FromRole="user" ToRole="reply" />
+    <Property Name="invalidate" Type="Int32" Nullable="false" />
   </EntityType>
   <Association Name="FK__PostCateg__categ__35BCFE0A">
     <End Role="categories" Type="Self.category" Multiplicity="1" />
@@ -224,6 +230,7 @@
     <Property Name="reply_text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="comment" Relationship="BlogModel.FK__replies__comment__6FE99F9F" FromRole="reply" ToRole="comment" />
     <NavigationProperty Name="user" Relationship="BlogModel.FK__replies__user_id__70DDC3D8" FromRole="reply" ToRole="user" />
+    <Property Name="invalidate" Type="Int32" Nullable="false" />
   </EntityType>
   <Association Name="FK__replies__comment__6FE99F9F">
     <End Type="BlogModel.comment" Role="comment" Multiplicity="0..1" />

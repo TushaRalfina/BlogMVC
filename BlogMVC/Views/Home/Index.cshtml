@@ -41,8 +41,7 @@
 
             </div> <!-- swiper-wrapper -->
 
-            <div class="swiper-pagination"></div>
-
+ 
         </div> <!-- end hero slider -->
 
         <a href="#bricks" class="hero__scroll-down smoothscroll">
@@ -52,14 +51,14 @@
             </svg>
             <span>Scroll</span>
         </a>
-    </div> <!-- end hero -->
+    </div> <!--end hero-->
     <div style="display:flex;align-items:center;justify-content:center">
         <a style="color: black; font-weight:800; cursor: pointer;" onclick="openFilterForm()"><i class="fas fa-filter iconfilter"></i>FILTER THE BLOG POSTS</a>
     </div>
 
 
 
-    <!-- Popup filter form -->
+    <!--Popup filter form-->
     <div id="filterFormPopup" class="popup">
         <div class="popup-content">
             <span class="close" onclick="closeFilterForm()">&times;</span>
@@ -88,12 +87,12 @@
     </div>
 
      @if (ViewBag.FromDate != null && ViewBag.ToDate != null)
-    {
-        <div style="text-align:center; margin: 20px 0;">
-            <strong style="color:forestgreen;">Shown @ViewBag.category Posts From: </strong> @((DateTime)ViewBag.FromDate) 
-            <strong style="color:forestgreen;"> To: </strong> @((DateTime)ViewBag.ToDate) 
-        </div>
-    }
+        {
+            <div style="text-align:center; margin: 20px 0;">
+                <strong style="color:forestgreen;">Shown @ViewBag.category Posts From: </strong> @((DateTime)ViewBag.FromDate) 
+                <strong style="color:forestgreen;"> To: </strong> @((DateTime)ViewBag.ToDate) 
+            </div>
+        }
 
  
 

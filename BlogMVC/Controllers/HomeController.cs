@@ -37,6 +37,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using Microsoft.Ajax.Utilities;
+using System.Text.RegularExpressions;
 
 
 namespace BlogMVC.Controllers
@@ -124,6 +125,7 @@ namespace BlogMVC.Controllers
         **/
         private async Task<string> ValidateUser(UserViewModel userViewModel)
         {
+            
             if (userRepository.GetUserByUsername(userViewModel.username) != null)
             {
                 return "This username is already taken";
@@ -131,6 +133,7 @@ namespace BlogMVC.Controllers
 
             if (userRepository.GetUserByEmail(userViewModel.email) != null)
             {
+
                 return "This email is already taken";
             }
 
@@ -314,7 +317,7 @@ namespace BlogMVC.Controllers
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: Logout
-          * Pershkrimi: Fshin te gjitha te dhenat e sesionit dhe ridrejton perdoruesin ne faqen kryesore.
+         * Pershkrimi: Fshin te gjitha te dhenat e sesionit dhe ridrejton perdoruesin ne faqen kryesore.
          * Para kushti: Perdoruesi duhet te jete i loguar.
          * Post kushti: Perdoruesi del nga accounti dhe ridrejtohet ne faqen kryesore.
          * Parametrat: Nuk ka.
@@ -448,7 +451,7 @@ namespace BlogMVC.Controllers
 
 
 
-        /**
+         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: Profile
@@ -456,7 +459,7 @@ namespace BlogMVC.Controllers
          * Pershkrimi: Merr dhe shfaq te dhenat e profilit te perdoruesit te loguar.
          * Para kushti: Perdoruesi duhet te jete i loguar.
          * Post kushti: Kthen nje View me te dhenat e profilit te perdoruesit te loguar.
-          * Return: ActionResult - VIEW me te dhenat e profilit te perdoruesit te loguar.
+         * Return: ActionResult - VIEW me te dhenat e profilit te perdoruesit te loguar.
          **/
         public ActionResult Profile()
         {
@@ -497,12 +500,12 @@ namespace BlogMVC.Controllers
 
 
 
-        /**
+         /**
          * Data: 26/06/2024
          * Programuesi:Ralfina Tusha
          * Metoda: DownloadFile
          * Arsyeja: Shkarkimi i fileve qe ndodhen te bashkangjituara postit.
-          * Para kushti: Skedari duhet te ekzistoje ne bazen e te dhenave.
+         * Para kushti: Skedari duhet te ekzistoje ne bazen e te dhenave.
          * Post kushti: Skedari shkarkohet nga perdoruesi.
          * Parametrat: fileId - ID e skedarit per t'u shkarkuar.
          * Return: ActionResult - FileResult qe permban skedarin per t'u shkarkuar ose HttpNotFound nese skedari nuk ekziston.
@@ -522,7 +525,7 @@ namespace BlogMVC.Controllers
 
 
 
-        /**
+            /**
             * Data: 26/06/2024
             * Programuesi: Ralfina Tusha
             * Metoda: EditProfile (GET)
@@ -556,12 +559,12 @@ namespace BlogMVC.Controllers
 
 
 
-        /**
+         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: EditProfile (POST)
          * Arsyeja: Ruajtja e te dhenave te edituara te profilit te perdoruesit.
-          * Para kushti: Modeli duhet te jete valid.
+         * Para kushti: Modeli duhet te jete valid.
          * Post kushti: Te dhenat e profilit te perdoruesit perditesohen ne db dhe ridrejtohet ne profilin e perdoruesit.
          * Parametrat: editProfileRequest - Modeli qe permban te dhenat qe mund te editohen.
          * Return: ActionResult - Ridrejtim ne profilin e perdoruesit ose rikthen pamjen e formes me nje mesazh gabimi.
@@ -606,13 +609,13 @@ namespace BlogMVC.Controllers
 
 
 
-        /**
+         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: About
          * Arsyeja: Shfaq faqen "About".
-          * Para kushti: Perdoruesi duhet te jete i loguar.
-          * Return: ActionResult - VIEW me informacionin "Rreth Nesh".
+         * Para kushti: Perdoruesi duhet te jete i loguar.
+         * Return: ActionResult - VIEW me informacionin "Rreth Nesh".
          **/
         public ActionResult About()
         {

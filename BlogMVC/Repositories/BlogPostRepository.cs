@@ -41,7 +41,7 @@ namespace BlogMVC.Repositories
         * Data: 26/06/2024
         * Programuesi: Rafina Tusha
         * Metoda: AddBlogPost
-         * Pershkrimi: Kjo metode shton nje postim blogu te ri ne db dhe lidh postimin me kategorite perkatese.
+        * Pershkrimi: Kjo metode shton nje postim blogu te ri ne db dhe lidh postimin me kategorite perkatese.
         * Parametrat:
         * - post post: Objekti i postimit qe do te shtohet.
         * - List<int> categoryIds: Lista e ID-ve te kategorive me te cilat do te lidhet postimi.
@@ -56,7 +56,8 @@ namespace BlogMVC.Repositories
                 var postCategory = new PostCategory
                 {
                     post_id = post.id,
-                    category_id = categoryId
+                    category_id = categoryId,
+                    invalidate= 10      
                 };
                 db.PostCategories.Add(postCategory);
             }
@@ -76,7 +77,7 @@ namespace BlogMVC.Repositories
          **/
         public post GetBlogPostById(int id)
         {
-            var post = db.posts.FirstOrDefault(p => p.id == id);
+            var post = db.posts.Where(p => p.invalidate==10).FirstOrDefault(p => p.id == id);
             return post;
         }
 
@@ -85,7 +86,7 @@ namespace BlogMVC.Repositories
         * Data: 26/06/2024
         * Programuesi: Rafina Tusha
         * Metoda: GetBlogPosts
-         * Pershkrimi: Kjo metode kthen nje liste te te gjithe postimeve te blogut.
+        * Pershkrimi: Kjo metode kthen nje liste te te gjithe postimeve te blogut.
         * Return: IEnumerable<post>: Nje liste e te gjithe postimeve te blogut.
         **/
 
@@ -117,8 +118,8 @@ namespace BlogMVC.Repositories
         * Data: 26/06/2024
         * Programuesi:Ralfina Tusha 
         * Metoda: AddComment
-         * Pershkrimi: Kjo metode shton nje koment te ri ne db.
-         * Parametrat:
+        * Pershkrimi: Kjo metode shton nje koment te ri ne db.
+        * Parametrat:
         * - comment comment: Objekti i komentit qe do te shtohet.
         * Return: Nuk ka.
         **/
@@ -134,7 +135,7 @@ namespace BlogMVC.Repositories
         * Programuesi: Rafina Tusha
         * Metoda: GetCommentsByPostId
         * Pershkrimi: Kjo metode kthen nje liste te komenteve te aprovuara per nje postim te caktuar duke perfshire dhe replies.
-         * Parametrat:
+        * Parametrat:
         * - int post_id: ID-ja e postimit.
         * Return: IEnumerable<comment>: Nje liste e komenteve te aprovuara te lidhura me postimin.
         **/
@@ -171,7 +172,7 @@ namespace BlogMVC.Repositories
         * Programuesi: Ralfina Tusha
         * Metoda: AddReply
         * Pershkrimi: Kjo metode shton nje reply te re ne nje koment.
-         * Parametrat:
+        * Parametrat:
         * - reply reply: Objekti i reply qe do te shtohet.
         * Return: Nuk ka.
         **/
@@ -218,7 +219,7 @@ namespace BlogMVC.Repositories
         * Programuesi:Ralfina Tusha 
         * Metoda: UpdateComment
         * Pershkrimi: Kjo metode updates nje koment ekzistues ne db.
-         * Parametrat:
+        * Parametrat:
         * - comment comment:komenti qe do te update-ohet.
         * Return: Nuk ka.**/
         public void UpdateComment(comment comment)
@@ -236,8 +237,8 @@ namespace BlogMVC.Repositories
         * Data:26/06/2024
         * Programuesi: Ralfina Tusha
         * Metoda: GetBlogPostsByCategory
-         * Pershkrimi: Kjo metode kthen nje liste te postimeve te aprovuara te blogut per nje kategori te caktuar.
-         * Parametrat:
+        * Pershkrimi: Kjo metode kthen nje liste te postimeve te aprovuara te blogut per nje kategori te caktuar.
+        * Parametrat:
         * - string category: emri i kategorise.
         * Return: IEnumerable<post>: Nje liste e postimeve te aprovuara te lidhura me kategorine.
         **/
@@ -252,7 +253,7 @@ namespace BlogMVC.Repositories
         * Data: 26/06/2024
         * Programuesi: Rafina Tusha
         * Metoda: GetBlogPostsByDate
-         * Pershkrimi: Kjo metode kthen nje liste te postimeve te aprovuara te blogut brenda nje periudhe te caktuar kohore.
+        * Pershkrimi: Kjo metode kthen nje liste te postimeve te aprovuara te blogut brenda nje periudhe te caktuar kohore.
         * Parametrat:
         * - DateTime? fromDate: Data e fillimit te periudhes.
         * - DateTime? toDate: Data e perfundimit te periudhes.

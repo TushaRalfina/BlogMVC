@@ -123,6 +123,8 @@ namespace BlogMVC.Repositories
                 throw;
             }
         }
+
+
         /**
         * Data: 26/06/2024
         * Programuesi: Ralfina Tusha
@@ -131,11 +133,11 @@ namespace BlogMVC.Repositories
         * Parametrat: int id: ID-ja e userit qe do te merret.
         * Return: user: Objekti i userit qe korrespondon me id-ne.
         **/
-
         public user GetUserById(int id)
         {
             return db.users.FirstOrDefault(u => u.id == id);
         }
+
 
         /**
         * Data: 26/06/2024
@@ -145,7 +147,6 @@ namespace BlogMVC.Repositories
         * Parametrat: string username: Username i userit qe do te merret.
         * Return: user: Objekti i userit qe korrespondon me username-in.
         **/
-
         public user GetUserByUsername(string username)
         {
                 return db.users.FirstOrDefault(u => u.username == username );
@@ -185,7 +186,6 @@ namespace BlogMVC.Repositories
         * Paramentrat: int id: ID-ja e userit per te cilin do te merren postimet.
         * Return: IEnumerable<post>: Nje liste e postimeve  per nje user te caktuar.
         **/
-
         public IEnumerable<post> GetPostsByUserId(int id)
         {
             return db.posts.Where(p => p.user_id == id).ToList();   

@@ -3,18 +3,18 @@
 
 
 @foreach (var category in Model)
-{
 
+ {
+        if (category.parent_id == null)
+        
+        {
+                <li>
+                    <a href="@Url.Action("Categories", "Home", new { category_id = category.id })">
 
-    if (category.parent_id == null)
-{
-    <li>
-        <a href="@Url.Action("Categories", "Home", new { category_id = category.id })">
-
-            @category.name
+                        @category.name
            
-        </a>
-    </li>
-    }
-}
+                    </a>
+                </li>
+        }
+ }
 

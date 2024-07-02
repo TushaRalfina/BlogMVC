@@ -17,6 +17,7 @@ namespace BlogMVC.Models
         public int id { get; set; }
         public int post_id { get; set; }
         public int category_id { get; set; }
+        public int invalidate { get; set; }
     
         public virtual category category { get; set; }
         public virtual post post { get; set; }

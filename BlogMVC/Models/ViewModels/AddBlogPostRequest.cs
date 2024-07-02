@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
@@ -31,7 +32,7 @@ namespace BlogMVC.Models.ViewModels
 
         public string main_image { get; set; }
 
-        public HttpPostedFileBase main_imagee { get; set; }  
+        public HttpPostedFileBase main_imagee { get; set; }
 
         public List<int> SelectedCategoryIds { get; set; }
         

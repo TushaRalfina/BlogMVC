@@ -33,6 +33,7 @@ namespace BlogMVC.Models
         public string bio { get; set; }
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> updated_at { get; set; }
+        public int invalidate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<comment> comments { get; set; }
@@ -40,8 +41,5 @@ namespace BlogMVC.Models
         public virtual ICollection<post> posts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<reply> replies { get; set; }
-        public bool IsEmailVerified { get; set; }
-        public string VerificationCode { get; set; }
-
     }
 }

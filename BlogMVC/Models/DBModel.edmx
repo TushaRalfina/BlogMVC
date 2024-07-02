@@ -14,6 +14,7 @@
           <Property Name="created_at" Type="datetime" />
           <Property Name="updated_at" Type="datetime" />
           <Property Name="parent_id" Type="int" />
+          <Property Name="invalidate" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="comments">
           <Key>
@@ -26,6 +27,7 @@
           <Property Name="created_at" Type="datetime" />
           <Property Name="updated_at" Type="datetime" />
           <Property Name="approved" Type="varchar" MaxLength="45" />
+          <Property Name="invalidate" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="files">
           <Key>
@@ -37,6 +39,7 @@
           <Property Name="file_name" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="file_content" Type="varchar(max)" Nullable="false" />
           <Property Name="body_images" Type="varchar(max)" />
+          <Property Name="invalidate" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="PostCategories">
           <Key>
@@ -45,6 +48,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="post_id" Type="int" Nullable="false" />
           <Property Name="category_id" Type="int" Nullable="false" />
+          <Property Name="invalidate" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="posts">
           <Key>
@@ -58,6 +62,7 @@
           <Property Name="created_at" Type="datetime" />
           <Property Name="updated_at" Type="datetime" />
           <Property Name="main_image" Type="varchar(max)" />
+          <Property Name="invalidate" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="replies">
           <Key>
@@ -67,6 +72,7 @@
           <Property Name="comment_id" Type="int" />
           <Property Name="user_id" Type="int" />
           <Property Name="reply_text" Type="nvarchar(max)" />
+          <Property Name="invalidate" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -93,8 +99,9 @@
           <Property Name="bio" Type="text" />
           <Property Name="created_at" Type="datetime" />
           <Property Name="updated_at" Type="datetime" />
+          <Property Name="invalidate" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK__comments__post_i__38996AB5">
+        <Association Name="FK__comments__post_i__403A8C7D">
           <End Role="posts" Type="Self.posts" Multiplicity="1" />
           <End Role="comments" Type="Self.comments" Multiplicity="*" />
           <ReferentialConstraint>
@@ -106,7 +113,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__comments__user_i__398D8EEE">
+        <Association Name="FK__comments__user_i__412EB0B6">
           <End Role="users" Type="Self.users" Multiplicity="1" />
           <End Role="comments" Type="Self.comments" Multiplicity="*" />
           <ReferentialConstraint>
@@ -118,7 +125,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__files__post_id__3E52440B">
+        <Association Name="FK__files__post_id__4222D4EF">
           <End Role="posts" Type="Self.posts" Multiplicity="1" />
           <End Role="files" Type="Self.files" Multiplicity="*" />
           <ReferentialConstraint>
@@ -130,7 +137,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PostCateg__categ__35BCFE0A">
+        <Association Name="FK__PostCateg__categ__4316F928">
           <End Role="categories" Type="Self.categories" Multiplicity="1" />
           <End Role="PostCategories" Type="Self.PostCategories" Multiplicity="*" />
           <ReferentialConstraint>
@@ -142,7 +149,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PostCateg__post___34C8D9D1">
+        <Association Name="FK__PostCateg__post___440B1D61">
           <End Role="posts" Type="Self.posts" Multiplicity="1" />
           <End Role="PostCategories" Type="Self.PostCategories" Multiplicity="*" />
           <ReferentialConstraint>
@@ -154,7 +161,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__posts__user_id__300424B4">
+        <Association Name="FK__posts__user_id__44FF419A">
           <End Role="users" Type="Self.users" Multiplicity="1" />
           <End Role="posts" Type="Self.posts" Multiplicity="*" />
           <ReferentialConstraint>
@@ -166,7 +173,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__replies__comment__6FE99F9F">
+        <Association Name="FK__replies__comment__45F365D3">
           <End Role="comments" Type="Self.comments" Multiplicity="0..1" />
           <End Role="replies" Type="Self.replies" Multiplicity="*" />
           <ReferentialConstraint>
@@ -178,7 +185,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__replies__user_id__70DDC3D8">
+        <Association Name="FK__replies__user_id__46E78A0C">
           <End Role="users" Type="Self.users" Multiplicity="0..1" />
           <End Role="replies" Type="Self.replies" Multiplicity="*" />
           <ReferentialConstraint>
@@ -211,35 +218,35 @@
           <EntitySet Name="replies" EntityType="Self.replies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__comments__post_i__38996AB5" Association="Self.FK__comments__post_i__38996AB5">
+          <AssociationSet Name="FK__comments__post_i__403A8C7D" Association="Self.FK__comments__post_i__403A8C7D">
             <End Role="posts" EntitySet="posts" />
             <End Role="comments" EntitySet="comments" />
           </AssociationSet>
-          <AssociationSet Name="FK__comments__user_i__398D8EEE" Association="Self.FK__comments__user_i__398D8EEE">
+          <AssociationSet Name="FK__comments__user_i__412EB0B6" Association="Self.FK__comments__user_i__412EB0B6">
             <End Role="users" EntitySet="users" />
             <End Role="comments" EntitySet="comments" />
           </AssociationSet>
-          <AssociationSet Name="FK__files__post_id__3E52440B" Association="Self.FK__files__post_id__3E52440B">
+          <AssociationSet Name="FK__files__post_id__4222D4EF" Association="Self.FK__files__post_id__4222D4EF">
             <End Role="posts" EntitySet="posts" />
             <End Role="files" EntitySet="files" />
           </AssociationSet>
-          <AssociationSet Name="FK__PostCateg__categ__35BCFE0A" Association="Self.FK__PostCateg__categ__35BCFE0A">
+          <AssociationSet Name="FK__PostCateg__categ__4316F928" Association="Self.FK__PostCateg__categ__4316F928">
             <End Role="categories" EntitySet="categories" />
             <End Role="PostCategories" EntitySet="PostCategories" />
           </AssociationSet>
-          <AssociationSet Name="FK__PostCateg__post___34C8D9D1" Association="Self.FK__PostCateg__post___34C8D9D1">
+          <AssociationSet Name="FK__PostCateg__post___440B1D61" Association="Self.FK__PostCateg__post___440B1D61">
             <End Role="posts" EntitySet="posts" />
             <End Role="PostCategories" EntitySet="PostCategories" />
           </AssociationSet>
-          <AssociationSet Name="FK__posts__user_id__300424B4" Association="Self.FK__posts__user_id__300424B4">
+          <AssociationSet Name="FK__posts__user_id__44FF419A" Association="Self.FK__posts__user_id__44FF419A">
             <End Role="users" EntitySet="users" />
             <End Role="posts" EntitySet="posts" />
           </AssociationSet>
-          <AssociationSet Name="FK__replies__comment__6FE99F9F" Association="Self.FK__replies__comment__6FE99F9F">
+          <AssociationSet Name="FK__replies__comment__45F365D3" Association="Self.FK__replies__comment__45F365D3">
             <End Role="comments" EntitySet="comments" />
             <End Role="replies" EntitySet="replies" />
           </AssociationSet>
-          <AssociationSet Name="FK__replies__user_id__70DDC3D8" Association="Self.FK__replies__user_id__70DDC3D8">
+          <AssociationSet Name="FK__replies__user_id__46E78A0C" Association="Self.FK__replies__user_id__46E78A0C">
             <End Role="users" EntitySet="users" />
             <End Role="replies" EntitySet="replies" />
           </AssociationSet>
@@ -264,6 +271,7 @@
           <Property Name="parent_id" Type="Int32" />
           <NavigationProperty Name="categories1" Relationship="BlogModel.FK_categories_parent" FromRole="category" ToRole="category1" />
           <NavigationProperty Name="category1" Relationship="BlogModel.FK_categories_parent" FromRole="category1" ToRole="category" />
+          <Property Name="invalidate" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="comment">
           <Key>
@@ -279,6 +287,7 @@
           <NavigationProperty Name="user" Relationship="Self.FK__comments__user_i__398D8EEE" FromRole="comments" ToRole="users" />
           <Property Name="approved" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="replies" Relationship="BlogModel.FK__replies__comment__6FE99F9F" FromRole="comment" ToRole="reply" />
+          <Property Name="invalidate" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="file">
           <Key>
@@ -291,6 +300,7 @@
           <Property Name="file_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="post" Relationship="Self.FK__files__post_id__3E52440B" FromRole="files" ToRole="posts" />
           <Property Name="body_images" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="invalidate" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="PostCategory">
           <Key>
@@ -301,6 +311,7 @@
           <Property Name="category_id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="category" Relationship="Self.FK__PostCateg__categ__35BCFE0A" FromRole="PostCategories" ToRole="categories" />
           <NavigationProperty Name="post" Relationship="Self.FK__PostCateg__post___34C8D9D1" FromRole="PostCategories" ToRole="posts" />
+          <Property Name="invalidate" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="post">
           <Key>
@@ -318,6 +329,7 @@
           <NavigationProperty Name="PostCategories" Relationship="Self.FK__PostCateg__post___34C8D9D1" FromRole="posts" ToRole="PostCategories" />
           <NavigationProperty Name="user" Relationship="Self.FK__posts__user_id__300424B4" FromRole="posts" ToRole="users" />
           <Property Name="main_image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="invalidate" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -347,6 +359,7 @@
           <NavigationProperty Name="comments" Relationship="Self.FK__comments__user_i__398D8EEE" FromRole="users" ToRole="comments" />
           <NavigationProperty Name="posts" Relationship="Self.FK__posts__user_id__300424B4" FromRole="users" ToRole="posts" />
           <NavigationProperty Name="replies" Relationship="BlogModel.FK__replies__user_id__70DDC3D8" FromRole="user" ToRole="reply" />
+          <Property Name="invalidate" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK__PostCateg__categ__35BCFE0A">
           <End Role="categories" Type="Self.category" Multiplicity="1" />
@@ -476,6 +489,7 @@
           <Property Name="reply_text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="comment" Relationship="BlogModel.FK__replies__comment__6FE99F9F" FromRole="reply" ToRole="comment" />
           <NavigationProperty Name="user" Relationship="BlogModel.FK__replies__user_id__70DDC3D8" FromRole="reply" ToRole="user" />
+          <Property Name="invalidate" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK__replies__comment__6FE99F9F">
           <End Type="BlogModel.comment" Role="comment" Multiplicity="0..1" />
@@ -522,6 +536,7 @@
           <EntitySetMapping Name="categories">
             <EntityTypeMapping TypeName="BlogModel.category">
               <MappingFragment StoreEntitySet="categories">
+                <ScalarProperty Name="invalidate" ColumnName="invalidate" />
                 <ScalarProperty Name="parent_id" ColumnName="parent_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -533,6 +548,7 @@
           <EntitySetMapping Name="comments">
             <EntityTypeMapping TypeName="BlogModel.comment">
               <MappingFragment StoreEntitySet="comments">
+                <ScalarProperty Name="invalidate" ColumnName="invalidate" />
                 <ScalarProperty Name="comment1" ColumnName="comment" />
                 <ScalarProperty Name="approved" ColumnName="approved" />
                 <ScalarProperty Name="id" ColumnName="id" />
@@ -546,6 +562,7 @@
           <EntitySetMapping Name="files">
             <EntityTypeMapping TypeName="BlogModel.file">
               <MappingFragment StoreEntitySet="files">
+                <ScalarProperty Name="invalidate" ColumnName="invalidate" />
                 <ScalarProperty Name="body_images" ColumnName="body_images" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="post_id" ColumnName="post_id" />
@@ -558,6 +575,7 @@
           <EntitySetMapping Name="PostCategories">
             <EntityTypeMapping TypeName="BlogModel.PostCategory">
               <MappingFragment StoreEntitySet="PostCategories">
+                <ScalarProperty Name="invalidate" ColumnName="invalidate" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="post_id" ColumnName="post_id" />
                 <ScalarProperty Name="category_id" ColumnName="category_id" />
@@ -567,6 +585,7 @@
           <EntitySetMapping Name="posts">
             <EntityTypeMapping TypeName="BlogModel.post">
               <MappingFragment StoreEntitySet="posts">
+                <ScalarProperty Name="invalidate" ColumnName="invalidate" />
                 <ScalarProperty Name="main_image" ColumnName="main_image" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="title" ColumnName="title" />
@@ -592,6 +611,7 @@
           <EntitySetMapping Name="users">
             <EntityTypeMapping TypeName="BlogModel.user">
               <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="invalidate" ColumnName="invalidate" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="password" ColumnName="password" />
@@ -609,6 +629,7 @@
           <EntitySetMapping Name="replies">
             <EntityTypeMapping TypeName="BlogModel.reply">
               <MappingFragment StoreEntitySet="replies">
+                <ScalarProperty Name="invalidate" ColumnName="invalidate" />
                 <ScalarProperty Name="reply_text" ColumnName="reply_text" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="comment_id" ColumnName="comment_id" />

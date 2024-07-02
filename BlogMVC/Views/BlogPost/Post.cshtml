@@ -7,8 +7,6 @@
     var groupedImages = Model.Post.files
         .Where(f => !string.IsNullOrEmpty(f.body_images))
         .GroupBy(f => f.body_images);
-
-
 }
 <!-- # site-content
    ================================================== -->
@@ -66,10 +64,10 @@
                     </div>
                 </header>
                 <div class="entry__media" style=" display: flex; justify-content: center;">
-                         <img class="featured-image" src="data:image/png;base64,@Model.Post.main_image"
-                             style=" vertical-align: bottom; margin-bottom: 0; position: relative; width: 75%; height: auto; object-fit: cover;"
-                             sizes="(max-width: 2400px) 100vw, 2400px" alt="Main Image">
-                 </div>
+                    <img class="featured-image" src="data:image/png;base64,@Model.Post.main_image"
+                         style=" vertical-align: bottom; margin-bottom: 0; position: relative; width: 75%; height: auto; object-fit: cover;"
+                         sizes="(max-width: 2400px) 100vw, 2400px" alt="Main Image">
+                </div>
 
                 <!-- end content-primary -->
                 <div class="content-primary">
@@ -97,7 +95,7 @@
 
                         <div class="entry__author-box">
                             <figure class="entry__author-avatar">
-                                <img alt="" src="/Content/images/avatars/default.png" class="avatar">
+                                <img alt="" src="~/Content/images/avatars/default.png" class="avatar">
                             </figure>
                             <div class="entry__author-info">
                                 <h5 class="entry__author-name">
@@ -147,115 +145,127 @@
                     </style>
                 }
             }
-            <div class="comment-respond">
-                <div id="respond">
-                    <h3>
-                        Add Comment
-                    </h3>
-                    <form name="contactForm" id="commentForm" method="post" action="" autocomplete="off" data-post-id="@Model.Post.id">
-                        <fieldset class="row">
-                            <input type="hidden" id="post_id" name="post_id" value="@Model.Post.id" />
-                            <div class="column lg-12 message form-field">
-                                <textarea name="comment" id="comment" class="u-fullwidth" placeholder="Your Message"></textarea>
+            @if (Model.Post.approved == "yes") 
+
+            { 
+                    <div class="comment-respond">
+                        <div id="respond">
+                            <h3>
+                                Add Comment
+                            </h3>
+                            <form name="contactForm" id="commentForm" method="post" action="" autocomplete="off" data-post-id="@Model.Post.id">
+                                <fieldset class="row">
+                                    <input type="hidden" id="post_id" name="post_id" value="@Model.Post.id" />
+                                    <div class="column lg-12 message form-field">
+                                        <textarea name="comment" id="comment" class="u-fullwidth" placeholder="Your Message"></textarea>
+                                    </div>
+                                    <div class="column lg-12">
+                                        <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Comment" type="submit">
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                    <!----------------------------------------------------------- COMMENTS ---------------------------------------------------------------------------------------------------->
+                    <div class="comments-wrap">
+                        <div id="comments">
+                            <div class="large-12">
+                                <h3>Comments Session!</h3>
+                                <!-- START commentlist -->
+                                <ol class="commentlist">
+                                    @foreach (var comment in Model.ApprovedComments)
+                                    {
+                                        if (comment.invalidate == 10)
+                                        {
+                                            <li class="thread-alt depth-1 comment">
+                                                <div class="comment__avatar">
+                                                    <img class="avatar" src="~/Content/images/avatars/default.png" alt="" width="50" height="50">
+                                                </div>
+                                                <div class="comment__content">
+                                                    <div class="comment__info">
+                                                        <div class="comment__author">@comment.user.username</div>
+                                                        <div class="comment__meta">
+                                                            <div class="comment__time">@comment.created_at</div>
+                                                            <div class="comment__reply">
+                                                                <a class="comment-reply-link" href="javascript:void(0);" onclick="openReplyForm('@comment.id')">Reply</a>
+                                                                @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == comment.user.username.ToString())
+                                                                {
+                                                                    <a style="color:red" href="@Url.Action("FshiComment", "Admin", new { id = comment.id })">Delete comment</a>
+                                                                }
+                                                                @if (Session["username"].ToString() == comment.user.username.ToString())
+                                                                {
+                                                                    <a style="color:green" href="javascript:void(0);" onclick="openEditForm('@comment.id', '@comment.comment1')">Edit comment</a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="comment__text">
+                                                        <p>@comment.comment1</p>
+                                                    </div>
+                                                </div>
+                                                @if (comment.replies.Any())
+                                                {
+                                                    <ul class="children">
+                                                        @foreach (var reply in comment.replies)
+                                                        {
+                                                            if (reply.invalidate == 10)
+                                                            {
+                                                                <li class="depth-2 comment">
+                                                                    <div class="comment__content">
+                                                                        <div class="comment__info">
+                                                                            <div class="comment__author">@reply.user.username</div>
+                                                                        </div>
+                                                                        <div class="comment__text">
+                                                                            @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == reply.user.username.ToString())
+                                                                            {
+                                                                                <a style="color:red" href="@Url.Action("FshiReply", "Admin", new { id = reply.id })">Delete reply</a>
+                                                                            }
+                                                                            <p>@reply.reply_text</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                }
+                                            </li>
+                                            <!-- end comment level 1 -->
+                                        }
+                                    }
+                                </ol>
+                                <!-- END commentlist -->
                             </div>
-                            <div class="column lg-12">
-                                <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Comment" type="submit">
-                            </div>
-                        </fieldset>
+                            <!-- end col-full -->
+                        </div>
+                    </div>
+            }
+
+            <!-- end comments -->
+            <!-- Popup reply form -->
+            <div id="replyFormPopup" class="popup">
+                <div class="popup-content">
+                    <span class="close" onclick="closeReplyForm()">&times;</span>
+                    <h2>Reply to Comment</h2>
+                    <form id="replyForm">
+                        <input type="hidden" name="comment_id" id="comment_id" value="">
+                        <textarea name="reply" id="reply" rows="4" cols="50" placeholder="Write your reply here..."></textarea><br>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
             </div>
-            <!----------------------------------------------------------- COMMENTS ---------------------------------------------------------------------------------------------------->
-            <div class="comments-wrap">
-                <div id="comments">
-                    <div class="large-12">
-                        <h3>Comments Session!</h3>
-                        <!-- START commentlist -->
-                        <ol class="commentlist">
-                            @foreach (var comment in Model.ApprovedComments)
-                            {
-                                <li class="thread-alt depth-1 comment">
-                                    <div class="comment__avatar">
-                                        <img class="avatar" src="/Content/images/avatars/default.png" alt="" width="50" height="50">
-                                    </div>
-                                    <div class="comment__content">
-                                        <div class="comment__info">
-                                            <div class="comment__author">@comment.user.username</div>
-                                            <div class="comment__meta">
-                                                <div class="comment__time">@comment.created_at</div>
-                                                <div class="comment__reply">
-                                                    <a class="comment-reply-link" href="javascript:void(0);" onclick="openReplyForm(@comment.id)">Reply</a>
-                                                    @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == comment.user.username.ToString())
-                                                    {
-                                                        <a style="color:red" href="@Url.Action("FshiComment", "Admin", new {id = comment.id})"> /   Delete comment</a>
-                                                    }
-                                                    @if (Session["username"].ToString() == comment.user.username.ToString())
-                                                    {
-                                                        <a style="color:green" href="javascript:void(0);" onclick="openEditForm(@comment.id, '@comment.comment1')"> / Edit comment</a>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="comment__text">
-                                            <p>@comment.comment1</p>
-                                        </div>
-                                    </div>
-                                    @if (comment.replies.Any())
-                                    {
-                                        <ul class="children">
-                                            @foreach (var reply in comment.replies)
-                                            {
-                                                <li class="depth-2 comment">
-                                                    <div class="comment__content">
-                                                        <div class="comment__info">
-                                                            <div class="comment__author">@reply.user.username</div>
-                                                        </div>
-                                                        <div class="comment__text">
-                                                            @if (Session["role"].ToString() == "admin" || Session["username"].ToString() == reply.user.username.ToString())
-                                                            {
-                                                                <a style="color:red" href="@Url.Action("FshiReply", "Admin", new {id = reply.id})">Delete reply</a>
-                                                            }
-                                                            <p>@reply.reply_text</p>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            }
-                                        </ul>
-                                    }
-                                </li>
-                                <!-- end comment level 1 -->
-                            }
-                        </ol>
-                        <!-- END commentlist -->
-                    </div>
-                    <!-- end col-full -->
-                </div>
-                <!-- end comments -->
-                <!-- Popup reply form -->
-                <div id="replyFormPopup" class="popup">
-                    <div class="popup-content">
-                        <span class="close" onclick="closeReplyForm()">&times;</span>
-                        <h2>Reply to Comment</h2>
-                        <form id="replyForm">
-                            <input type="hidden" name="comment_id" id="comment_id" value="">
-                            <textarea name="reply" id="reply" rows="4" cols="50" placeholder="Write your reply here..."></textarea><br>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- Popup edit form -->
-                <div id="editFormPopup" class="popup">
-                    <div class="popup-content">
-                        <span class="close" onclick="closeEditForm()">&times;</span>
-                        <h2>Edit Comment</h2>
-                        <form id="editForm">
-                            <input type="hidden" name="comment_id" id="comment_id" value="">
-                            <textarea name="comment1" id="comment1" rows="4" cols="50" placeholder="Edit your comment here..."></textarea><br>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
+            <!-- Popup edit form -->
+            <div id="editFormPopup" class="popup">
+                <div class="popup-content">
+                    <span class="close" onclick="closeEditForm()">&times;</span>
+                    <h2>Edit Comment</h2>
+                    <form id="editForm">
+                        <input type="hidden" name="comment_id" id="comment_id" value="">
+                        <textarea name="comment1" id="comment1" rows="4" cols="50" placeholder="Edit your comment here..."></textarea><br>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                 </div>
             </div>
+        </div>
             <!-- end comments-wrap -->
             <style>
                 /* Pop-up form styles */
@@ -452,9 +462,6 @@
                            error: function() {
                                alert('Error editing comment.');
                            }
-
-
-
                        });
                    });
                });
@@ -467,7 +474,7 @@
              * Metoda: openEditForm
              * Arsyeja: Per te hapur formen e editimit te komentit
              * Pershkrimi: Kjo metode vendos vleren e comment_id dhe comment_text ne formen e editimit dhe e shfaq formen.
-              * Parametrat:
+             * Parametrat:
              *   - comment_id: ID-ja e komentit qe po editohet.
              *   - comment_text: Teksti aktual i komentit qe po editohet.
              * Return: Nuk kthen ndonje vlere.
@@ -485,12 +492,10 @@
              * Arsyeja: Per te mbyllur formen e editimit te komentit
              */
 
-               function closeEditForm() {
+            function closeEditForm()
+            {
                document.getElementById("editFormPopup").style.display = "none";
-               }
-
-
-
+             }
 
         </script>
     }

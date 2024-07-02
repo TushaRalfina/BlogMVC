@@ -9,6 +9,7 @@
     <Property Name="created_at" Type="datetime" />
     <Property Name="updated_at" Type="datetime" />
     <Property Name="parent_id" Type="int" />
+    <Property Name="invalidate" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="comments">
     <Key>
@@ -21,6 +22,7 @@
     <Property Name="created_at" Type="datetime" />
     <Property Name="updated_at" Type="datetime" />
     <Property Name="approved" Type="varchar" MaxLength="45" />
+    <Property Name="invalidate" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="files">
     <Key>
@@ -32,6 +34,7 @@
     <Property Name="file_name" Type="varchar" MaxLength="255" Nullable="false" />
     <Property Name="file_content" Type="varchar(max)" Nullable="false" />
     <Property Name="body_images" Type="varchar(max)" />
+    <Property Name="invalidate" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="PostCategories">
     <Key>
@@ -40,6 +43,7 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="post_id" Type="int" Nullable="false" />
     <Property Name="category_id" Type="int" Nullable="false" />
+    <Property Name="invalidate" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="posts">
     <Key>
@@ -53,6 +57,7 @@
     <Property Name="created_at" Type="datetime" />
     <Property Name="updated_at" Type="datetime" />
     <Property Name="main_image" Type="varchar(max)" />
+    <Property Name="invalidate" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="replies">
     <Key>
@@ -62,6 +67,7 @@
     <Property Name="comment_id" Type="int" />
     <Property Name="user_id" Type="int" />
     <Property Name="reply_text" Type="nvarchar(max)" />
+    <Property Name="invalidate" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
@@ -88,8 +94,9 @@
     <Property Name="bio" Type="text" />
     <Property Name="created_at" Type="datetime" />
     <Property Name="updated_at" Type="datetime" />
+    <Property Name="invalidate" Type="int" Nullable="false" />
   </EntityType>
-  <Association Name="FK__comments__post_i__38996AB5">
+  <Association Name="FK__comments__post_i__403A8C7D">
     <End Role="posts" Type="Self.posts" Multiplicity="1" />
     <End Role="comments" Type="Self.comments" Multiplicity="*" />
     <ReferentialConstraint>
@@ -101,7 +108,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__comments__user_i__398D8EEE">
+  <Association Name="FK__comments__user_i__412EB0B6">
     <End Role="users" Type="Self.users" Multiplicity="1" />
     <End Role="comments" Type="Self.comments" Multiplicity="*" />
     <ReferentialConstraint>
@@ -113,7 +120,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__files__post_id__3E52440B">
+  <Association Name="FK__files__post_id__4222D4EF">
     <End Role="posts" Type="Self.posts" Multiplicity="1" />
     <End Role="files" Type="Self.files" Multiplicity="*" />
     <ReferentialConstraint>
@@ -125,7 +132,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PostCateg__categ__35BCFE0A">
+  <Association Name="FK__PostCateg__categ__4316F928">
     <End Role="categories" Type="Self.categories" Multiplicity="1" />
     <End Role="PostCategories" Type="Self.PostCategories" Multiplicity="*" />
     <ReferentialConstraint>
@@ -137,7 +144,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__PostCateg__post___34C8D9D1">
+  <Association Name="FK__PostCateg__post___440B1D61">
     <End Role="posts" Type="Self.posts" Multiplicity="1" />
     <End Role="PostCategories" Type="Self.PostCategories" Multiplicity="*" />
     <ReferentialConstraint>
@@ -149,7 +156,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__posts__user_id__300424B4">
+  <Association Name="FK__posts__user_id__44FF419A">
     <End Role="users" Type="Self.users" Multiplicity="1" />
     <End Role="posts" Type="Self.posts" Multiplicity="*" />
     <ReferentialConstraint>
@@ -161,7 +168,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__replies__comment__6FE99F9F">
+  <Association Name="FK__replies__comment__45F365D3">
     <End Role="comments" Type="Self.comments" Multiplicity="0..1" />
     <End Role="replies" Type="Self.replies" Multiplicity="*" />
     <ReferentialConstraint>
@@ -173,7 +180,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__replies__user_id__70DDC3D8">
+  <Association Name="FK__replies__user_id__46E78A0C">
     <End Role="users" Type="Self.users" Multiplicity="0..1" />
     <End Role="replies" Type="Self.replies" Multiplicity="*" />
     <ReferentialConstraint>
@@ -206,35 +213,35 @@
     <EntitySet Name="replies" EntityType="Self.replies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__comments__post_i__38996AB5" Association="Self.FK__comments__post_i__38996AB5">
+    <AssociationSet Name="FK__comments__post_i__403A8C7D" Association="Self.FK__comments__post_i__403A8C7D">
       <End Role="posts" EntitySet="posts" />
       <End Role="comments" EntitySet="comments" />
     </AssociationSet>
-    <AssociationSet Name="FK__comments__user_i__398D8EEE" Association="Self.FK__comments__user_i__398D8EEE">
+    <AssociationSet Name="FK__comments__user_i__412EB0B6" Association="Self.FK__comments__user_i__412EB0B6">
       <End Role="users" EntitySet="users" />
       <End Role="comments" EntitySet="comments" />
     </AssociationSet>
-    <AssociationSet Name="FK__files__post_id__3E52440B" Association="Self.FK__files__post_id__3E52440B">
+    <AssociationSet Name="FK__files__post_id__4222D4EF" Association="Self.FK__files__post_id__4222D4EF">
       <End Role="posts" EntitySet="posts" />
       <End Role="files" EntitySet="files" />
     </AssociationSet>
-    <AssociationSet Name="FK__PostCateg__categ__35BCFE0A" Association="Self.FK__PostCateg__categ__35BCFE0A">
+    <AssociationSet Name="FK__PostCateg__categ__4316F928" Association="Self.FK__PostCateg__categ__4316F928">
       <End Role="categories" EntitySet="categories" />
       <End Role="PostCategories" EntitySet="PostCategories" />
     </AssociationSet>
-    <AssociationSet Name="FK__PostCateg__post___34C8D9D1" Association="Self.FK__PostCateg__post___34C8D9D1">
+    <AssociationSet Name="FK__PostCateg__post___440B1D61" Association="Self.FK__PostCateg__post___440B1D61">
       <End Role="posts" EntitySet="posts" />
       <End Role="PostCategories" EntitySet="PostCategories" />
     </AssociationSet>
-    <AssociationSet Name="FK__posts__user_id__300424B4" Association="Self.FK__posts__user_id__300424B4">
+    <AssociationSet Name="FK__posts__user_id__44FF419A" Association="Self.FK__posts__user_id__44FF419A">
       <End Role="users" EntitySet="users" />
       <End Role="posts" EntitySet="posts" />
     </AssociationSet>
-    <AssociationSet Name="FK__replies__comment__6FE99F9F" Association="Self.FK__replies__comment__6FE99F9F">
+    <AssociationSet Name="FK__replies__comment__45F365D3" Association="Self.FK__replies__comment__45F365D3">
       <End Role="comments" EntitySet="comments" />
       <End Role="replies" EntitySet="replies" />
     </AssociationSet>
-    <AssociationSet Name="FK__replies__user_id__70DDC3D8" Association="Self.FK__replies__user_id__70DDC3D8">
+    <AssociationSet Name="FK__replies__user_id__46E78A0C" Association="Self.FK__replies__user_id__46E78A0C">
       <End Role="users" EntitySet="users" />
       <End Role="replies" EntitySet="replies" />
     </AssociationSet>

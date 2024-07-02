@@ -26,6 +26,7 @@ namespace BlogMVC.Models
         public Nullable<System.DateTime> created_at { get; set; }
         public Nullable<System.DateTime> updated_at { get; set; }
         public Nullable<int> parent_id { get; set; }
+        public int invalidate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PostCategory> PostCategories { get; set; }
