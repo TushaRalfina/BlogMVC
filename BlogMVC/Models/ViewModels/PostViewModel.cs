@@ -18,6 +18,8 @@ namespace BlogMVC.Models.ViewModels
         public List<comment> ApprovedComments { get; set; }
 
          public List<file> Files { get; set; }
+        public List<file> Images { get; set; }
+
     }
 
 }

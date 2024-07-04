@@ -106,24 +106,24 @@
 
 
 
-                <style>
-                    .category-item {
-                       display:flex;
-                       gap:10px;
+                    <style>
+                        .category-item {
+                           display:flex;
+                           gap:10px;
                       
                         
-                     }
+                         }
 
                         .category-item h4 {
                             margin-right: 10px;
                             font-size: 1em;
                         }
 
-                    .checkbox-inline {
-                        margin-right: 10px;
-                        vertical-align: middle;
-                    }
-                </style>
+                        .checkbox-inline {
+                            margin-right: 10px;
+                            vertical-align: middle;
+                        }
+                    </style>
 
 
                 <div class="column lg-12 form-field">
@@ -142,10 +142,7 @@
             </fieldset>
 
                 }
-                <!-- Thank You Popup -->
-                <div id="thankYouPopup" class="popup">
-                    <p>Thank you for adding your post!</p>
-                </div>
+                
 
 
             </article> <!-- end entry -->
@@ -310,7 +307,6 @@ $(document).ready(function () {
                 }
             }
         }
-
         function validateAdditionalFiles(input) {
              var files = input.files;
              var allowedExtensions = /(\.pdf|\.docx)$/i;
@@ -321,7 +317,7 @@ $(document).ready(function () {
                     input.value = '';
                     return false;
                 }
-            }
         }
     </script>
+            }
 }

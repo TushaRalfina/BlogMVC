@@ -55,18 +55,25 @@ namespace BlogMVC.Controllers
         [HttpGet]
         public ActionResult Add()
         {
-            if (Session["id"] == null)
+            try
             {
-                return RedirectToAction("Login", "Home");
-            }
-            ViewBag.UserRole = Session["role"];
-            var categories = categoryRepository.GetCategories();
+                if (Session["id"] == null)
+                {
+                    return RedirectToAction("Login", "Home");
+                }
+                ViewBag.UserRole = Session["role"];
+                var categories = categoryRepository.GetCategories();
 
-            var model = new AddBlogPostRequest
+                var model = new AddBlogPostRequest
+                {
+                    categoriess = categories
+                };
+                return View(model);
+            }
+            catch (Exception ex)
             {
-                categoriess = categories
-            };
-            return View(model);
+                return HttpNotFound("An error occurred while retrieving the add form: " + ex.Message);
+            }
         }
 
 
@@ -85,14 +92,7 @@ namespace BlogMVC.Controllers
         [HttpPost]
         public ActionResult Add(AddBlogPostRequest model, IEnumerable<HttpPostedFileBase> body_images)
         {
-            var validationResult = ValidatePost(model);
-            if (validationResult != null)
-            {
-                ViewBag.Notification = validationResult;
-                model.categoriess = categoryRepository.GetCategories();
- 
-                return View(model);
-            }
+            
             if (ModelState.IsValid)
             {
                 if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
@@ -203,8 +203,7 @@ namespace BlogMVC.Controllers
                         }
                     }
 
-                    var categories = categoryRepository.GetCategories();
-                    model.categoriess = categories;
+                     
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -212,35 +211,10 @@ namespace BlogMVC.Controllers
                     return RedirectToAction("Login", "Home");
                 }
             }
-           
+            var categories = categoryRepository.GetCategories();
+            model.categoriess = categories;
             return View(model);
         }
-
- 
-        private string ValidatePost(AddBlogPostRequest model)
-        {
-            if (string.IsNullOrEmpty(model.title))
-            {
-                return "";
-            }
-
-            if (string.IsNullOrEmpty(model.content))
-            {
-                return "";
-            }
-             
-            if (model.SelectedCategoryIds == null || !model.SelectedCategoryIds.Any())
-            {
-                return "";
-            }
-
-            return null;
-        }
-
-
-
-
-
 
 
         /**
@@ -259,81 +233,100 @@ namespace BlogMVC.Controllers
             var post = blogPostRepository.GetBlogPostById(id);
             if (post != null)
             {
-                var approvedComments = blogPostRepository.GetCommentsByPostId(id).ToList();
-                var files = filesRepository.GetFilesByPostId(id).ToList();
-                ViewBag.UserRole = Session["role"];
-
-
-
-                var viewModel = new PostViewModel
+                try
                 {
-                    Post = post,
-                    ApprovedComments = approvedComments,
-                    Files = files
-                };
+                    var approvedComments = blogPostRepository.GetCommentsByPostId(id).ToList();
+                    var files = filesRepository.GetFilesByPostId(id).ToList();
+                    var body_images = filesRepository.GetImagesByPostId(id).ToList();
+                    ViewBag.UserRole = Session["role"];
 
-                return View(viewModel);
+
+
+                    var viewModel = new PostViewModel
+                    {
+                        Post = post,
+                        ApprovedComments = approvedComments,
+                        Files = files,
+                        Images= body_images
+                    };
+
+                    return View(viewModel);
+                }
+                catch (Exception ex)
+                {
+                    return HttpNotFound("An error occurred while retrieving the post: " + ex.Message);
+                }
             }
 
             return HttpNotFound("Post not found.");
         }
 
 
-         /**
-         * Data: 26/06/2024
-         * Programuesi: Ralfina Tusha
-         * Metoda: AddComment
-         * Arsyeja: Shtimi i nje komenti ne nje postim.
-         * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar. Nese eshte i loguar, shton komentin e ri ne databaze dhe kthen nje pergjigje JSON me sukses dhe komentin e shtuar.
-         * Para kushti: Perdoruesi duhet te jete i loguar.
-         * Post kushti: Kthen nje pergjigje JSON me sukses dhe komentin e shtuar.
-         * Parametrat: post_id - id e postit; comment - teksti i komentit.
-         * Return: JsonResult - Pergjigje JSON me sukses dhe komentin e shtuar.
-         **/
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: AddComment
+        * Arsyeja: Shtimi i nje komenti ne nje postim.
+        * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar. Nese eshte i loguar, shton komentin e ri ne databaze dhe kthen nje pergjigje JSON me sukses dhe komentin e shtuar.
+        * Para kushti: Perdoruesi duhet te jete i loguar.
+        * Post kushti: Kthen nje pergjigje JSON me sukses dhe komentin e shtuar.
+        * Parametrat: post_id - id e postit; comment - teksti i komentit.
+        * Return: JsonResult - Pergjigje JSON me sukses dhe komentin e shtuar.
+        **/
         [HttpPost]
         public JsonResult AddComment(int post_id, string comment)
         {
-            if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
+            try
             {
-                var user = userRepository.GetUserById(user_id);
-
-
-                if (user == null)
+                if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
                 {
-                    return Json(new { success = false, message = "User not found." });
-                }
+                    var user = userRepository.GetUserById(user_id);
 
-                if (string.IsNullOrWhiteSpace(comment))
-                {
-                    return Json(new { success = false, message = "Comment text is required." });
-                }
-
-                var newComment = new comment
-                {
-                    post_id = post_id,
-                    user_id = user_id,
-                    comment1 = comment,
-                    created_at = DateTime.Now,
-                    approved = user.role == "admin" ? "yes" : "no",
-                    invalidate = 10
-                };
-
-                blogPostRepository.AddComment(newComment);
- 
-                newComment.user = user;
-
-                return Json(new
-                {
-                    success = true,
-                    comment = new
+                    if (user == null)
                     {
-                        newComment.comment1,
-                        user.username,
-                        created_at = newComment.created_at
+                        return Json(new { success = false, message = "User not found." });
                     }
-                });
+
+                    if (string.IsNullOrWhiteSpace(comment))
+                    {
+                        return Json(new { success = false, message = "Comment text is required." });
+                    }
+
+                    var newComment = new comment
+                    {
+                        post_id = post_id,
+                        user_id = user_id,
+                        comment1 = comment,
+                        created_at = DateTime.Now,
+                        approved = user.role == "admin" ? "yes" : "no",
+                        invalidate = 10
+                    };
+
+                    blogPostRepository.AddComment(newComment);
+
+                    newComment.user = user;
+
+                    return Json(new
+                    {
+                        success = true,
+                        comment = new
+                        {
+                            newComment.comment1,
+                            user.username,
+                            created_at = newComment.created_at
+                        }
+                    });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "User not authenticated." });
+                }
             }
-            return Json(new { success = false, message = "User not authenticated." });
+            catch (Exception ex)
+            {
+               
+                return Json(new { success = false, message = "An error occurred while processing your request to add comment." });
+            }
         }
 
 
@@ -351,48 +344,55 @@ namespace BlogMVC.Controllers
         [HttpPost]
         public JsonResult AddReply(int comment_id, string reply_text)
         {
-            if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
+            try
             {
-                var user = userRepository.GetUserById(user_id);
-
-                if (user == null)
+                if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
                 {
-                    return Json(new { success = false, message = "User not found." });
-                }
+                    var user = userRepository.GetUserById(user_id);
 
-                var parentComment = blogPostRepository.GetCommentById(comment_id);
-
-
-                if (string.IsNullOrWhiteSpace(reply_text))
-                {
-                    return Json(new { success = false, message = "Reply text is required." });
-                }
-
-                var newReply = new comment
-                {
-                    post_id = parentComment.post_id,
-                    parent_id = comment_id,
-                    user_id = user_id,
-                    comment1 = reply_text,
-                    approved = "yes",
-                    invalidate = 10
-                };
-
-                blogPostRepository.AddReply(newReply);
-
-                newReply.user = user;
-
-                return Json(new
-                {
-                    success = true,
-                    reply = new
+                    if (user == null)
                     {
-                        newReply.comment1,
-                        user.username
+                        return Json(new { success = false, message = "User not found." });
                     }
-                });
+
+                    var parentComment = blogPostRepository.GetCommentById(comment_id);
+
+
+                    if (string.IsNullOrWhiteSpace(reply_text))
+                    {
+                        return Json(new { success = false, message = "Reply text is required." });
+                    }
+
+                    var newReply = new comment
+                    {
+                        post_id = parentComment.post_id,
+                        parent_id = comment_id,
+                        user_id = user_id,
+                        comment1 = reply_text,
+                        approved = "yes",
+                        invalidate = 10
+                    };
+
+                    blogPostRepository.AddReply(newReply);
+
+                    newReply.user = user;
+
+                    return Json(new
+                    {
+                        success = true,
+                        reply = new
+                        {
+                            newReply.comment1,
+                            user.username
+                        }
+                    });
+                }
+                return Json(new { success = false, message = "User not authenticated." });
             }
-            return Json(new { success = false, message = "User not authenticated." });
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred while processing your request to add reply." });
+            }
         }
 
 
@@ -415,12 +415,19 @@ namespace BlogMVC.Controllers
         **/
         public ActionResult UserPosts(int id)
         {
-            if (Session["id"] == null)
+            try
             {
-                return RedirectToAction("Login", "Home");
+                if (Session["id"] == null)
+                {
+                    return RedirectToAction("Login", "Home");
+                }
+                var posts = blogPostRepository.GetBlogPostsByUserId(id).ToList();
+                return View(posts);
             }
-            var posts = blogPostRepository.GetBlogPostsByUserId(id).ToList();
-            return View(posts);
+            catch (Exception ex)
+            {
+                return HttpNotFound("An error occurred while retrieving the posts of the user: " + ex.Message);
+            }
         }
 
 
@@ -438,47 +445,20 @@ namespace BlogMVC.Controllers
         [HttpPost]
         public JsonResult EditComment(int comment_id, string comment_text)
         {
-            var comment = blogPostRepository.GetCommentById(comment_id);
-            if (comment == null)
+            try
             {
-                return Json(new { success = false, message = "Comment not found." });
+                var comment = blogPostRepository.GetCommentById(comment_id);
+                if (comment == null)
+                {
+                    return Json(new { success = false, message = "Comment not found." });
+                }
+                comment.comment1 = comment_text;
+                blogPostRepository.UpdateComment(comment);
+                return Json(new { success = true });
             }
-            comment.comment1 = comment_text;
-            blogPostRepository.UpdateComment(comment);
-            return Json(new { success = true });
+            catch (Exception ex) {
+                return Json(new { success = false, message = "An error occurred while processing your request to edit comment." });
+            }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-    

@@ -57,14 +57,22 @@ namespace BlogMVC.Controllers
         [HttpGet]
         public ActionResult ManagePosts()
         {
-            if (Session["role"] == null || Session["role"].ToString() != "admin")
+            try
             {
-                return RedirectToAction("Login", "Home");
-            }
- 
-             var posts = adminRepository.GetBlogPostsNotApproved();
+                if (Session["role"] == null || Session["role"].ToString() != "admin")
+                {
+                    return RedirectToAction("Login", "Home");
+                }
 
-             return View(posts);
+                var posts = adminRepository.GetBlogPostsNotApproved();
+
+                return View(posts);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting posts: " + ex.Message);
+                return RedirectToAction("Index", "Home");
+            }
         }
 
 
@@ -83,13 +91,21 @@ namespace BlogMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ApprovePost(int id)
         {
-            var post = blogPostRepository.GetBlogPostById(id);
+            try
             {
-                adminRepository.ApproveBlogPost(id);
-                post.approved = "yes";
-                SendApprovalEmail(post.user.email, post.title,post.user.username,post.approved);
+                var post = blogPostRepository.GetBlogPostById(id);
+                {
+                    adminRepository.ApproveBlogPost(id);
+                    post.approved = "yes";
+                    SendApprovalEmail(post.user.email, post.title, post.user.username, post.approved);
+                }
+                return RedirectToAction("ManagePosts");
             }
-            return RedirectToAction("ManagePosts");
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error approving post: " + ex.Message);
+                return RedirectToAction("ManagePosts");
+            }
         }
 
         private void SendApprovalEmail(string toEmail, string postTitle,string username,string approved)
@@ -138,12 +154,18 @@ namespace BlogMVC.Controllers
 
         public ActionResult DeletePost(int id)
         {
-            var post = blogPostRepository.GetBlogPostById(id);
+            try
             {
+                var post = blogPostRepository.GetBlogPostById(id);
                 adminRepository.DeleteBlogPosts(id);
                 SendApprovalEmail(post.user.email, post.title, post.user.username, post.approved);
+                return RedirectToAction("ManagePosts");
             }
-            return RedirectToAction("ManagePosts");
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error deleting post: " + ex.Message);
+                return RedirectToAction("ManagePosts");
+             }
         }
 
          /**
@@ -161,14 +183,22 @@ namespace BlogMVC.Controllers
         [HttpGet]
         public ActionResult ManageComments()
         {
-            if (Session["role"] == null || Session["role"].ToString() != "admin")
+            try
             {
-                return RedirectToAction("Login", "Home");
+                if (Session["role"] == null || Session["role"].ToString() != "admin")
+                {
+                    return RedirectToAction("Login", "Home");
+                }
+
+                var comments = adminRepository.GetCommentsNotApproved();
+
+                return View(comments);
             }
-
-            var comments = adminRepository.GetCommentsNotApproved();
-
-            return View(comments);
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting comments: " + ex.Message);
+                return RedirectToAction("ManageComments", "Admin");
+             }
         }
 
 
@@ -184,8 +214,16 @@ namespace BlogMVC.Controllers
 
         public ActionResult ApproveComment(int id)
         {
-            adminRepository.ApproveComment(id);
-            return RedirectToAction("ManageComments");
+            try
+            {
+                adminRepository.ApproveComment(id);
+                return RedirectToAction("ManageComments");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error approving comment: " + ex.Message);
+                return RedirectToAction("ManageComments");
+            }
         }
 
          /**
@@ -200,8 +238,16 @@ namespace BlogMVC.Controllers
 
         public ActionResult DeleteComment(int id)
         {
-            adminRepository.DeleteComment(id);
-            return RedirectToAction("ManageComments");
+            try
+            {
+                adminRepository.DeleteComment(id);
+                return RedirectToAction("ManageComments");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error deleting comment: " + ex.Message);
+                return RedirectToAction("ManageComments");
+            }
         }
 
 
@@ -217,9 +263,16 @@ namespace BlogMVC.Controllers
         public ActionResult FshiComment(int id)
         {
             int postId = adminRepository.GetPostIdByCommentId(id);
-
-            adminRepository.DeleteComment(id);
-            return RedirectToAction("Post","BlogPost", new { id = postId });
+            try
+            {
+                adminRepository.DeleteComment(id);
+                return RedirectToAction("Post", "BlogPost", new { id = postId });
+            }
+            catch (Exception ex)
+            {
+                 Console.WriteLine("Error deleting comment: " + ex.Message);
+                return RedirectToAction("Post", "BlogPost", new { id = postId });
+            }
 
         }
 
@@ -234,11 +287,18 @@ namespace BlogMVC.Controllers
          **/
 
         public ActionResult FshiReply(int id)
-        {
-
-             int postId = adminRepository.GetPostIdByCommentId(id);
-            adminRepository.FshiReply(id);
-            return RedirectToAction("Post", "BlogPost", new { id = postId });
+        {               
+            int postId = adminRepository.GetPostIdByCommentId(id);
+            try 
+            { 
+                adminRepository.FshiReply(id);
+                return RedirectToAction("Post", "BlogPost", new { id = postId });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error deleting reply: " + ex.Message);
+                return RedirectToAction("Post", "BlogPost", new { id = postId });
+            }
 
         }
 
@@ -261,8 +321,6 @@ namespace BlogMVC.Controllers
             {
                 return RedirectToAction("Login", "Home");
             }
-
- 
              return View( );  
         }
 
@@ -280,16 +338,24 @@ namespace BlogMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddCategory(category category)
         {
-            if (ModelState.IsValid)
+            try
             {
-                category.created_at = DateTime.Now;
-                category.updated_at = DateTime.Now;
+                if (ModelState.IsValid)
+                {
+                    category.created_at = DateTime.Now;
+                    category.updated_at = DateTime.Now;
 
-                adminRepository.AddCategory(category);
+                    adminRepository.AddCategory(category);
 
+                    return RedirectToAction("AddCategory");
+                }
+                return View();
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Error adding category: " + ex.Message);
                 return RedirectToAction("AddCategory");
             }
-              return View();  
+
         }
 
          /**
@@ -304,14 +370,22 @@ namespace BlogMVC.Controllers
 
         public ActionResult ShowCategories()
         {
-            if (Session["role"] == null || Session["role"].ToString() != "admin")
+            try
             {
-                return RedirectToAction("Login", "Home");
-            }
+                if (Session["role"] == null || Session["role"].ToString() != "admin")
+                {
+                    return RedirectToAction("Login", "Home");
+                }
 
-            var categoriesandsubcategories = categoryRepository.GetCategories();
-             
-            return View(categoriesandsubcategories);
+                var categoriesandsubcategories = categoryRepository.GetCategories();
+
+                return View(categoriesandsubcategories);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error getting categories: " + ex.Message);
+                return RedirectToAction("ShowCategories", "Admin");
+            }
         }
 
 
@@ -328,12 +402,20 @@ namespace BlogMVC.Controllers
         [HttpPost]
         public JsonResult AddSubCategory(string name, int category_id)
         {
-            if (string.IsNullOrWhiteSpace(name) || category_id <= 0)
+            try
             {
-                return Json(new { success = false, message = "Invalid input." });
+                if (string.IsNullOrWhiteSpace(name) || category_id <= 0)
+                {
+                    return Json(new { success = false, message = "Invalid input." });
+                }
+                adminRepository.AddSubCategory(name, category_id);
+                return Json(new { success = true });
             }
-            adminRepository.AddSubCategory(name, category_id);
-            return Json(new { success = true });
+            catch (Exception ex) 
+            {
+                Console.WriteLine("Error adding subcategory: " + ex.Message);
+                return Json(new { success = false, message = "Error adding subcategory." });
+            }
         } 
 
     }

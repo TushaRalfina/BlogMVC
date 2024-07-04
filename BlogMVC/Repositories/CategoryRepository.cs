@@ -27,6 +27,7 @@ namespace BlogMVC.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
+        BlogEntities db = new BlogEntities();
 
         /**
         * Data: 26/06/2024
@@ -37,11 +38,8 @@ namespace BlogMVC.Repositories
         **/
         public IEnumerable<category> GetCategories()
         {
-
-            using (var db = new BlogEntities())
-            {
                 return db.categories.ToList();
-            }
+             
         }
 
         /**
@@ -56,10 +54,7 @@ namespace BlogMVC.Repositories
 
         public category GetCategoryById(int id)
         {
-            using (var db = new BlogEntities())
-            {
-                 return db.categories.FirstOrDefault(c => c.id == id);
-             }
+            return db.categories.FirstOrDefault(c => c.id == id);      
         }
 
         /**
@@ -74,14 +69,12 @@ namespace BlogMVC.Repositories
 
         public IEnumerable<post> GetBlogPostsByCategoryId(int id)
         {
-            using (var db = new BlogEntities())
-            {
-                var postsInCategory = (from post in db.posts.Include("PostCategories")
+             var postsInCategory = (from post in db.posts.Include("PostCategories")
                                        where post.PostCategories.Any(pc => pc.category_id == id) && post.approved=="yes"
                                        select post).ToList();
 
-                return postsInCategory;
-            }
+              return postsInCategory;
+            
         }
         /**
         * Data: 26/06/2024
@@ -96,11 +89,8 @@ namespace BlogMVC.Repositories
 
         public IEnumerable<category> GetSubcategoriesByCategoryId(int id)
         {
-
-            using (var db = new BlogEntities())
-            {
                 return db.categories.Where(c => c.parent_id == id).ToList();
-            }
+             
          }
     }
 }

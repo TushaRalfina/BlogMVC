@@ -33,6 +33,8 @@ namespace BlogMVC.Repositories
     public class AdminRepository : IAdminRepository
 
     {
+        BlogEntities db = new BlogEntities();
+
         /**
         * Data: 26/06/2024
         * Programuesi:Ralfina Tusha 
@@ -45,12 +47,9 @@ namespace BlogMVC.Repositories
 
         public void AddCategory(category category)
         { 
-             using (var db = new BlogEntities())
-            {
-                category.invalidate = 10;
-                db.categories.Add(category);
-                db.SaveChanges();
-            }
+             category.invalidate = 10;
+             db.categories.Add(category);
+             db.SaveChanges();
         }
         /**
         * Data: 26/06/2024
@@ -67,8 +66,6 @@ namespace BlogMVC.Repositories
 
         public void AddSubCategory(string name,int category_id)
         {
-            using (var db = new BlogEntities())
-            {
                 var category = db.categories.Find(category_id);
                 if (category == null)
                 {
@@ -83,7 +80,6 @@ namespace BlogMVC.Repositories
                 };
                 db.categories.Add(subcategory);
                 db.SaveChanges();    
-            }
         }
 
         /**
@@ -100,12 +96,9 @@ namespace BlogMVC.Repositories
 
         public void ApproveBlogPost(int id)
         {
-            using (var db = new BlogEntities())
-            {
                 var post = db.posts.Find(id);
                 post.approved = "yes";
                 db.SaveChanges();
-            }
         }
         /**
             * Data: Data e krijimit
@@ -120,13 +113,9 @@ namespace BlogMVC.Repositories
             **/
         public void ApproveComment(int id)
         {
-            using (var db = new BlogEntities())
-            {
                 var comment = db.comments.Find(id);
                 comment.approved = "yes";
                 db.SaveChanges();
-            }
-
         }
         /**
        * Data: 26/06/2024
@@ -142,8 +131,6 @@ namespace BlogMVC.Repositories
 
         public void DeleteBlogPosts(int id)
         {
-            using (var db = new BlogEntities())
-            {
                  var post = db.posts.Find(id);
 
                 if (post != null)
@@ -162,7 +149,7 @@ namespace BlogMVC.Repositories
 
                      db.SaveChanges();
                 }
-            }
+             
         }
 
         /**
@@ -179,14 +166,11 @@ namespace BlogMVC.Repositories
 
         public void DeleteComment(int id)
         {
-            using (var db = new BlogEntities())
-            {
-                var comment = db.comments.Find(id);
+              var comment = db.comments.Find(id);
                 if (comment != null)
                 {
-                    comment.invalidate = 20; // Mark the main comment as invalidated
+                    comment.invalidate = 20;  
 
-                    // Invalidate replies
                     var replies = db.comments.Where(c => c.parent_id == id).ToList();
                     foreach (var reply in replies)
                     {
@@ -195,7 +179,7 @@ namespace BlogMVC.Repositories
 
                     db.SaveChanges();
                 }
-            }
+             
         }
 
         /**
@@ -210,15 +194,12 @@ namespace BlogMVC.Repositories
 
         public void FshiReply(int id)
         {
-            using (var db = new BlogEntities())
-            {
                 var reply = db.comments.Find(id);  
                 if (reply != null)
                 {
                     reply.invalidate = 20;  
                     db.SaveChanges();
                 }
-            }
         }
 
         /**
@@ -232,22 +213,9 @@ namespace BlogMVC.Repositories
 
         public IEnumerable<post> GetBlogPostsNotApproved() 
         {
-
-            using (var db = new BlogEntities())
-            {
-                return db.posts.Include(p => p.user).Where(x => x.approved == "no" && x.invalidate==10).OrderByDescending(p => p.created_at).ToList();
-            }
-
+           return db.posts.Include(p => p.user).Where(x => x.approved == "no" && x.invalidate==10).OrderByDescending(p => p.created_at).ToList();
         }
-        /**
-        * Data: 26/06/2024
-        * Programuesi: Rafina Tusha
-        * Metoda: GetCommentIdByReplyId
-        * Pershkrimi: Kjo metode kthen ID-ne e komentit te lidhur me nje reply te dhene.
-         * Parametrat:
-        * - int id: ID-ja e reply.
-        * Return: int: ID-ja e komentit te lidhur me reply.
-        **/
+      
 
         
 
@@ -261,10 +229,9 @@ namespace BlogMVC.Repositories
         **/
         public IEnumerable<comment> GetCommentsNotApproved()
         {
-            using (var db = new BlogEntities())
-            {
+       
                 return db.comments.Include(c => c.user).Where(x => x.approved == "no" && x.invalidate==10).OrderByDescending(x=>x.created_at).ToList();
-            }
+            
         }
 
         /**
@@ -279,11 +246,10 @@ namespace BlogMVC.Repositories
 
         public int GetPostIdByCommentId(int id)
         {
-            using (var db = new BlogEntities())
-            {
+             
                 var comment = db.comments.Find(id);
                 return comment.post_id;
-            }
+             
         }
  
     }

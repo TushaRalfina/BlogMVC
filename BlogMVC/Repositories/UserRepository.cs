@@ -61,7 +61,8 @@ namespace BlogMVC.Repositories
                 LastName = userViewModel.LastName,
                 bio = userViewModel.bio,
                 created_at = userViewModel.created_at,
-                updated_at = userViewModel.updated_at
+                updated_at = userViewModel.updated_at,
+                invalidate=10
             });
             db.SaveChanges();
         }
@@ -98,7 +99,7 @@ namespace BlogMVC.Repositories
                     existingUser.updated_at = System.DateTime.Now;
                     db.SaveChanges();
 
-
+ 
                     return existingUser;
                 }
                 else
@@ -191,8 +192,8 @@ namespace BlogMVC.Repositories
             return db.posts.Where(p => p.user_id == id).ToList();   
         }
 
-        //ndryshim i shtuar
 
+        //ndryshim i shtuar
         public user GetUserByEmail(string email)
         {
             return db.users.FirstOrDefault(u => u.email == email);

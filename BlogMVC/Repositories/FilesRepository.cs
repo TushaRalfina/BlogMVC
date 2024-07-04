@@ -85,5 +85,14 @@ namespace BlogMVC.Repositories
                      .Where(f => f.post_id == id && !imageExtensions.Any(ext => f.file_name.EndsWith(ext)))
                      .ToList();
         }
+
+        public IEnumerable<file> GetImagesByPostId(int id)
+        {
+            var imageExtensions = new List<string> { ".jpg", ".jpeg", ".png" };
+
+            return db.files
+                     .Where(f => f.post_id == id && imageExtensions.Any(ext => f.file_name.EndsWith(ext)))
+                     .ToList();
+        }
     }
 }

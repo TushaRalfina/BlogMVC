@@ -3,10 +3,9 @@
     ViewBag.Title = "Post";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var imageExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
     var groupedImages = Model.Post.files
-        .Where(f => !string.IsNullOrEmpty(f.body_images))
-        .GroupBy(f => f.body_images);
+   .Where(f => !string.IsNullOrEmpty(f.body_images))
+   .GroupBy(f => f.body_images);
 }
 
 
@@ -123,10 +122,10 @@
                             @Html.Raw(Model.Post.content)
                         </p>
 
-                        @foreach (var group in groupedImages)
+                        @foreach (var image in Model.Images)
                         {
-                            var file = group.First();
-                            <img src="data:image/png;base64,@file.body_images" alt="Body Image">
+                            
+                            <img src="data:image/png;base64,@image.body_images" alt="Body Image">
                         }
 
 

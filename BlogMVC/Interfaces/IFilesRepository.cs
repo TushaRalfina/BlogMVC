@@ -30,5 +30,7 @@ namespace BlogMVC.Repositories
 
  
         IEnumerable<file> GetFilesByPostId(int id);
+
+        IEnumerable<file> GetImagesByPostId(int id);
     }
 }

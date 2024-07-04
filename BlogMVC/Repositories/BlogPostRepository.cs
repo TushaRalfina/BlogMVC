@@ -92,7 +92,7 @@ namespace BlogMVC.Repositories
 
         public IEnumerable<post> GetBlogPosts()
         {
-             var blogPosts = db.posts.Include("user").Include("PostCategories").ToList();
+             var blogPosts = db.posts.Include("user").Include("PostCategories").Where(p => p.invalidate == 10).ToList();
 
 
             return blogPosts;
