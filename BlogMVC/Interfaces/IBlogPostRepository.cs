@@ -46,7 +46,7 @@ namespace BlogMVC.Repositories
          IEnumerable<comment> GetCommentsApproved(int user_id);
 
 
-         void AddReply(reply reply);
+         void AddReply(comment reply);
 
 
          IEnumerable<post> GetBlogPostsByUserId(int user_id);

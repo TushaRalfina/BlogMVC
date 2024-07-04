@@ -37,7 +37,7 @@ namespace BlogMVC.Repositories
         * Data: 26/06/2024
         * Programuesi:Ralfina Tusha 
         * Metoda: AddCategory
-         * Pershkrimi: Kjo metode shton nje kategori te re ne db.
+        * Pershkrimi: Kjo metode shton nje kategori te re ne db.
         * Parametrat:
         * - category category: Objekti i kategorise qe do te shtohet.
         * Return: Nuk ka.
@@ -47,6 +47,7 @@ namespace BlogMVC.Repositories
         { 
              using (var db = new BlogEntities())
             {
+                category.invalidate = 10;
                 db.categories.Add(category);
                 db.SaveChanges();
             }
@@ -76,7 +77,8 @@ namespace BlogMVC.Repositories
                 var subcategory = new category
                 {
                     name = name,
-                    parent_id = category_id
+                    parent_id = category_id,
+                    invalidate = 10
 
                 };
                 db.categories.Add(subcategory);
@@ -177,18 +179,25 @@ namespace BlogMVC.Repositories
 
         public void DeleteComment(int id)
         {
-
             using (var db = new BlogEntities())
             {
                 var comment = db.comments.Find(id);
-                comment.invalidate = 20;
-                for (int i = 0; i < comment.replies.Count; i++)
+                if (comment != null)
                 {
-                    comment.replies.ElementAt(i).invalidate = 20;
-                }   
-                db.SaveChanges();
+                    comment.invalidate = 20; // Mark the main comment as invalidated
+
+                    // Invalidate replies
+                    var replies = db.comments.Where(c => c.parent_id == id).ToList();
+                    foreach (var reply in replies)
+                    {
+                        reply.invalidate = 20;
+                    }
+
+                    db.SaveChanges();
+                }
             }
         }
+
         /**
         * Data: 26/06/2024
         * Programuesi: Rafina Tusha
@@ -203,13 +212,15 @@ namespace BlogMVC.Repositories
         {
             using (var db = new BlogEntities())
             {
-                var reply = db.replies.Find(id);
-                reply.invalidate = 20;
-                 
-                db.SaveChanges();
+                var reply = db.comments.Find(id);  
+                if (reply != null)
+                {
+                    reply.invalidate = 20;  
+                    db.SaveChanges();
+                }
             }
-
         }
+
         /**
         * Data: 26/06/2024
         * Programuesi: Rafina Tusha
@@ -219,12 +230,12 @@ namespace BlogMVC.Repositories
         * Return: IEnumerable<post>: Nje liste e postimeve te blogut te paaprovuar.
         **/
 
-        public IEnumerable<post> GetBlogPostsNotApproved()
+        public IEnumerable<post> GetBlogPostsNotApproved() 
         {
 
             using (var db = new BlogEntities())
             {
-                return db.posts.Include(p => p.user).Where(x => x.approved == "no" & x.invalidate==10).OrderByDescending(p => p.created_at).ToList();
+                return db.posts.Include(p => p.user).Where(x => x.approved == "no" && x.invalidate==10).OrderByDescending(p => p.created_at).ToList();
             }
 
         }
@@ -238,28 +249,21 @@ namespace BlogMVC.Repositories
         * Return: int: ID-ja e komentit te lidhur me reply.
         **/
 
-        public int GetCommentIdByReplyId(int id)
-        {
-            using (var db = new BlogEntities())
-            {
-                var reply = db.replies.Find(id);
-                return reply.comment_id;
-            }
-         }
+        
 
         /**
         * Data: 26/06/2024
         * Programuesi: Rafina Tusha
         * Metoda: GetCommentsNotApproved
-         * Pershkrimi: Kjo metode kthen nje liste te komenteve qe nuk jane aprovuar ende.
-         * Parametrat: Nuk ka.
+        * Pershkrimi: Kjo metode kthen nje liste te komenteve qe nuk jane aprovuar ende.
+        * Parametrat: Nuk ka.
         * Return: IEnumerable<comment>: Nje liste e komenteve te paaprovuar.
         **/
         public IEnumerable<comment> GetCommentsNotApproved()
         {
             using (var db = new BlogEntities())
             {
-                return db.comments.Include(c => c.user).Where(x => x.approved == "no").ToList();
+                return db.comments.Include(c => c.user).Where(x => x.approved == "no" && x.invalidate==10).OrderByDescending(x=>x.created_at).ToList();
             }
         }
 

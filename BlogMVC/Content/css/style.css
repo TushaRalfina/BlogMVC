@@ -346,6 +346,9 @@ abbr[title] {
     text-decoration: underline;
     text-decoration: underline dotted;
 }
+.text-danger{
+    color: red;
+}
 
 b,
 strong {

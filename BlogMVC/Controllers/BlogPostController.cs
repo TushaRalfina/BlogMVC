@@ -21,6 +21,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace BlogMVC.Controllers
 {
@@ -58,6 +59,7 @@ namespace BlogMVC.Controllers
             {
                 return RedirectToAction("Login", "Home");
             }
+            ViewBag.UserRole = Session["role"];
             var categories = categoryRepository.GetCategories();
 
             var model = new AddBlogPostRequest
@@ -69,7 +71,7 @@ namespace BlogMVC.Controllers
 
 
 
-        /**
+         /**
          * Data: 26/06/2024
          * Programuesi: Ralfina Tusha
          * Metoda: Add (POST)
@@ -83,6 +85,14 @@ namespace BlogMVC.Controllers
         [HttpPost]
         public ActionResult Add(AddBlogPostRequest model, IEnumerable<HttpPostedFileBase> body_images)
         {
+            var validationResult = ValidatePost(model);
+            if (validationResult != null)
+            {
+                ViewBag.Notification = validationResult;
+                model.categoriess = categoryRepository.GetCategories();
+ 
+                return View(model);
+            }
             if (ModelState.IsValid)
             {
                 if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
@@ -92,6 +102,8 @@ namespace BlogMVC.Controllers
                     {
                         return RedirectToAction("Login", "Home");
                     }
+                      
+
 
                     if (model.main_imagee != null && model.main_imagee.ContentLength > 0)
                     {
@@ -127,6 +139,8 @@ namespace BlogMVC.Controllers
 
                     blogPostRepository.AddBlogPost(post, model.SelectedCategoryIds);
 
+                   
+
                     if (model.files != null && model.files.Any())
                     {
                         foreach (var file in model.files.Where(f => f != null && f.ContentLength > 0))
@@ -144,7 +158,8 @@ namespace BlogMVC.Controllers
                                         file_type = Path.GetExtension(file.FileName),
                                         file_name = Path.GetFileName(file.FileName),
                                         file_content = Convert.ToBase64String(fileBytes),
-                                        body_images = ""
+                                        body_images = "",
+                                        invalidate = 10
                                     };
 
                                     filesRepository.AddFiles(documentFile);
@@ -175,6 +190,7 @@ namespace BlogMVC.Controllers
                                         file_name = Path.GetFileName(bodyImage.FileName),
                                         file_content = "",
                                         body_images = Convert.ToBase64String(fileBytes),
+                                        invalidate = 10
                                     };
 
                                     filesRepository.AddFiles(documentFile);
@@ -196,9 +212,31 @@ namespace BlogMVC.Controllers
                     return RedirectToAction("Login", "Home");
                 }
             }
-
+           
             return View(model);
         }
+
+ 
+        private string ValidatePost(AddBlogPostRequest model)
+        {
+            if (string.IsNullOrEmpty(model.title))
+            {
+                return "";
+            }
+
+            if (string.IsNullOrEmpty(model.content))
+            {
+                return "";
+            }
+             
+            if (model.SelectedCategoryIds == null || !model.SelectedCategoryIds.Any())
+            {
+                return "";
+            }
+
+            return null;
+        }
+
 
 
 
@@ -223,6 +261,9 @@ namespace BlogMVC.Controllers
             {
                 var approvedComments = blogPostRepository.GetCommentsByPostId(id).ToList();
                 var files = filesRepository.GetFilesByPostId(id).ToList();
+                ViewBag.UserRole = Session["role"];
+
+
 
                 var viewModel = new PostViewModel
                 {
@@ -230,10 +271,6 @@ namespace BlogMVC.Controllers
                     ApprovedComments = approvedComments,
                     Files = files
                 };
-
-                var allowedFileTypes = new List<string> { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
-                var imageExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
-             
 
                 return View(viewModel);
             }
@@ -259,6 +296,7 @@ namespace BlogMVC.Controllers
             if (Session["id"] != null && int.TryParse(Session["id"].ToString(), out int user_id))
             {
                 var user = userRepository.GetUserById(user_id);
+
 
                 if (user == null)
                 {
@@ -299,17 +337,17 @@ namespace BlogMVC.Controllers
         }
 
 
-         /**
-         * Data: 26/06/2024
-         * Programuesi: Ralfina Tusha
-         * Metoda: AddReply
-         * Arsyeja: Shtimi i nje pergjigje te re ne nje koment te blogut.
-         * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar dhe krijon nje pergjigje te re per nje koment.
-         * Para kushti: Perdoruesi duhet te jete i loguar.
-         * Post kushti: Pergjigja e re ruhet dhe kthehet si rezultat JSON.
-         * Parametrat: comment_id - id e komentit per t'u pergjigjur; reply_text - Teksti i pergjigjes.
-         * Return: JsonResult - Rezultati JSON me detajet e pergjigjes se re ose nje mesazh fail.
-         **/
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: AddReply
+        * Arsyeja: Shtimi i nje pergjigje te re ne nje koment te blogut.
+        * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar dhe krijon nje pergjigje te re per nje koment.
+        * Para kushti: Perdoruesi duhet te jete i loguar.
+        * Post kushti: Pergjigja e re ruhet dhe kthehet si rezultat JSON.
+        * Parametrat: comment_id - id e komentit per t'u pergjigjur; reply_text - Teksti i pergjigjes.
+        * Return: JsonResult - Rezultati JSON me detajet e pergjigjes se re ose nje mesazh fail.
+        **/
         [HttpPost]
         public JsonResult AddReply(int comment_id, string reply_text)
         {
@@ -322,16 +360,21 @@ namespace BlogMVC.Controllers
                     return Json(new { success = false, message = "User not found." });
                 }
 
+                var parentComment = blogPostRepository.GetCommentById(comment_id);
+
+
                 if (string.IsNullOrWhiteSpace(reply_text))
                 {
                     return Json(new { success = false, message = "Reply text is required." });
                 }
 
-                var newReply = new reply
+                var newReply = new comment
                 {
-                    comment_id = comment_id,
+                    post_id = parentComment.post_id,
+                    parent_id = comment_id,
                     user_id = user_id,
-                    reply_text = reply_text,
+                    comment1 = reply_text,
+                    approved = "yes",
                     invalidate = 10
                 };
 
@@ -344,29 +387,32 @@ namespace BlogMVC.Controllers
                     success = true,
                     reply = new
                     {
-                        newReply.reply_text,
+                        newReply.comment1,
                         user.username
                     }
                 });
             }
             return Json(new { success = false, message = "User not authenticated." });
-         }
+        }
+
+
+   
 
 
 
 
 
-         /**
-         * Data: 26/06/2024
-         * Programuesi: Ralfina Tusha
-         * Metoda: UserPosts
-         * Arsyeja: Shfaq te gjitha postimet e blogut te krijuara nga nje perdorues specifik.
-         * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar dhe merr te gjitha postimet e krijuara nga perdoruesi specifik me ID-ne e dhene.
-         * Para kushti: Perdoruesi duhet te jete i loguar.
-         * Post kushti: Kthen nje View me listen e postimeve te krijuara nga perdoruesi specifik.
-         * Parametrat: id - ID e perdoruesit per te marre postimet.
-         * Return: ActionResult - VIEW me listen e postimeve te krijuara nga perdoruesi specifik.
-         **/
+        /**
+        * Data: 26/06/2024
+        * Programuesi: Ralfina Tusha
+        * Metoda: UserPosts
+        * Arsyeja: Shfaq te gjitha postimet e blogut te krijuara nga nje perdorues specifik.
+        * Pershkrimi: Kontrollon nese perdoruesi eshte i loguar dhe merr te gjitha postimet e krijuara nga perdoruesi specifik me ID-ne e dhene.
+        * Para kushti: Perdoruesi duhet te jete i loguar.
+        * Post kushti: Kthen nje View me listen e postimeve te krijuara nga perdoruesi specifik.
+        * Parametrat: id - ID e perdoruesit per te marre postimet.
+        * Return: ActionResult - VIEW me listen e postimeve te krijuara nga perdoruesi specifik.
+        **/
         public ActionResult UserPosts(int id)
         {
             if (Session["id"] == null)

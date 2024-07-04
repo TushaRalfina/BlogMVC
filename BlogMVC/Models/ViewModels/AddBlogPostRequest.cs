@@ -21,11 +21,12 @@ namespace BlogMVC.Models.ViewModels
 {
     public class AddBlogPostRequest
     {
-
         [AllowHtml]
+        [Required(ErrorMessage = "Title is required")]
         public string title { get; set; }
 
          [AllowHtml]
+         [Required(ErrorMessage = "Content is required")]
         public string content { get; set; }
 
         public int user_id { get; set; }
@@ -34,6 +35,7 @@ namespace BlogMVC.Models.ViewModels
 
         public HttpPostedFileBase main_imagee { get; set; }
 
+        [Required(ErrorMessage = "Please select at least one category")]
         public List<int> SelectedCategoryIds { get; set; }
         
         public List<HttpPostedFileBase> files { get; set; }

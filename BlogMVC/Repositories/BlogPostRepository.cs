@@ -143,8 +143,7 @@ namespace BlogMVC.Repositories
         public IEnumerable<comment> GetCommentsByPostId(int post_id)
         {
             var comments = db.comments
-                             .Include("replies")
-                             .Where(c => c.post_id == post_id && c.approved == "yes")
+                             .Where(c => c.post_id == post_id && c.approved == "yes" && c.invalidate==10)
                              .OrderByDescending(c => c.created_at)
                              .ToList();
             return comments;
@@ -177,9 +176,9 @@ namespace BlogMVC.Repositories
         * Return: Nuk ka.
         **/
 
-        public void AddReply(reply reply)
+        public void AddReply(comment reply)
         {
-            db.replies.Add(reply);
+            db.comments.Add(reply);
             db.SaveChanges();
         }
 

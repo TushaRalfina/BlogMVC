@@ -44,8 +44,7 @@ namespace BlogMVC.Interfaces
         void FshiReply(int id);
 
 
-        int GetCommentIdByReplyId(int id);
-
+ 
 
         void AddCategory(category category);
 

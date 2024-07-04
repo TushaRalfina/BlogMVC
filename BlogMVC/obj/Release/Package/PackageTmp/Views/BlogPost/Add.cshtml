@@ -21,6 +21,8 @@
                 @using (Html.BeginForm("Add", "BlogPost", FormMethod.Post, new { id = "addForm", @class = "entry__form", enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
 
                     <fieldset class="row">
                         <div class="column lg-6 tab-12 form-field">
@@ -31,17 +33,21 @@
                             <input name="email" id="email" class="u-fullwidth" placeholder="Your Email" value="@Session["email"]" type="text" readonly>
                         </div>
 
+
+
                         <div class="column lg-12 form-field">
-                            @Html.LabelFor(model => model.title, "Title")
+                            @Html.LabelFor(model => model.title, "Title *")
+                            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger", style = "color: red; font-weight: bold;" })
                             @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "u-fullwidth", placeholder = "Title" } })
-                            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="column lg-12 message form-field mt-2 mb-2">
-                            @Html.LabelFor(model => model.content, "Content")
+                            @Html.LabelFor(model => model.content, "Content *")
+                            @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger", style = "color: red; font-weight: bold;" })
                             @Html.TextAreaFor(model => model.content, new { @class = "u-fullwidth", placeholder = "Content" })
-                            @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
                         </div>
+
+
                         <!-- Body Images -->
                         <div class="column lg-12 form-field">
                             <label>Body Images</label>
@@ -66,20 +72,28 @@
                         </style>
 
                         <div class="form-group">
-                            <h3>Categories</h3>
+                            <h3>Categories *</h3>
+                            @Html.ValidationMessageFor(model => model.SelectedCategoryIds, "", new { @class = "text-danger", style = "color: red; font-weight: bold;" })
+
+                            @if (ViewBag.Notification != null)
+                            {
+                                <div class="notification" style="color: red; font-weight: bold;">
+                                    @ViewBag.Notification
+                                </div>
+                            }
                             @foreach (var category in Model.categoriess)
                             {
                                 if (category.parent_id == null)
                                 {
                                     <div class="category-item">
-                                        <input type="checkbox" id="category_@category.id" name="SelectedCategoryIds" value="@category.id" class="category-checkbox form-check" />
+                                        <input type="checkbox" id="category_@category.id" name="SelectedCategoryIds" value="@category.id" class="category-checkbox form-check" @(Model.SelectedCategoryIds != null && Model.SelectedCategoryIds.Contains(category.id) ? "checked" : "") />
                                         <label for="category_@category.id" class="form-check-label">@category.name</label>
 
                                         <div class="subcategory-list" style="display:none;">
                                             @foreach (var subcategory in Model.categoriess.Where(sub => sub.parent_id == category.id))
                                             {
-                                                <div class="checkbox-inline subcategory-item" >
-                                                    <input type="checkbox" id="category_@subcategory.id" name="SelectedCategoryIds" value="@subcategory.id" class="subcategory-checkbox form-check" data-category-id="@category.id" />
+                                                <div class="checkbox-inline subcategory-item">
+                                                    <input type="checkbox" id="category_@subcategory.id" name="SelectedCategoryIds" value="@subcategory.id" class="subcategory-checkbox form-check" data-category-id="@category.id" @(Model.SelectedCategoryIds != null && Model.SelectedCategoryIds.Contains(subcategory.id) ? "checked" : "") />
                                                     <label for="category_@subcategory.id" class=" ">@subcategory.name</label>
                                                 </div>
                                             }
@@ -87,7 +101,10 @@
                                     </div>
                                 }
                             }
+
                         </div>
+
+
 
 
                         <style>
@@ -112,18 +129,52 @@
                             <label for="main_imagee">Main Picture</label>
                             <input type="file" name="main_imagee" id="main_imagee" class="u-fullwidth" />
                         </div>
+                        @if (ViewBag.Notification != null)
+                        {
+                            <div class="notification" style="color: red; font-weight: bold;">
+                                @ViewBag.Notification
+                            </div>
+                        }
                         <div class="column lg-12">
                             <input name="submit" id="submit" class="btn btn--primary btn-wide btn--large u-fullwidth" value="Add Post" type="submit">
                         </div>
                     </fieldset>
+
                 }
+                <!-- Thank You Popup -->
+                <div id="thankYouPopup" class="popup">
+                    <p>Thank you for adding your post!</p>
+                </div>
+
+
             </article> <!-- end entry -->
         </div>
     </div> <!-- end entry-wrap -->
 </div> <!-- end site-content -->
 
+
+
 @section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+     var userRole = '@ViewBag.UserRole';
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#myForm').submit(function (e) {
+                if (!$(this).valid()) {
+                    e.preventDefault();  
+                    $('html, body').animate({
+                        scrollTop: $('.text-danger').first().offset().top
+                    }, 500);
+                    return false;  
+                }
+            });
+        });
+    </script>
+
+
 
     <script>
         new FroalaEditor('#content', {
@@ -159,19 +210,19 @@
          * Data: 26-06-2024
          * Programuesi: Ralfina Tusha
          * Metoda: DOMContentLoaded listener
-          * Pershkrimi: Ky event listener inicializon funksionalitetin per te menaxhuar ndryshimet ne checkbox-et e nenkategorive.
+         * Pershkrimi: Ky event listener inicializon funksionalitetin per te menaxhuar ndryshimet ne checkbox-et e nenkategorive.
          * Para kushti: Ekzistimi i checkbox-eve te nenkategorive ne dokument.
          * Post kushti: Kur nje checkbox ndryshon gjendjen, te gjitha checkbox-et tjera me te njejtin category ID do te zevendesohen ne gjendjen unchecked.
          */
         document.addEventListener("DOMContentLoaded", function () {
-          
+
             const subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
 
             subcategoryCheckboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     if (this.checked) {
-                         const categoryId = this.getAttribute('data-category-id');
-                         subcategoryCheckboxes.forEach(subCheckbox => {
+                        const categoryId = this.getAttribute('data-category-id');
+                        subcategoryCheckboxes.forEach(subCheckbox => {
                             if (subCheckbox !== this && subCheckbox.getAttribute('data-category-id') === categoryId) {
                                 subCheckbox.checked = false;
                             }
@@ -182,28 +233,65 @@
         });
 
         /**
-         * Data: 26-06-2024
-         * Programuesi: Ralfina Tusha
-         * Metoda: $(document).ready
-         * Pershkrimi: Ky event listener inicializon funksionalitetinper te afishuar subkategorite e nje kategorie kur kjo e fundit behet check.
-         * Post kushti: Kur nje checkbox ndryshon gjendjen, lista e nenkategorive te lidhura me ate kategori do te shfaqet ose te fshehet  
-         * Parametrat: Nuk ka parametra.
-         * Return: Nuk kthen ndonje vlere.
-         */
-        $(document).ready(function () {
-             $('.category-checkbox').change(function () {
-                var subcategoryList = $(this).siblings('.subcategory-list');
-                if ($(this).is(':checked')) {
-                    subcategoryList.slideDown();
-                } else {
-                    subcategoryList.slideUp();
+ * Data: 26-06-2024
+ * Programuesi: Ralfina Tusha
+ * Metoda: $(document).ready
+ * Pershkrimi: Ky event listener inicializon funksionalitetin per te afishuar subkategorite e nje kategorie kur kjo e fundit behet check.
+ * Post kushti: Kur nje checkbox ndryshon gjendjen, lista e nenkategorive te lidhura me ate kategori do te shfaqet ose te fshehet
+ * Parametrat: Nuk ka parametra.
+ * Return: Nuk kthen ndonje vlere.
+ */
+$(document).ready(function () {
+    function attachCategoryCheckboxListener() {
+        $('.category-checkbox').change(function () {
+            var subcategoryList = $(this).siblings('.subcategory-list');
+            if ($(this).is(':checked')) {
+                subcategoryList.slideDown();
+            } else {
+                subcategoryList.slideUp();
+            }
+        });
+    }
+
+    function attachFormSubmit() {
+        $('#addForm').submit(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if ($(data).find('.text-danger').length > 0) {
+                        $('#body').html($(data).find('#body').html());
+                         attachFormSubmit();
+                        attachCategoryCheckboxListener();
+                    } else {
+                        showThankYouAlertAndRedirect();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("An error occurred: " + error);
                 }
             });
         });
+    }
 
+    function showThankYouAlertAndRedirect() {
+        if (userRole === 'user') {
+            alert('Thank you for adding your post! Radiance Blog will review it shortly');
+            window.location.href = '@Url.Action("Index", "Home")';
+        } else {
+            alert('Thank you for adding your post!');
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+    }
 
-
-
+     attachCategoryCheckboxListener();
+     attachFormSubmit();
+});
 
 
 

@@ -69,14 +69,14 @@ namespace BlogMVC.Repositories
             }
 
 
-        /**
-       * Data: 27/06/2024
-       * Programuesi: Ralfina Tusha
-       * Metoda: GetFilesById
-       * Pershkrimi: Kjo metode kthen filet(non-image) e nje posti bazuar ne ID-ne e postit.
-       * Parametrat:int id: ID-ja e postit per te cilin do te merren filet.
-       * Return: IEnumerable<file>: Nje liste e fileve qe i perket postit me ID te dhene.
-       **/
+           /**
+           * Data: 27/06/2024
+           * Programuesi: Ralfina Tusha
+           * Metoda: GetFilesById
+           * Pershkrimi: Kjo metode kthen filet(non-image) e nje posti bazuar ne ID-ne e postit.
+           * Parametrat:int id: ID-ja e postit per te cilin do te merren filet.
+           * Return: IEnumerable<file>: Nje liste e fileve qe i perket postit me ID te dhene.
+           **/
         public IEnumerable<file> GetFilesByPostId(int id)
         {
             var imageExtensions = new List<string> { ".jpg", ".jpeg", ".png" };

@@ -236,9 +236,7 @@ namespace BlogMVC.Controllers
         public ActionResult FshiReply(int id)
         {
 
-            int commentId = adminRepository.GetCommentIdByReplyId(id);
-
-            int postId = adminRepository.GetPostIdByCommentId(commentId);
+             int postId = adminRepository.GetPostIdByCommentId(id);
             adminRepository.FshiReply(id);
             return RedirectToAction("Post", "BlogPost", new { id = postId });
 

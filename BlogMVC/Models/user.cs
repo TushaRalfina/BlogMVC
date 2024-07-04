@@ -19,7 +19,6 @@ namespace BlogMVC.Models
         {
             this.comments = new HashSet<comment>();
             this.posts = new HashSet<post>();
-            this.replies = new HashSet<reply>();
         }
     
         public int id { get; set; }
@@ -39,7 +38,5 @@ namespace BlogMVC.Models
         public virtual ICollection<comment> comments { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<post> posts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<reply> replies { get; set; }
     }
 }
